@@ -8,3 +8,5 @@
 
 # Ignore approval test result files.
 *Test*.received.txt
+
+/.idea/
