@@ -13,4 +13,4 @@
 **/.approval_tests_temp/
 *Test*.received.txt
 
-/.idea/
+/uwant-*/build/

@@ -1,0 +1,13 @@
+apply from: "${rootDir}/gradle/java-project.gradle"
+
+dependencies {
+  api project(':openTCS-API-Base')
+  api project(':openTCS-API-Injection')
+
+  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.4.Final'
+  implementation  group: 'commons-codec', name: 'commons-codec', version: '1.10'
+}
+
+task release {
+  dependsOn build
+}
