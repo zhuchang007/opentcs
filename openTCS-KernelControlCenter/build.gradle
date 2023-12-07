@@ -14,6 +14,7 @@ dependencies {
   api project(':openTCS-API-Injection')
   api project(':openTCS-Common')
   api project(':openTCS-CommAdapter-Loopback')
+  api project(':Uwant-CommAdapter-Vehicle')
   api project(':openTCS-PeripheralCommAdapter-Loopback')
   api project(':openTCS-Impl-Configuration-gestalt')
 

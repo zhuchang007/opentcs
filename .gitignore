@@ -4,6 +4,7 @@
 /.gradle/
 /build/
 /openTCS-*/build/
+/Uwant-*/build/
 *~
 
 # Ignore approval test result files.
