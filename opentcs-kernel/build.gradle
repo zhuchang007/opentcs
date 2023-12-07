@@ -22,6 +22,7 @@ dependencies {
   api project(':opentcs-impl-configuration-gestalt')
   api project(':opentcs-kernel-extension-http-services')
   api project(':opentcs-kernel-extension-rmi-services')
+  api project(':uwant-commadapter-vehicle')
 
   implementation libs.huxhorn.sulky.ulid
 
