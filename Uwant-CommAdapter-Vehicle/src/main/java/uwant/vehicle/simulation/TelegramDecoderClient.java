@@ -10,8 +10,8 @@ package uwant.vehicle.simulation;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import org.opentcs.contrib.tcp.netty.ConnectionEventListener;
-import uwant.vehicle.telegrams.StateResponse;
+import uwant.common.netty.tcp.ConnectionEventListener;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 import java.util.List;
 

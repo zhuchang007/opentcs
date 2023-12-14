@@ -9,13 +9,13 @@ package uwant.vehicle.simulation;
 
 import io.netty.channel.ChannelHandler;
 import io.netty.handler.codec.FixedLengthFrameDecoder;
-import org.opentcs.contrib.tcp.netty.ConnectionEventListener;
-import org.opentcs.contrib.tcp.netty.TcpClientChannelManager;
+import uwant.common.netty.tcp.ConnectionEventListener;
+import uwant.common.netty.tcp.TcpClientChannelManager;
 import uwant.common.telegrams.Response;
 import uwant.common.telegrams.Telegram;
-import uwant.vehicle.telegrams.ActionResponse;
-import uwant.vehicle.telegrams.NodeActionSetResponse;
-import uwant.vehicle.telegrams.StateResponse;
+import uwant.common.vehicle.telegrams.ActionResponse;
+import uwant.common.vehicle.telegrams.NodeActionSetResponse;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 import java.util.Arrays;
 import java.util.List;
