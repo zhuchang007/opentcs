@@ -34,12 +34,14 @@ compileJava {
   options.release = 21
   options.compilerArgs << "-Xlint:all"
   options.compilerArgs << "-Xlint:-serial"
+  options.encoding = "UTF-8"
 }
 
 compileTestJava {
   options.release = 21
   options.compilerArgs << "-Xlint:all"
   options.compilerArgs << "-Xlint:-serial"
+  options.encoding = "UTF-8"
 }
 
 javadoc {
