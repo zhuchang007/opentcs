@@ -66,7 +66,7 @@ import uwant.common.event.AgvOnlineEvent;
 import uwant.vehicle.exchange.AdapterPanelComponentsFactory;
 import uwant.vehicle.exchange.UwtProcessModelTO;
 import uwant.vehicle.exchange.commands.SendRequestCommand;
-import uwant.vehicle.telegrams.NodeActionSetRequest;
+import uwant.common.vehicle.telegrams.NodeActionSetRequest;
 
 /** @author zhuchang */
 public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler {
@@ -105,7 +105,7 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
   private final CallWrapper callWrapper;
 
   UwtProcessModelTO processModel;
-  
+
   private final String vehicleName;
 
   /**
@@ -128,7 +128,7 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
 
     this.vehicleService = requireNonNull(vehicleService, "vehicleService");
     this.callWrapper = requireNonNull(callWrapper, "callWrapper");
-    
+
     sendRouteButton.setEnabled(false);
     this.processModel = (UwtProcessModelTO) processModel;
     if (this.processModel != null && this.processModel.getRecvCount() > 3) {
@@ -143,7 +143,7 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
         });
     }
     this.vehicleName = processModel.getVehicleName();
-    
+
     eventBus.subscribe(this);
 
     SwingUtilities.invokeLater(
@@ -318,7 +318,7 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
 
   private void sendRoutes(List<List<RouteTableEntry>> routes) {
     int addr = processModel.getCurrentState().getAddr();
-    int agvId = processModel.getCurrentState().getId();
+    int agvId = processModel.getCurrentState().getAgvId();
 
     routes.forEach(
         e -> {

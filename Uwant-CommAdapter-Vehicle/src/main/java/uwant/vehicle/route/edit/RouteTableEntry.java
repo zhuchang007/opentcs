@@ -14,7 +14,7 @@ package uwant.vehicle.route.edit;
 
 import java.util.HashMap;
 import java.util.Map;
-import uwant.vehicle.telegrams.NodeAction;
+import uwant.common.vehicle.telegrams.NodeAction;
 
 /** @author zhuchang */
 public class RouteTableEntry {

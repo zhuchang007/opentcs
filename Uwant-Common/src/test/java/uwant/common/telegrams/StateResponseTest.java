@@ -8,11 +8,11 @@
 package uwant.common.telegrams;
 
 import org.junit.Test;
-import uwant.vehicle.telegrams.StateResponse;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 import java.util.BitSet;
 
-import static uwant.vehicle.telegrams.StateResponse.byte2BitSet;
+import static uwant.common.vehicle.telegrams.StateResponse.byte2BitSet;
 
 public class StateResponseTest {
   @Test

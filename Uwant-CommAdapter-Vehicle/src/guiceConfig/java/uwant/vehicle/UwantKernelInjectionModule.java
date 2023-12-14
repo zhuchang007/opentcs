@@ -16,9 +16,9 @@ import com.google.inject.assistedinject.FactoryModuleBuilder;
 import org.opentcs.customizations.kernel.KernelInjectionModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uwant.vehicle.comm.ChannelManager;
-import uwant.vehicle.comm.ComChannelManager;
-import uwant.vehicle.comm.NetChannelManager;
+import uwant.common.netty.ChannelManager;
+import uwant.vehicle.netty.com.ComChannelManager;
+import uwant.vehicle.netty.tcp.NetChannelManager;
 
 /**
  * @author zhuchang

@@ -92,18 +92,18 @@ public class RequestResponseMatcher {
     requireNonNull(response, "response");
 
     Request currentRequest = requests.peek();
-    if (currentRequest != null && response.isResponseTo(currentRequest)) {
+    if (currentRequest != null && response.isResponseSuccessfulTo(currentRequest)) {
       requests.remove();
       return true;
     }
 
     if (currentRequest != null) {
       LOG.info("No request matching response with counter {}. Latest request counter is {}.",
-               response.getId(), currentRequest.getId());
+               response.getAgvId(), currentRequest.getAgvId());
     }
     else {
       LOG.info("Received response with counter {}, but no request is waiting for a response.",
-               response.getId());
+               response.getAgvId());
     }
 
     return false;

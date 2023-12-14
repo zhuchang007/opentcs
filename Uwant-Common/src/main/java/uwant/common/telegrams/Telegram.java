@@ -15,22 +15,26 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Stefan Walter (Fraunhofer IML)
  */
-public abstract class Telegram implements Serializable {
+public class Telegram implements Serializable {
 
-  /** The default value for a telegram's id. */
-  public static final int ID_DEFAULT = 0;
+  /** The expected length of a telegram of this type. */
+  public static final int TELEGRAM_LENGTH = 22;
+  /** The position of the checksum byte. */
+  public static final int CHECKSUM_POS = TELEGRAM_LENGTH - 2;
+
   /** The telegram's raw content as sent via the network. */
   protected final byte[] rawContent;
   /** The identifier for a specific telegram instance. */
-  protected int id;
+  protected int addr;
+  protected int agvId;
+
+  protected byte commandType;
 
   /**
    * Creates a new instance.
-   *
-   * @param telegramLength The telegram's length
    */
-  public Telegram(int telegramLength) {
-    this.rawContent = new byte[telegramLength];
+  public Telegram() {
+    this.rawContent = new byte[TELEGRAM_LENGTH];
   }
 
   /**
@@ -43,7 +47,7 @@ public abstract class Telegram implements Serializable {
   }
 
   public String getHexRawContent() {
-    return bytesToHexString(rawContent);
+    return HexConvert.bytesToHex(rawContent);
   }
 
   /**
@@ -51,26 +55,15 @@ public abstract class Telegram implements Serializable {
    *
    * @return The identifier for this specific telegram instance.
    */
-  public int getId() {
-    return id;
+  public int getAgvId() {
+    return agvId;
   }
 
-  // tag::documentation_checksumComp[]
-  /**
-   * Computes a checksum for the given raw content of a telegram.
-   *
-   * @param rawContent A telegram's raw content.
-   * @return The checksum computed for the given raw content.
-   */
-  public static byte getCheckSum(byte[] rawContent) {
-    requireNonNull(rawContent, "rawContent");
-
-    int cs = 0;
-    for (int i = 0; i < rawContent[1]; i++) {
-      cs ^= rawContent[2 + i];
-    }
-    return (byte) cs;
+  public int getAddr() {
+    return addr;
   }
+
+  public int getCommandType() {return commandType;}
 
   public static byte getCheckSum(byte[] rawContent, int startPos, int endPos) {
     requireNonNull(rawContent, "rawContent");
@@ -81,20 +74,4 @@ public abstract class Telegram implements Serializable {
     }
     return (byte) cs;
   }
-
-  public static String bytesToHexString(byte[] bArray) {
-    StringBuilder sb = new StringBuilder(bArray.length);
-    String sTemp;
-    // i从第3个字节开始，前面2个字节（串口模块地址）不显示
-    for (int i = 2; i < bArray.length; i++) {
-      sTemp = Integer.toHexString(0xFF & bArray[i]);
-      if (sTemp.length() < 2) {
-        sb.append(0);
-      }
-      sb.append(sTemp.toUpperCase());
-      sb.append(" ");
-    }
-    return sb.toString();
-  }
-  // end::documentation_checksumComp[]
 }

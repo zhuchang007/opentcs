@@ -16,7 +16,7 @@ import uwant.common.telegrams.Response;
 import org.opentcs.data.TCSObjectReference;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
-import uwant.vehicle.telegrams.StateResponse;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
 public class UwtProcessModelTO extends VehicleProcessModelTO {

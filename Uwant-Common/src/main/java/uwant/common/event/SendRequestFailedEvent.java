@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import uwant.common.telegrams.Request;
-import static uwant.vehicle.telegrams.I18nTelegrams.BUNDLE_PATH;
+import static uwant.common.vehicle.telegrams.I18nTelegrams.BUNDLE_PATH;
 
 /** @author zhuchang */
 public class SendRequestFailedEvent implements Serializable {

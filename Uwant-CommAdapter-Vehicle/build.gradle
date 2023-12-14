@@ -9,27 +9,12 @@ dependencies {
   api project(':openTCS-Common')
   api project(':openTCS-Impl-Configuration-cfg4j')
   api project(':Uwant-Common')
-  //api project(':openTCS-Contrib')
 
-
-//  compile group: 'org.opentcs', name: 'opentcs-api-injection', version: openTcsBaselineVersion
-//  compileOnly group: 'org.opentcs', name: 'opentcs-api-injection', version: openTcsBaselineVersion, classifier: 'sources'
-//
-//  compile group: 'org.opentcs', name: 'opentcs-common', version: openTcsBaselineVersion
-//  compileOnly group: 'org.opentcs', name: 'opentcs-common', version: openTcsBaselineVersion, classifier: 'sources'
-//
-//  compile group: 'org.opentcs.contrib', name: 'opentcs-contrib-tcp-netty', version: '0.13.0'
-//  compileOnly group: 'org.opentcs.contrib', name: 'opentcs-contrib-tcp-netty', version: '0.13.0', classifier: 'sources'
-
-  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.4.Final'
+  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.86.Final'
 //  compileOnly group: 'io.netty', name: 'netty-all', version: '4.1.4.Final', classifier: 'sources'
 
-  implementation  group: 'commons-codec', name: 'commons-codec', version: '1.10'
-//  compileOnly group: 'commons-codec', name: 'commons-codec', version: '1.10', classifier: 'sources'
-
-  implementation  'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
-
-  implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6'
+  implementation  group: 'commons-codec', name: 'commons-codec', version: '1.13'
+  implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6.1'
 
   //testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.21'
 }

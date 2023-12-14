@@ -22,7 +22,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import uwant.vehicle.telegrams.NodeAction;
+import uwant.common.vehicle.telegrams.NodeAction;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

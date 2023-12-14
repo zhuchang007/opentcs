@@ -38,6 +38,7 @@ compileJava {
   options.compilerArgs << "-Werror"
   options.compilerArgs << "-Xlint:all"
   options.compilerArgs << "-Xlint:-serial"
+  options.encoding = "UTF-8"
 }
 
 compileTestJava {
@@ -45,6 +46,7 @@ compileTestJava {
   options.compilerArgs << "-Werror"
   options.compilerArgs << "-Xlint:all"
   options.compilerArgs << "-Xlint:-serial"
+  options.encoding = "UTF-8"
 }
 
 javadoc {
