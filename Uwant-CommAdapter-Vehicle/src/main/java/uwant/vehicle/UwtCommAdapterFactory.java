@@ -20,7 +20,7 @@ import org.opentcs.drivers.vehicle.VehicleCommAdapterDescription;
 import org.opentcs.drivers.vehicle.VehicleCommAdapterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uwant.vehicle.comm.ChannelManager;
+import uwant.common.netty.ChannelManager;
 import uwant.vehicle.exchange.UwtCommAdapterDescription;
 
 /** @author zhuchang */
