@@ -28,8 +28,8 @@ import uwant.common.event.AgvOfflineEvent;
 import uwant.common.event.AgvOnlineEvent;
 import uwant.vehicle.UwtProcessModel;
 import uwant.vehicle.exchange.commands.SendRequestCommand;
-import uwant.vehicle.telegrams.ActionRequest;
-import uwant.vehicle.telegrams.StateResponse;
+import uwant.common.vehicle.telegrams.ActionRequest;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
 public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
@@ -42,7 +42,7 @@ public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
   private final VehicleService vehicleService;
   /** The call wrapper to use for service calls. */
   private final CallWrapper callWrapper;
-  
+
   private final String vehicleName;
 
   /**
@@ -73,7 +73,7 @@ public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
       setButtonsEnabled(false);
     }
     vehicleName = processModel.getVehicleName();
-   
+
     eventBus.subscribe(this);
   }
 
@@ -85,7 +85,7 @@ public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
     processModel = (UwtProcessModelTO) newProcessModel;
     if (Objects.equals(attributeChanged, UwtProcessModel.Attribute.CURRENT_STATE.name())) {
       updateStatePanel(processModel.getCurrentState());
-    } 
+    }
   }
 
   @Override
@@ -123,7 +123,7 @@ public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
     ActionRequest actionRequest =
         new ActionRequest(
             processModel.getCurrentState().getAddr(),
-            processModel.getCurrentState().getId(),
+            processModel.getCurrentState().getAgvId(),
             action,
             speedComboBox.getSelectedIndex() + 1);
     sendAdapterCommand(new SendRequestCommand(actionRequest, -1));

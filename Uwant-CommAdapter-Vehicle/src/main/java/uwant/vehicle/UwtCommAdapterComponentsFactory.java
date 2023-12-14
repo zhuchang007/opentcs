@@ -15,7 +15,7 @@ package uwant.vehicle;
 import uwant.common.telegrams.RequestResponseMatcherCom;
 import uwant.common.telegrams.TelegramSender;
 import org.opentcs.data.model.Vehicle;
-import uwant.vehicle.comm.ChannelManager;
+import uwant.common.netty.ChannelManager;
 
 /** @author zhuchang */
 public interface UwtCommAdapterComponentsFactory {
