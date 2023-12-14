@@ -4,8 +4,13 @@ dependencies {
   api project(':openTCS-API-Base')
   api project(':openTCS-API-Injection')
 
-  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.4.Final'
-  implementation  group: 'commons-codec', name: 'commons-codec', version: '1.10'
+  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.86.Final'
+  implementation  group: 'commons-codec', name: 'commons-codec', version: '1.13'
+
+  implementation  'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+
+  testImplementation 'junit:junit:4.13.1'
+  testImplementation 'junit:junit:4.13.1'
 }
 
 task release {

@@ -47,7 +47,7 @@ public class RequestResponseMatcherCom {
 
   private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
   private ScheduledFuture<?> scheduledFuture;
-  
+
   private final String vehicleName;
 
   /**
@@ -137,7 +137,7 @@ public class RequestResponseMatcherCom {
     }
 
     Request request = currentRequest.getRequest();
-    if (request.getRawContent()[3] == response.getRawContent()[3] && response.getIsOk()) {
+    if (response.isResponseSuccessfulTo(request)) {
       sendCount = 0;
       eventBus.onEvent(new SendRequestSuccessEvent(vehicleName, request));
       currentRequest = null;
@@ -148,12 +148,12 @@ public class RequestResponseMatcherCom {
     if (currentRequest != null) {
       LOG.info(
           "No request matching response with counter {}. Latest request counter is {}.",
-          response.getId(),
-          currentRequest.getRequest().getId());
+          response.getAgvId(),
+          currentRequest.getRequest().getAgvId());
     } else {
       LOG.info(
           "Received response with counter {}, but no request is waiting for a response.",
-          response.getId());
+          response.getAgvId());
     }
 
     return false;

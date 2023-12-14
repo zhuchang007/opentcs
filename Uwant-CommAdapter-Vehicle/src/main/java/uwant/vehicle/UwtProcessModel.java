@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
 import javax.annotation.Nonnull;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.VehicleProcessModel;
-import uwant.vehicle.telegrams.StateResponse;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
 public class UwtProcessModel extends VehicleProcessModel {
