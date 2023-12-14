@@ -13,22 +13,22 @@ package uwant.common.telegrams;
  *
  * @author Mats Wilhelm (Fraunhofer IML)
  */
-public abstract class Request
+public class Request
     extends Telegram {
-
-  /**
-   * Creates a new instance.
-   *
-   * @param telegramLength The request's length.
-   */
-  public Request(int telegramLength) {
-    super(telegramLength);
+  public Request() {
   }
 
-  /**
-   * Updates the content of the request to include the given id.
-   *
-   * @param telegramId The request's new id.
-   */
-  public abstract void updateRequestContent(int telegramId);
+  protected void encodeTelegramHead(int addr, int agvId) {
+    this.addr = addr;
+    this.agvId = agvId;
+    rawContent[0] = (byte) ((this.addr >> 8) & 0xff);
+    rawContent[1] = (byte) (this.addr & 0xff);
+    rawContent[2] = (byte) (this.agvId & 0xff);
+  }
+
+  protected void encodeTelegramTail() {
+    // End of the request
+    rawContent[CHECKSUM_POS] = getCheckSum(rawContent, 3, CHECKSUM_POS);
+    rawContent[TELEGRAM_LENGTH - 1] = (byte) (0xff - rawContent[2]);
+  }
 }

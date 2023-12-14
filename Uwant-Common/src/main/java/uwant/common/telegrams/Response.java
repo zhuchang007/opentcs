@@ -7,26 +7,31 @@
  */
 package uwant.common.telegrams;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import com.google.common.primitives.Ints;
 import static java.util.Objects.requireNonNull;
 import javax.annotation.Nonnull;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 /**
  * A response represents an answer of a vehicle control to a request sent by the control system.
  *
  * @author Mats Wilhelm (Fraunhofer IML)
  */
-public abstract class Response extends Telegram {
+public class Response extends Telegram {
 
-  protected int addr;
+
   protected boolean isOK;
-
   /**
    * Creates a new instance.
-   *
-   * @param telegramLength The response's length.
    */
-  public Response(int telegramLength) {
-    super(telegramLength);
+  public Response(byte[] telegramData) {
+    requireNonNull(telegramData, "telegramData");
+    checkArgument(telegramData.length == TELEGRAM_LENGTH);
+    checkArgument(getCheckSum(telegramData, 3, CHECKSUM_POS) == telegramData[CHECKSUM_POS]);
+
+    System.arraycopy(telegramData, 0, rawContent, 0, TELEGRAM_LENGTH);
+    decodeTelegramContent();
   }
 
   /**
@@ -38,16 +43,17 @@ public abstract class Response extends Telegram {
    * @param request The request to check with.
    * @return {@code true} if, and only if, the given request's id matches this response's id.
    */
-  public boolean isResponseTo(@Nonnull Request request) {
+  public boolean isResponseSuccessfulTo(@Nonnull Request request) {
     requireNonNull(request, "request");
-    return request.getId() == getId();
+    return request.getAgvId() == getAgvId() && request.getCommandType() == getCommandType() && isOK;
   }
 
-  public int getAddr() {
-    return addr;
+  protected void decodeTelegramContent() {
+    addr = (rawContent[0] << 8) | (rawContent[1]);
+    agvId = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[2]) ^ 0x80;
+    if(this.getCommandType() != StateResponse.TYPE) {
+      isOK = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[4]) == 1;
+    }
   }
 
-  public boolean getIsOk() {
-    return isOK;
-  }
 }
