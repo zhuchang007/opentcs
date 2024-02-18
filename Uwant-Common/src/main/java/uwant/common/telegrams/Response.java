@@ -19,18 +19,12 @@ import uwant.common.vehicle.telegrams.StateResponse;
  * @author Mats Wilhelm (Fraunhofer IML)
  */
 public class Response extends Telegram {
-
-
   protected boolean isOK;
   /**
    * Creates a new instance.
    */
   public Response(byte[] telegramData) {
-    requireNonNull(telegramData, "telegramData");
-    checkArgument(telegramData.length == TELEGRAM_LENGTH);
-    checkArgument(getCheckSum(telegramData, 3, CHECKSUM_POS) == telegramData[CHECKSUM_POS]);
-
-    System.arraycopy(telegramData, 0, rawContent, 0, TELEGRAM_LENGTH);
+    super(telegramData);
     decodeTelegramContent();
   }
 
@@ -55,5 +49,4 @@ public class Response extends Telegram {
       isOK = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[4]) == 1;
     }
   }
-
 }
