@@ -21,6 +21,7 @@ dependencies {
   api project(':opentcs-plantoverview-panel-loadgenerator')
   api project(':opentcs-plantoverview-panel-resourceallocation')
   api project(':opentcs-plantoverview-themes-default')
+  api project(':uwant-common')
 
   runtimeOnly libs.slf4j.jdk14
 }

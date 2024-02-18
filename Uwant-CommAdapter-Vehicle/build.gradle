@@ -10,11 +10,11 @@ dependencies {
   api project(':openTCS-Impl-Configuration-cfg4j')
   api project(':Uwant-Common')
 
-  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.86.Final'
-//  compileOnly group: 'io.netty', name: 'netty-all', version: '4.1.4.Final', classifier: 'sources'
+  implementation  group: 'io.netty', name: 'netty-all', version: '4.1.105.Final'
 
   implementation  group: 'commons-codec', name: 'commons-codec', version: '1.13'
   implementation group: 'org.jdom', name: 'jdom2', version: '2.0.6.1'
+  implementation  'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
 
   //testCompile group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.21'
 }
