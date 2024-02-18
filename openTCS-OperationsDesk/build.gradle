@@ -17,6 +17,7 @@ dependencies {
   api project(':openTCS-PlantOverview-Panel-LoadGenerator')
   api project(':openTCS-PlantOverview-Panel-ResourceAllocation')
   api project(':openTCS-PlantOverview-Themes-Default')
+  api project(':Uwant-Common') //this must be added or there will be a runtime error
 
   runtimeOnly group: 'org.slf4j', name: 'slf4j-jdk14', version: '2.0.13'
 }
