@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,19 +56,16 @@ import org.opentcs.drivers.vehicle.management.VehicleCommAdapterPanel;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 import org.opentcs.util.CallWrapper;
 import org.opentcs.util.event.EventBus;
-import org.opentcs.util.event.EventHandler;
 import org.opentcs.util.gui.BoundsPopupMenuListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uwant.common.event.AgvOfflineEvent;
-import uwant.common.event.AgvOnlineEvent;
 import uwant.vehicle.exchange.AdapterPanelComponentsFactory;
 import uwant.vehicle.exchange.UwtProcessModelTO;
 import uwant.vehicle.exchange.commands.SendRequestCommand;
-import uwant.common.vehicle.telegrams.NodeActionSetRequest;
+import uwant.common.vehicle.telegrams.NodeActionRequest;
 
 /** @author zhuchang */
-public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler {
+public class RoutePanel extends VehicleCommAdapterPanel {
 
   private static final Logger LOG = LoggerFactory.getLogger(RoutePanel.class);
 
@@ -131,7 +127,7 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
 
     sendRouteButton.setEnabled(false);
     this.processModel = (UwtProcessModelTO) processModel;
-    if (this.processModel != null && this.processModel.getRecvCount() > 3) {
+    if (this.processModel != null && this.processModel.isCommAdapterConnected()) {
       SwingUtilities.invokeLater(
         () -> {
           sendRouteButton.setEnabled(true);
@@ -143,8 +139,6 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
         });
     }
     this.vehicleName = processModel.getVehicleName();
-
-    eventBus.subscribe(this);
 
     SwingUtilities.invokeLater(
         new Runnable() {
@@ -235,27 +229,6 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
         });
   }
 
-  @Override
-  public void onEvent(Object event) {
-    if (event instanceof AgvOnlineEvent) {
-        AgvOnlineEvent agvOnlineEvent = (AgvOnlineEvent) event;
-        if(Objects.equals(vehicleName, agvOnlineEvent.getVehicleName())) {
-          SwingUtilities.invokeLater(
-            () -> {
-              sendRouteButton.setEnabled(true);
-          });
-        }
-    } else if (event instanceof AgvOfflineEvent) {
-        AgvOfflineEvent agvOfflineEvent = (AgvOfflineEvent) event;
-        if(Objects.equals(vehicleName, agvOfflineEvent.getVehicleName())) {
-          SwingUtilities.invokeLater(
-            () -> {
-              sendRouteButton.setEnabled(false);
-          });
-        }
-    }
-  }
-
   private void initActionIdColumnComboBox(String actionIdColumnIdentifier) {
     final JComboBox<RouteDisplayAction> nodeActionCombo = new JComboBox<>();
     // 设置下拉框的展现形式
@@ -325,10 +298,10 @@ public class RoutePanel extends VehicleCommAdapterPanel implements EventHandler 
           // sendTextArea.append("发送路线" + e.get(0).getRouteId() + ":\n");
           e.forEach(
               r -> {
-                NodeActionSetRequest nodeActionSetRequest =
-                    new NodeActionSetRequest(
+                NodeActionRequest nodeActionRequest =
+                    new NodeActionRequest(
                         addr, agvId, r.getNodeId(), new ArrayList(r.getNodeActionsMap().values()));
-                sendAdapterCommand(new SendRequestCommand(nodeActionSetRequest, r.getRouteId()));
+                sendAdapterCommand(new SendRequestCommand(nodeActionRequest, r.getRouteId()));
               });
         });
   }

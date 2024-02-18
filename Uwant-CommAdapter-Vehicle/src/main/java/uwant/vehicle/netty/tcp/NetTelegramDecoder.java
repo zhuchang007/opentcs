@@ -11,7 +11,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import uwant.common.telegrams.Response;
 import uwant.common.vehicle.telegrams.ActionResponse;
-import uwant.common.vehicle.telegrams.NodeActionSetResponse;
+import uwant.common.vehicle.telegrams.NodeActionResponse;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 public class NetTelegramDecoder extends ChannelInboundHandlerAdapter {
@@ -28,8 +28,8 @@ public class NetTelegramDecoder extends ChannelInboundHandlerAdapter {
       response = new StateResponse(byteMsg);
     } else if (byteMsg[4] == ActionResponse.TYPE) {
       response = new ActionResponse(byteMsg);
-    } else if (byteMsg[4] == NodeActionSetResponse.TYPE) {
-      response = new NodeActionSetResponse(byteMsg);
+    } else if (byteMsg[4] == NodeActionResponse.TYPE) {
+      response = new NodeActionResponse(byteMsg);
     } else {
       return;
     }

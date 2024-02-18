@@ -11,70 +11,56 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
-import javax.annotation.Nonnull;
 import javax.swing.SwingUtilities;
 import org.opentcs.components.kernel.services.VehicleService;
-import org.opentcs.customizations.ApplicationEventBus;
 import org.opentcs.customizations.ServiceCallWrapper;
+import org.opentcs.data.TCSObjectReference;
+import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.AdapterCommand;
+import org.opentcs.drivers.vehicle.VehicleProcessModel;
 import org.opentcs.drivers.vehicle.management.VehicleCommAdapterPanel;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 import org.opentcs.util.CallWrapper;
-import org.opentcs.util.event.EventBus;
-import org.opentcs.util.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uwant.common.event.AgvOfflineEvent;
-import uwant.common.event.AgvOnlineEvent;
 import uwant.vehicle.UwtProcessModel;
 import uwant.vehicle.exchange.commands.SendRequestCommand;
 import uwant.common.vehicle.telegrams.ActionRequest;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
-public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
+public class UwtPanel extends VehicleCommAdapterPanel {
 
   private static final Logger LOG = LoggerFactory.getLogger(VehicleCommAdapterPanel.class);
 
-  private UwtProcessModelTO processModel;
-  private final AdapterPanelComponentsFactory adapterPanelComponentsFactory;
+  private final TCSObjectReference<Vehicle> vehicle;
+  private UwtProcessModelTO processModelTO;
+
   /** The vehicle service used for interaction with the comm adapter. */
   private final VehicleService vehicleService;
   /** The call wrapper to use for service calls. */
   private final CallWrapper callWrapper;
 
-  private final String vehicleName;
-
   /**
    * Creates new form COMPanel
    *
-   * @param adapterPanelComponentsFactory
-   * @param vehicleService
+   * @param vehicle
    * @param callWrapper
-   * @param eventBus
-   * @param processModel
+   * @param vehicleService
+   * @param processModelTO
    */
   @Inject
   public UwtPanel(
-      @Nonnull AdapterPanelComponentsFactory adapterPanelComponentsFactory,
-      @Assisted VehicleService vehicleService,
+      @Assisted TCSObjectReference<Vehicle> vehicle,
       @ServiceCallWrapper CallWrapper callWrapper,
-      @Nonnull @ApplicationEventBus EventBus eventBus,
-      @Assisted VehicleProcessModelTO processModel) {
+      @Assisted VehicleService vehicleService,
+      @Assisted VehicleProcessModelTO processModelTO) {
     initComponents();
-    this.adapterPanelComponentsFactory =
-        requireNonNull(adapterPanelComponentsFactory, "adapterPanelComponentsFactory");
+    this.vehicle = vehicle;
     this.vehicleService = requireNonNull(vehicleService, "vehicleService");
     this.callWrapper = requireNonNull(callWrapper, "callWrapper");
-    this.processModel = (UwtProcessModelTO) processModel;
-    if (this.processModel != null && this.processModel.getRecvCount() > 3) {
-      setButtonsEnabled(true);
-    } else {
-      setButtonsEnabled(false);
-    }
-    vehicleName = processModel.getVehicleName();
-
-    eventBus.subscribe(this);
+    this.processModelTO = requireNonNull((UwtProcessModelTO) processModelTO);
+    setButtonsEnabled(processModelTO.isCommAdapterConnected());
   }
 
   @Override
@@ -82,48 +68,32 @@ public class UwtPanel extends VehicleCommAdapterPanel implements EventHandler {
     if (!(newProcessModel instanceof UwtProcessModelTO)) {
       return;
     }
-    processModel = (UwtProcessModelTO) newProcessModel;
+    processModelTO = (UwtProcessModelTO) newProcessModel;
     if (Objects.equals(attributeChanged, UwtProcessModel.Attribute.CURRENT_STATE.name())) {
-      updateStatePanel(processModel.getCurrentState());
-    }
-  }
-
-  @Override
-  public void onEvent(Object event) {
-    if (event instanceof AgvOnlineEvent) {
-      AgvOnlineEvent agvOnlineEvent = (AgvOnlineEvent) event;
-      if (Objects.equals(vehicleName, agvOnlineEvent.getVehicleName())) {
-        setButtonsEnabled(true);
-      }
-    } else if (event instanceof AgvOfflineEvent) {
-      AgvOfflineEvent agvOfflineEvent = (AgvOfflineEvent) event;
-      if (Objects.equals(vehicleName, agvOfflineEvent.getVehicleName())) {
-        setButtonsEnabled(false);
-      }
+      updateStatePanel(processModelTO.getCurrentState());
+    } else if (Objects.equals(attributeChanged, VehicleProcessModel.Attribute.COMM_ADAPTER_CONNECTED.name())) {
+      setButtonsEnabled(processModelTO.isCommAdapterConnected());
     }
   }
 
   private void sendAdapterCommand(AdapterCommand command) {
     try {
-      if (processModel == null) {
-        return;
-      }
       callWrapper.call(
-          () -> vehicleService.sendCommAdapterCommand(processModel.getVehicleRef(), command));
+          () -> vehicleService.sendCommAdapterCommand(vehicle, command));
     } catch (Exception ex) {
       LOG.warn("Error sending comm adapter command '{}'", command, ex);
     }
   }
 
   private void sendActionRequest(ActionRequest.Action action) {
-    if (processModel == null || processModel.getCurrentState() == null) {
+    if (processModelTO == null || processModelTO.getCurrentState() == null) {
       return;
     }
 
     ActionRequest actionRequest =
         new ActionRequest(
-            processModel.getCurrentState().getAddr(),
-            processModel.getCurrentState().getAgvId(),
+            processModelTO.getCurrentState().getAddr(),
+            processModelTO.getCurrentState().getAgvId(),
             action,
             speedComboBox.getSelectedIndex() + 1);
     sendAdapterCommand(new SendRequestCommand(actionRequest, -1));

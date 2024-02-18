@@ -15,6 +15,7 @@ package uwant.common.vehicle.telegrams;
 import static com.google.common.base.Preconditions.checkArgument;
 import com.google.common.primitives.Ints;
 import uwant.common.telegrams.Response;
+import uwant.common.telegrams.Telegram;
 import static uwant.common.telegrams.Telegram.getCheckSum;
 import static java.util.Objects.requireNonNull;
 
@@ -26,6 +27,6 @@ public class ActionResponse extends Response {
 
   public ActionResponse(byte[] telegramData) {
     super(telegramData);
+    this.commandType = TYPE;
   }
-
 }

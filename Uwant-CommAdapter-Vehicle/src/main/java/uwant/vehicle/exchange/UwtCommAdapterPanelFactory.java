@@ -16,6 +16,7 @@ import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import javax.annotation.Nonnull;
 import org.opentcs.access.KernelServicePortal;
 import org.opentcs.data.TCSObjectReference;
 import org.opentcs.data.model.Vehicle;
@@ -31,7 +32,7 @@ public class UwtCommAdapterPanelFactory implements VehicleCommAdapterPanelFactor
 
   private static final Logger LOG = LoggerFactory.getLogger(UwtCommAdapterPanelFactory.class);
 
-  private AdapterPanelComponentsFactory componentsFactory;
+  private final AdapterPanelComponentsFactory componentsFactory;
 
   /** The service portal. */
   private final KernelServicePortal servicePortal;
@@ -47,18 +48,16 @@ public class UwtCommAdapterPanelFactory implements VehicleCommAdapterPanelFactor
 
   @Override
   public List<VehicleCommAdapterPanel> getPanelsFor(
-      VehicleCommAdapterDescription description,
-      TCSObjectReference<Vehicle> vehicle,
-      VehicleProcessModelTO processModel) {
+      @Nonnull VehicleCommAdapterDescription description,
+      @Nonnull TCSObjectReference<Vehicle> vehicle,
+      @Nonnull VehicleProcessModelTO processModel) {
     if (!providesPanelsFor(description, processModel)) {
       LOG.debug("Cannot provide panels for '{}' with '{}'.", description, processModel);
       return new ArrayList<>();
     }
     List<VehicleCommAdapterPanel> panels = new ArrayList<>();
-    panels.add(componentsFactory.createCOMPanel(servicePortal.getVehicleService(), processModel));
+    panels.add(componentsFactory.createCOMPanel(vehicle, servicePortal.getVehicleService(), processModel));
     panels.add(componentsFactory.createRoutePanel(servicePortal.getVehicleService(), processModel));
-    // panels.add(componentsFactory.createStatusPanel((CustomProcessModelTO) processModel,
-    // servicePortal.getVehicleService()));
     return panels;
   }
 

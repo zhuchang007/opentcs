@@ -362,6 +362,7 @@ public class DetailPanel
           LOG.debug("Adding {} with title {} to tabbedPane.", curPanel, curPanel.getTitle());
           tabbedPane.addTab(curPanel.getTitle(), curPanel);
         }
+        tabbedPane.setSelectedIndex(1); //select UWT Main Panel
       }
     }
   }

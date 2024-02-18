@@ -7,6 +7,7 @@
  */
 package uwant.common.telegrams;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import java.io.Serializable;
 import static java.util.Objects.requireNonNull;
 
@@ -35,6 +36,14 @@ public class Telegram implements Serializable {
    */
   public Telegram() {
     this.rawContent = new byte[TELEGRAM_LENGTH];
+  }
+
+  public Telegram(byte[] telegramData) {
+    this();
+    requireNonNull(telegramData, "telegramData");
+    checkArgument(telegramData.length == TELEGRAM_LENGTH);
+    checkArgument(getCheckSum(telegramData, 3, CHECKSUM_POS) == telegramData[CHECKSUM_POS]);
+    System.arraycopy(telegramData, 0, rawContent, 0, TELEGRAM_LENGTH);
   }
 
   /**

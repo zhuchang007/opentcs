@@ -16,14 +16,11 @@ import java.util.concurrent.*;
 import javax.annotation.Nonnull;
 import org.opentcs.customizations.kernel.KernelExecutor;
 import org.opentcs.drivers.vehicle.MovementCommand;
-import uwant.common.event.AgvOfflineEvent;
-import uwant.common.event.AgvOnlineEvent;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import uwant.common.telegrams.Request;
 import uwant.common.telegrams.RequestResponseMatcherCom;
 import uwant.common.telegrams.Response;
-import uwant.common.event.SendRequestSuccessEvent;
 import uwant.common.telegrams.TelegramSender;
 import java.util.*;
 import static java.util.Objects.requireNonNull;
@@ -34,14 +31,12 @@ import org.opentcs.drivers.vehicle.BasicVehicleCommAdapter;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 import org.opentcs.util.ExplainedBoolean;
 import org.opentcs.util.event.EventBus;
-import org.opentcs.util.event.EventHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uwant.common.netty.ChannelManager;
 import uwant.vehicle.exchange.UwtProcessModelTO;
-import uwant.common.vehicle.telegrams.ActionRequest;
 import uwant.common.vehicle.telegrams.ActionResponse;
-import uwant.common.vehicle.telegrams.NodeActionSetResponse;
+import uwant.common.vehicle.telegrams.NodeActionResponse;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 /**
@@ -50,8 +45,7 @@ import uwant.common.vehicle.telegrams.StateResponse;
 public class UwtCommAdapter
     extends BasicVehicleCommAdapter
     implements ConnectionEventListener<Response>,
-               TelegramSender,
-               EventHandler {
+               TelegramSender {
 
   private static final Logger LOG = LoggerFactory.getLogger(UwtCommAdapter.class);
 
@@ -72,6 +66,8 @@ public class UwtCommAdapter
   private long lastRecvCount = 0;
 
   private EventBus eventBus;
+
+  private final Timer checkConnectedTimer = new Timer();
 
   @Inject
   public UwtCommAdapter(
@@ -95,46 +91,18 @@ public class UwtCommAdapter
     super.initialize();
     requestResponseMatcher =
         uwtCommAdapterComponentsFactory.createRequestResponseMatcherCom(vehicle.getName(), this);
-    eventBus.subscribe(this);
+    checkConnectedTimer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        getProcessModel().setCommAdapterConnected(lastRecvCount != recvCount);
+        lastRecvCount = recvCount;
+      }
+    }, 0, 3000);
   }
 
   @Override
   public void terminate() {
     super.terminate();
-  }
-
-  @Override
-  public synchronized void enable() {
-    if (isEnabled()) {
-      return;
-    }
-    //because of sharing only one channel, so initializing it only once
-    if (vehicleChannelManager.getListenerCount() == 0) {
-      vehicleChannelManager.initialize();
-    }
-    //每隔3秒检测小车是否一直在发包
-    ((ScheduledExecutorService) getExecutor()).scheduleAtFixedRate(()->{
-      synchronized (this) {
-        if (lastRecvCount == recvCount) {
-          eventBus.onEvent(new AgvOfflineEvent(vehicle.getName()));
-        } else {
-          eventBus.onEvent(new AgvOnlineEvent(vehicle.getName()));
-        }
-        lastRecvCount = recvCount;
-      }
-    },0,3000,TimeUnit.MILLISECONDS);
-    super.enable();
-  }
-
-  @Override
-  public synchronized void disable() {
-    if (!isEnabled()) {
-      return;
-    }
-    super.disable();
-    if (vehicleChannelManager.getListenerCount() == 0) {
-      vehicleChannelManager.terminate();
-    }
   }
 
   @Override
@@ -158,14 +126,10 @@ public class UwtCommAdapter
       StateResponse stateResponse = (StateResponse) response;
       onStateResponse(stateResponse);
     }
-    else {
-      if ((response instanceof ActionResponse || response instanceof NodeActionSetResponse)) {
-        requestResponseMatcher.tryMatchWithCurrentRequest(response);
-      }
+    else if (response instanceof ActionResponse || response instanceof NodeActionResponse) {
+      requestResponseMatcher.tryMatchWithCurrentRequest(response);
     }
-
     recvCount++;
-
   }
 
   @Override
@@ -198,38 +162,20 @@ public class UwtCommAdapter
   }
 
   @Override
-  public void onEvent(Object event) {
-    if (event instanceof AgvOnlineEvent) {
-      AgvOnlineEvent agvOnlineEvent = (AgvOnlineEvent) event;
-      if (Objects.equals(vehicle.getName(), agvOnlineEvent.getVehicleName())) {
-        getProcessModel().setVehicleState(Vehicle.State.IDLE);
-      }
-    }
-    else if (event instanceof AgvOfflineEvent) {
-      AgvOfflineEvent agvOfflineEvent = (AgvOfflineEvent) event;
-      if (Objects.equals(vehicle.getName(), agvOfflineEvent.getVehicleName())) {
-        getProcessModel().setVehicleState(Vehicle.State.UNKNOWN);
-      }
-    }
-    else if (event instanceof SendRequestSuccessEvent) {
-      SendRequestSuccessEvent sendRequestSuccessEvent = (SendRequestSuccessEvent) event;
-      if (Objects.equals(vehicle.getName(), sendRequestSuccessEvent.getVehicleName())) {
-        LOG.info(
-            "Command {} successfully sent.",
-            sendRequestSuccessEvent.getRequest().getHexRawContent());
-      }
-    }
-  }
-
-  @Override
   protected synchronized void connectVehicle() {
+    //because of sharing only one channel, so initializing it only once
+    if (vehicleChannelManager.getListenerCount() == 0) {
+      vehicleChannelManager.initialize();
+    }
     vehicleChannelManager.addListener(agvId, this);
   }
 
   @Override
   protected synchronized void disconnectVehicle() {
     vehicleChannelManager.removeListener(agvId, this);
-    eventBus.onEvent(new AgvOfflineEvent(vehicle.getName()));
+    if (vehicleChannelManager.getListenerCount() == 0) {
+      vehicleChannelManager.terminate();
+    }
   }
 
   @Override
@@ -252,11 +198,8 @@ public class UwtCommAdapter
   @Override
   protected VehicleProcessModelTO createCustomTransferableProcessModel() {
     return new UwtProcessModelTO()
-               .setVehicleRef(getProcessModel().getVehicleReference())
-               .setPreviousState(getProcessModel().getPreviousState())
                .setCurrentState(getProcessModel().getCurrentState())
-               .setResponse(getProcessModel().getResponse())
-               .setRecvCount(recvCount);
+               .setResponse(getProcessModel().getResponse());
   }
 
   private int parseAgvId() {
@@ -276,14 +219,10 @@ public class UwtCommAdapter
   }
 
   private void onStateResponse(StateResponse stateResponse) {
-    int addr = stateResponse.getAddr();
-    int agvId = stateResponse.getAgvId();
+//    int addr = stateResponse.getAddr();
+//    int agvId = stateResponse.getAgvId();
 
-    getProcessModel().setPreviousState(getProcessModel().getCurrentState());
     getProcessModel().setCurrentState(stateResponse);
-
-    StateResponse previousState = getProcessModel().getPreviousState();
-    StateResponse currentState = getProcessModel().getCurrentState();
 
 //    checkForVehicleDirectionUpdate(previousState, currentState);
 //    checkForVehiclePositionUpdate(previousState, currentState);

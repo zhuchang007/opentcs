@@ -24,12 +24,14 @@ public class SendRequestEvent implements Serializable {
   private final Request request;
   private final int routeId;
   private final int sendCount;
+  private final boolean sendSuccess;
 
-  public SendRequestEvent(String vehicleName, Request request, int routeId, int sendCount) {
+  public SendRequestEvent(String vehicleName, Request request, int routeId, int sendCount, boolean sendSuccess) {
     this.vehicleName = vehicleName;
     this.request = request;
     this.routeId = routeId;
     this.sendCount = sendCount;
+    this.sendSuccess = sendSuccess;
   }
 
   public String getVehicleName() {
