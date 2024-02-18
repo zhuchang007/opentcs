@@ -26,7 +26,6 @@ public class UwtProcessModelTO extends VehicleProcessModelTO {
   /** The current/most recent state reported by the vehicle. */
   private StateResponse currentState;
   /** The previous state reported by the vehicle. */
-  private StateResponse previousState;
 
   private Response response;
 
@@ -39,17 +38,6 @@ public class UwtProcessModelTO extends VehicleProcessModelTO {
    */
   public TCSObjectReference<Vehicle> getVehicleRef() {
     return vehicleRef;
-  }
-
-  /**
-   * Sets the vehicle reference.
-   *
-   * @param vehicleRef The vehicle reference
-   * @return This
-   */
-  public UwtProcessModelTO setVehicleRef(TCSObjectReference<Vehicle> vehicleRef) {
-    this.vehicleRef = vehicleRef;
-    return this;
   }
 
   /**
@@ -77,25 +65,6 @@ public class UwtProcessModelTO extends VehicleProcessModelTO {
    *
    * @return The previous state reported by the vehicle
    */
-  public StateResponse getPreviousState() {
-    return previousState;
-  }
-
-  /**
-   * Sets the previous state reported by the vehicle.
-   *
-   * @param previousState The previous state reported by the vehicle
-   * @return This
-   */
-  public UwtProcessModelTO setPreviousState(StateResponse previousState) {
-    this.previousState = previousState;
-    return this;
-  }
-  /**
-   * Returns the previous state reported by the vehicle.
-   *
-   * @return The previous state reported by the vehicle
-   */
   public Response getResponse() {
     return response;
   }
@@ -111,12 +80,4 @@ public class UwtProcessModelTO extends VehicleProcessModelTO {
     return this;
   }
 
-  public long getRecvCount() {
-    return recvCount;
-  }
-
-  public UwtProcessModelTO setRecvCount(long recvCount) {
-    this.recvCount = recvCount;
-    return this;
-  }
 }

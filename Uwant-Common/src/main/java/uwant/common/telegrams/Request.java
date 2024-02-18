@@ -18,6 +18,10 @@ public class Request
   public Request() {
   }
 
+  public Request(byte[] telegramData) {
+    super(telegramData);
+  }
+
   protected void encodeTelegramHead(int addr, int agvId) {
     this.addr = addr;
     this.agvId = agvId;
