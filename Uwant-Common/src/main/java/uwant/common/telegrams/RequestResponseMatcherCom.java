@@ -7,18 +7,13 @@
  */
 package uwant.common.telegrams;
 
-import uwant.common.event.SendRequestFailedEvent;
-import uwant.common.event.SendRequestSuccessEvent;
+import java.util.concurrent.*;
 import uwant.common.event.SendRequestEvent;
 import org.opentcs.util.event.EventBus;
 import com.google.inject.assistedinject.Assisted;
 import java.util.LinkedList;
 import static java.util.Objects.requireNonNull;
 import java.util.Queue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 import org.opentcs.customizations.ApplicationEventBus;
@@ -32,26 +27,34 @@ import org.slf4j.LoggerFactory;
  */
 public class RequestResponseMatcherCom {
 
-  /** This class's logger. */
+  /**
+   * This class's logger.
+   */
   private static final Logger LOG = LoggerFactory.getLogger(RequestResponseMatcher.class);
-  /** The actual queue of requests. */
+  /**
+   * The actual queue of requests.
+   */
   private final Queue<WrapRequest> requests = new LinkedList<>();
-  /** The actual queue of requests. */
-  private WrapRequest currentRequest = null;
-  /** Sends the queued {@link Request}s. */
+  /**
+   * The actual queue of requests.
+   */
+  private WrapRequest sendingRequest = null;
+  /**
+   * Sends the queued {@link Request}s.
+   */
   private final TelegramSender telegramSender;
 
   private int sendCount = 0;
 
   private final EventBus eventBus;
 
-  private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-  private ScheduledFuture<?> scheduledFuture;
+  private ExecutorService service;
 
   private final String vehicleName;
 
   /**
    * Creates a new instance.
+   *
    * @param vehicleName
    * @param telegramSender Sends the queued {@link Request}s.
    * @param eventBus
@@ -67,8 +70,6 @@ public class RequestResponseMatcherCom {
 
   public void enqueueRequest(@Nonnull Request request, int routeId) {
     requireNonNull(request, "request");
-    boolean emptyQueueBeforeEnqueue = requests.isEmpty();
-
     LOG.debug("Enqueuing request: {}", request);
     WrapRequest wrapRequest = new WrapRequest(routeId, request);
     requests.add(wrapRequest);
@@ -76,92 +77,51 @@ public class RequestResponseMatcherCom {
   }
 
   private void triggerNextRequestSending() {
-    if (currentRequest != null) {
-      return;
+    if (sendingRequest == null && !requests.isEmpty()) {
+      sendingRequest = requests.poll();
+      service = Executors.newSingleThreadExecutor();
+      service.execute(this::sendingNextRequest);
     }
+  }
 
-    if (!requests.isEmpty()) {
-      currentRequest = requests.poll();
-      if (scheduledFuture != null) {
-        scheduledFuture.cancel(true);
+  /**
+   * Checks if a telegram is enqueued and sends it.
+   */
+  private void sendingNextRequest() {
+    // 发送sendCount次失败后放弃本次request发送，发送下一个request
+    try {
+      while (sendingRequest != null) {
+        telegramSender.sendTelegram(sendingRequest.getRequest());
+        synchronized (this) {
+          sendCount++;
+        }
+        TimeUnit.MILLISECONDS.sleep(2000);
+        if (sendCount == 3) {
+          LOG.info("Send {} for 3 times failed! Give up and send next!", sendingRequest.getRequest().getHexRawContent()); //todo-zc
+          eventBus.onEvent(new SendRequestEvent(vehicleName, sendingRequest.getRequest(), sendingRequest.getRouteId(), sendCount, false));
+          resetSendingRequest();
+          triggerNextRequestSending();
+        }
       }
-      scheduledFuture =
-          service.scheduleAtFixedRate(
-              () -> {
-                checkForSendingNextRequest();
-              },
-              0,
-              2000,
-              TimeUnit.MILLISECONDS);
-    } else {
-      LOG.debug("No requests to be sent.");
+    } catch (InterruptedException e) {
+      LOG.debug("sending thread sleep interrupted!");
     }
   }
 
-  /** Checks if a telegram is enqueued and sends it. */
-  public void checkForSendingNextRequest() {
-    LOG.debug("Check for sending next request.");
-    if (currentRequest != null) {
-      // 发送sendCount次失败后放弃本次request发送，发送下一个request
-      if (sendCount == 10) {
-        Request request = currentRequest.getRequest();
-        LOG.info(
-            "Send {} for three times failed! Give up and send next!", request.getHexRawContent());
-        eventBus.onEvent(new SendRequestFailedEvent(vehicleName, request));
-        currentRequest = null;
-        sendCount = 0;
-        return;
-      }
-
-      telegramSender.sendTelegram(currentRequest.getRequest());
-      sendCount++;
-      eventBus.onEvent(
-          new SendRequestEvent(
-              vehicleName, currentRequest.getRequest(), currentRequest.getRouteId(), sendCount));
-    } else {
-      triggerNextRequestSending();
-    }
-  }
-
-  public Request peekRequest() {
-    if (currentRequest == null) {
-      return null;
-    }
-    return currentRequest.getRequest();
-  }
-
-  public boolean tryMatchWithCurrentRequest(@Nonnull Response response) {
+  public void tryMatchWithCurrentRequest(@Nonnull Response response) {
     requireNonNull(response, "response");
-    if (currentRequest == null) {
-      return false;
-    }
-
-    Request request = currentRequest.getRequest();
-    if (response.isResponseSuccessfulTo(request)) {
-      sendCount = 0;
-      eventBus.onEvent(new SendRequestSuccessEvent(vehicleName, request));
-      currentRequest = null;
+    if (sendingRequest != null && response.isResponseSuccessfulTo(sendingRequest.getRequest())) {
+      LOG.info("send successful: " + sendCount); //todo-zc
+      eventBus.onEvent(new SendRequestEvent(vehicleName, sendingRequest.getRequest(), sendingRequest.getRouteId(), sendCount, true));
+      resetSendingRequest();
+      service.shutdownNow();
       triggerNextRequestSending();
-      return true;
     }
-
-    if (currentRequest != null) {
-      LOG.info(
-          "No request matching response with counter {}. Latest request counter is {}.",
-          response.getAgvId(),
-          currentRequest.getRequest().getAgvId());
-    } else {
-      LOG.info(
-          "Received response with counter {}, but no request is waiting for a response.",
-          response.getAgvId());
-    }
-
-    return false;
   }
 
-  /** Clears all requests stored in the queue. */
-  public void clear() {
-    requests.clear();
+  private synchronized  void resetSendingRequest() {
+    sendingRequest = null;
+    sendCount = 0;
   }
 
   public static class WrapRequest {

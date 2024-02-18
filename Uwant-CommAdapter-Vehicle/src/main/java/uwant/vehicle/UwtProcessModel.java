@@ -23,8 +23,6 @@ import uwant.common.vehicle.telegrams.StateResponse;
 public class UwtProcessModel extends VehicleProcessModel {
   /** The current/most recent state reported by the vehicle. */
   private StateResponse currentState;
-  /** The previous state reported by the vehicle. */
-  private StateResponse previousState;
 
   private Response response;
 
@@ -32,7 +30,6 @@ public class UwtProcessModel extends VehicleProcessModel {
     super(attachedVehicle);
     // Initialize the state fields
     final byte[] dummyData = new byte[StateResponse.TELEGRAM_LENGTH];
-    previousState = new StateResponse(dummyData);
     currentState = new StateResponse(dummyData);
   }
 
@@ -50,19 +47,6 @@ public class UwtProcessModel extends VehicleProcessModel {
   }
 
   @Nonnull
-  public StateResponse getPreviousState() {
-    return previousState;
-  }
-
-  public void setPreviousState(@Nonnull StateResponse previousState) {
-    StateResponse oldValue = this.previousState;
-    this.previousState = requireNonNull(previousState, "previousState");
-
-    getPropertyChangeSupport()
-        .firePropertyChange(Attribute.PREVIOUS_STATE.name(), oldValue, previousState);
-  }
-
-  @Nonnull
   public synchronized Response getResponse() {
     return response;
   }
@@ -75,11 +59,8 @@ public class UwtProcessModel extends VehicleProcessModel {
   }
 
   /** Model attributes specific to this implementation. */
-  public static enum Attribute {
+  public enum Attribute {
     CURRENT_STATE,
-    PREVIOUS_STATE,
     RESPONSE,
-    AGV_ADDR,
-    TELEGRAM,
   }
 }
