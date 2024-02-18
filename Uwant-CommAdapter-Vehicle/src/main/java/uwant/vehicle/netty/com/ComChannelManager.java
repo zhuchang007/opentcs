@@ -12,58 +12,57 @@
  */
 package uwant.vehicle.netty.com;
 
+import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortEvent;
+import com.fazecast.jSerialComm.SerialPortPacketListener;
 import com.google.inject.Inject;
-import uwant.common.netty.com.JSerialCommChannel;
-import uwant.common.netty.com.JSerialCommDeviceAddress;
 import uwant.common.telegrams.Request;
 import uwant.common.telegrams.Response;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
-import io.netty.channel.oio.OioEventLoopGroup;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import javax.annotation.Nonnull;
 
 import uwant.common.netty.tcp.ConnectionEventListener;
-import static org.opentcs.util.Assertions.checkState;
 import org.slf4j.LoggerFactory;
 import uwant.common.netty.ChannelManager;
+import uwant.common.telegrams.Telegram;
+import uwant.common.vehicle.telegrams.ActionResponse;
+import uwant.common.vehicle.telegrams.NodeActionResponse;
+import uwant.common.vehicle.telegrams.StateResponse;
 import uwant.vehicle.UwtCommAdapterConfiguration;
 
-/** @author zhuchang */
-public class ComChannelManager implements ChannelManager {
+/**
+ * @author zhuchang
+ */
+public class ComChannelManager
+    implements ChannelManager {
 
-  /** This class's Logger. */
+  /**
+   * This class's Logger.
+   */
   private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ComChannelManager.class);
-  /** */
-  private String port = "COM1";
-  private int  comBaudRate = 57600;
-  /** Bootstraps the channel. */
-  private Bootstrap bootstrap;
-  /** */
-  private EventLoopGroup workerGroup;
-  /** */
-  private ChannelFuture channelFuture;
+  private String comPortName = "COM1";
+  private int comBaudRate = 57600;
 
-  // private final Supplier<List<ChannelHandler>> channelSupplier;
+  private static SerialPort serialPort;
 
   private final Set<ConnectionEventListener<Response>> listeners =
       Collections.synchronizedSet(new HashSet<>());
 
-  /** Whether this component is initialized or not. */
+  /**
+   * Whether this component is initialized or not.
+   */
   private boolean initialized;
 
   @Inject
   public ComChannelManager(
       @Nonnull UwtCommAdapterConfiguration comCommAdapterConfiguration) {
     requireNonNull(comCommAdapterConfiguration, "comCommAdapterConfiguration");
-    port = comCommAdapterConfiguration.comName();
-    comBaudRate = comCommAdapterConfiguration.comBaudRate();
+    this.comPortName = comCommAdapterConfiguration.comName();
+    this.comBaudRate = comCommAdapterConfiguration.comBaudRate();
   }
 
   @Override
@@ -71,50 +70,49 @@ public class ComChannelManager implements ChannelManager {
     if (initialized) {
       return;
     }
-    workerGroup = new OioEventLoopGroup();
-
-    bootstrap = new Bootstrap();
-    bootstrap.group(workerGroup)
-        .channel(JSerialCommChannel.class)
-        .handler(new ChannelInitializer<JSerialCommChannel>() {
-          @Override
-          protected void initChannel(JSerialCommChannel ch) {
-            ch.config().setBaudrate(comBaudRate);
-            ch.pipeline().addLast(new ComTelegramDecoder(listeners), new ComTelegramEncoder());
-          }
-        });
-    initialized = true;
-    connect();
-
+    if (connect()) {
+      initialized = true;
+    }
   }
 
-  /** Initiates a connection (attempt) to the remote host and port. */
-  public void connect() {
-    checkState(isInitialized(), "Not initialized");
+  /**
+   * Initiates a connection (attempt) to the remote host and port.
+   */
+  public boolean connect() {
     if (isConnected()) {
       LOG.debug("Already connected, doing nothing.");
-      return;
+      return true;
     }
-    channelFuture = bootstrap.connect(new JSerialCommDeviceAddress(port));
+    boolean existComPort = false;
+    SerialPort[] serialPorts = SerialPort.getCommPorts();
+    for (SerialPort port : serialPorts) {
+      if (port.getSystemPortName().equals(this.comPortName)) {
+        existComPort = true;
+        serialPort = port;
+      }
+    }
+    if (!existComPort) {
+      LOG.info("The COM to be opened doesn't exist! Please modify the configuration file.");
+      return false;
+    }
+    serialPort.setBaudRate(comBaudRate);
+    serialPort.openPort();
+    serialPort.addDataListener(new PacketListener());
+    return true;
   }
 
   public void disconnect() {
-    if (!isConnected()) {
-      return;
-    }
-
-    if (channelFuture != null) {
-      channelFuture.channel().disconnect();
-      channelFuture = null;
+    if (isConnected()) {
+      serialPort.removeDataListener();
+      serialPort.closePort();
     }
   }
 
   @Override
   public void send(int agvId, Request telegram) {
-    if (!isConnected()) {
-      return;
+    if (isConnected()) {
+      serialPort.writeBytes(telegram.getRawContent(), Telegram.TELEGRAM_LENGTH);
     }
-    channelFuture.channel().writeAndFlush(telegram);
   }
 
   @Override
@@ -123,7 +121,7 @@ public class ComChannelManager implements ChannelManager {
   }
 
   public boolean isConnected() {
-    return channelFuture != null && channelFuture.channel().isActive();
+    return serialPort!=null && serialPort.isOpen();
   }
 
   @Override
@@ -132,11 +130,8 @@ public class ComChannelManager implements ChannelManager {
       return;
     }
 
-    disconnect();
-    workerGroup.shutdownGracefully();
-    workerGroup = null;
-    bootstrap = null;
     listeners.clear();
+    disconnect();
     initialized = false;
   }
 
@@ -153,5 +148,52 @@ public class ComChannelManager implements ChannelManager {
   @Override
   public int getListenerCount() {
     return listeners.size();
+  }
+
+  private final class PacketListener
+      implements SerialPortPacketListener {
+    @Override
+    public int getListeningEvents() {
+      return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
+    }
+
+    @Override
+    public int getPacketSize() {
+      return Telegram.TELEGRAM_LENGTH;
+    }
+
+    @Override
+    public void serialEvent(SerialPortEvent event) {
+      byte[] recvTelegram = event.getReceivedData();
+      if (recvTelegram.length != Telegram.TELEGRAM_LENGTH) {
+        LOG.info("Receive data wrong length! ");
+        return;
+      }
+
+      if (((recvTelegram[2] ^ recvTelegram[Telegram.TELEGRAM_LENGTH - 1]) & 0xff) != 0xff) {
+        LOG.info("Receive head and tail do not equals to '0xff'! ");
+        return;
+      }
+
+      if (recvTelegram[3] == StateResponse.TYPE) {
+        // 每个Vehicle的CommAdapter都处理
+        listeners.forEach(
+            (responseHandler) -> {
+              responseHandler.onIncomingTelegram(new StateResponse(recvTelegram));
+            });
+      }
+      else if (recvTelegram[3] == ActionResponse.TYPE) {
+        listeners.forEach(
+            (responseHandler) -> {
+              responseHandler.onIncomingTelegram(new ActionResponse(recvTelegram));
+            });
+      }
+      else if (recvTelegram[3] == NodeActionResponse.TYPE) {
+        listeners.forEach(
+            (responseHandler) -> {
+              responseHandler.onIncomingTelegram(new NodeActionResponse(recvTelegram));
+            });
+      }
+    }
   }
 }

@@ -19,12 +19,16 @@ import static uwant.common.telegrams.Telegram.getCheckSum;
 public class ActionRequest extends Request {
 
   /** The command type.命令字 */
-  public static final byte TYPE = 0x01;
+  public static final byte TYPE = 0x03;
 
   public ActionRequest(int addr, int agvId, Action action, int speed) {
     this.addr = addr;
     this.agvId = agvId;
     encodeTelegramContent(action, speed);
+  }
+
+  public ActionRequest(byte[] telegramData) {
+    super(telegramData);
   }
 
   private void encodeTelegramContent(Action action, int speed) {
@@ -49,7 +53,7 @@ public class ActionRequest extends Request {
 
     private int value = 0;
 
-    private Action(int value) {
+    Action(int value) {
       this.value = value;
     }
 

@@ -13,13 +13,15 @@
 package uwant.vehicle.exchange;
 
 import org.opentcs.components.kernel.services.VehicleService;
+import org.opentcs.data.TCSObjectReference;
+import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 import uwant.vehicle.route.edit.RoutePanel;
 
 /** @author zhuchang */
 public interface AdapterPanelComponentsFactory {
-  UwtPanel createCOMPanel(VehicleService vehicleService, VehicleProcessModelTO processModel);
+  UwtPanel createCOMPanel(TCSObjectReference<Vehicle> vehicle, VehicleService vehicleService, VehicleProcessModelTO processModel);
 
   RoutePanel createRoutePanel(VehicleService vehicleService, VehicleProcessModelTO processModel);
-  
+
 }

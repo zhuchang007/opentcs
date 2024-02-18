@@ -12,6 +12,7 @@
  */
 package uwant.common.vehicle.telegrams;
 
+import org.w3c.dom.Node;
 import uwant.common.telegrams.Request;
 import java.util.List;
 import static com.google.common.base.Preconditions.checkArgument;
@@ -19,7 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * @author zhuchang
  */
-public class NodeActionSetRequest
+public class NodeActionRequest
     extends Request {
 
   /**
@@ -27,10 +28,14 @@ public class NodeActionSetRequest
    */
   public static final byte TYPE = 0x16;
 
-  public NodeActionSetRequest(int addr, int agvId, int nodeId, List<NodeAction> listNodeAction) {
+  public NodeActionRequest(int addr, int agvId, int nodeId, List<NodeAction> listNodeAction) {
     this.addr = addr;
     this.agvId = agvId;
     encodeTelegramContent(nodeId, listNodeAction);
+  }
+
+  public NodeActionRequest(byte[] telegram) {
+    super(telegram);
   }
 
   private void encodeTelegramContent(int nodeId, List<NodeAction> listNodeAction) {
