@@ -13,17 +13,17 @@
 package uwant.common.vehicle.telegrams;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import com.google.common.primitives.Ints;
 import uwant.common.telegrams.Response;
-import static uwant.common.telegrams.Telegram.getCheckSum;
 import static java.util.Objects.requireNonNull;
 
 /** @author zhuchang */
-public class NodeActionSetResponse extends Response {
+public class NodeActionResponse
+    extends Response {
   /** The response type.命令字 */
   public static final byte TYPE = 0x16;
 
-  public NodeActionSetResponse(byte[] telegramData) {
+  public NodeActionResponse(byte[] telegramData) {
     super(telegramData);
+    this.commandType = TYPE;
   }
 }
