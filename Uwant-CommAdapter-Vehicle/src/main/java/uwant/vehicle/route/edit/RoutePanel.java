@@ -138,7 +138,7 @@ public class RoutePanel extends VehicleCommAdapterPanel {
           sendRouteButton.setEnabled(false);
         });
     }
-    this.vehicleName = processModel.getVehicleName();
+    this.vehicleName = processModel.getName();
 
     SwingUtilities.invokeLater(
         new Runnable() {
@@ -709,7 +709,7 @@ public class RoutePanel extends VehicleCommAdapterPanel {
 
   private class MyCellEditor extends DefaultCellEditor implements FocusListener {
 
-    JComboBox comboBox;
+    JComboBox<?> comboBox;
     private int editedRow;
     private int editedColumn;
     private int oldValue;
