@@ -13,13 +13,13 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.opentcs.configuration.ConfigurationBindingProvider;
-import org.opentcs.configuration.cfg4j.Cfg4jConfigurationBindingProvider;
 
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.opentcs.configuration.gestalt.GestaltConfigurationBindingProvider;
 
 public class ComManagerTest {
   @Test
@@ -50,6 +50,6 @@ public class ComManagerTest {
     Path path =
         Paths.get(System.getProperty("opentcs.base", "."), "config", "opentcs-kernel.properties")
             .toAbsolutePath();
-    return new Cfg4jConfigurationBindingProvider(path);
+    return new GestaltConfigurationBindingProvider(path);
   }
 }

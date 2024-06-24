@@ -28,11 +28,15 @@ public class UwantKernelInjectionModule
 
   private static final Logger LOG = LoggerFactory.getLogger(UwantKernelInjectionModule.class);
 
+  public UwantKernelInjectionModule() {
+  }
+
   @Override
   protected void configure() {
 
     UwtCommAdapterConfiguration config =
-        getConfigBindingProvider().get(UwtCommAdapterConfiguration.PREFIX, UwtCommAdapterConfiguration.class);
+        getConfigBindingProvider()
+            .get(UwtCommAdapterConfiguration.PREFIX, UwtCommAdapterConfiguration.class);
 
     bind(UwtCommAdapterConfiguration.class).toInstance(config);
 

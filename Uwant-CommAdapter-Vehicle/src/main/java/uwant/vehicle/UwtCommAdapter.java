@@ -15,6 +15,7 @@ package uwant.vehicle;
 import java.util.concurrent.*;
 import javax.annotation.Nonnull;
 import org.opentcs.customizations.kernel.KernelExecutor;
+import org.opentcs.data.order.TransportOrder;
 import org.opentcs.drivers.vehicle.MovementCommand;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -106,11 +107,6 @@ public class UwtCommAdapter
   }
 
   @Override
-  public synchronized ExplainedBoolean canProcess(List<String> operations) {
-    return new ExplainedBoolean(true, "can process");
-  }
-
-  @Override
   public void processMessage(Object message) {
     // Process messages sent from the kernel or a kernel extension
   }
@@ -187,6 +183,16 @@ public class UwtCommAdapter
   @Nonnull
   public final UwtProcessModel getProcessModel() {
     return (UwtProcessModel) super.getProcessModel();
+  }
+
+  @Override
+  public ExplainedBoolean canProcess(TransportOrder order) {
+    return new ExplainedBoolean(true, "can process");
+  }
+
+  @Override
+  public void onVehiclePaused(boolean paused) {
+
   }
 
   @Override

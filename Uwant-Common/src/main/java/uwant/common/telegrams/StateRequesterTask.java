@@ -11,7 +11,7 @@ import com.google.inject.assistedinject.Assisted;
 import java.awt.event.ActionListener;
 import static java.util.Objects.requireNonNull;
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
