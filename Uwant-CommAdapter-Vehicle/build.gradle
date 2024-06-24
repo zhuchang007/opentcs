@@ -7,7 +7,7 @@ dependencies {
   api project(':openTCS-API-Base')
   api project(':openTCS-API-Injection')
   api project(':openTCS-Common')
-  api project(':openTCS-Impl-Configuration-cfg4j')
+  api project(':openTCS-Impl-Configuration-gestalt')
   api project(':Uwant-Common')
 
   implementation  group: 'io.netty', name: 'netty-all', version: '4.1.105.Final'
