@@ -19,6 +19,7 @@ import uwant.vehicle.exchange.UwtCommAdapterPanelFactory;
 
 /** @author zhuchang */
 public class UwantControlCenterInjectionModule extends ControlCenterInjectionModule {
+  public UwantControlCenterInjectionModule(){}
   @Override
   protected void configure() {
     install(new FactoryModuleBuilder().build(AdapterPanelComponentsFactory.class));
