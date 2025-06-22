@@ -65,6 +65,7 @@ import uwant.vehicle.exchange.commands.SendRequestCommand;
 import uwant.common.vehicle.telegrams.NodeActionRequest;
 
 /** @author zhuchang */
+@SuppressWarnings({"deprecation","unchecked","rawtypes","this-escape"})
 public class RoutePanel extends VehicleCommAdapterPanel {
 
   private static final Logger LOG = LoggerFactory.getLogger(RoutePanel.class);
@@ -300,7 +301,7 @@ public class RoutePanel extends VehicleCommAdapterPanel {
               r -> {
                 NodeActionRequest nodeActionRequest =
                     new NodeActionRequest(
-                        addr, agvId, r.getNodeId(), new ArrayList(r.getNodeActionsMap().values()));
+                        addr, agvId, r.getNodeId(), new ArrayList<>(r.getNodeActionsMap().values()));
                 sendAdapterCommand(new SendRequestCommand(nodeActionRequest, r.getRouteId()));
               });
         });
