@@ -46,7 +46,7 @@ public class ServerConnectionStateNotifier<I> extends ChannelDuplexHandler {
       this.key = ((ConnectionAssociatedEvent) evt).getKey();
       LOG.debug("Connection associated to key: '{}'", this.key);
       this.connectionEventListener =
-          ((ClientEntry<I>) this.clientEntries.get(this.key)).getConnectionEventListener();
+          this.clientEntries.get(this.key).getConnectionEventListener();
       this.connectionEventListener.onConnect(this.key);
     }
     super.userEventTriggered(ctx, evt);

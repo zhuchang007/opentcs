@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.border.EmptyBorder;
 
 /** @author zhuchang */
+@SuppressWarnings("this-escape")
 public class StandardDialog extends javax.swing.JDialog {
 
   /** A return status code - returned if Cancel button has been pressed */
