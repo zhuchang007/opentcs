@@ -4,11 +4,11 @@ apply from: "${rootDir}/gradle/guice-application.gradle"
 //apply from: "${rootDir}/gradle/publishing-java.gradle"
 
 dependencies {
-  api project(':openTCS-API-Base')
-  api project(':openTCS-API-Injection')
-  api project(':openTCS-Common')
-  api project(':openTCS-Impl-Configuration-gestalt')
-  api project(':Uwant-Common')
+  api project(':opentcs-api-base')
+  api project(':opentcs-api-injection')
+  api project(':opentcs-common')
+  api project(':opentcs-impl-configuration-gestalt')
+  api project(':uwant-common')
 
   implementation  group: 'io.netty', name: 'netty-all', version: '4.1.105.Final'
 
@@ -22,3 +22,9 @@ dependencies {
 task release {
   dependsOn build
 }
+
+//可以用以下方法抑制告警，或者直接在代码中加@SupppresWarning({"deprection","this-escape"})
+//compileJava {
+//  options.compilerArgs << "-Xlint:-deprecation"
+//  options.compilerArgs << "-Xlint:-this-escape"
+//}

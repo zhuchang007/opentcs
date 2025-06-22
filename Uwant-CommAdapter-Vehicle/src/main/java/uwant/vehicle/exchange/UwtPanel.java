@@ -29,6 +29,7 @@ import uwant.common.vehicle.telegrams.ActionRequest;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
+@SuppressWarnings({"deprecation","this-escape"})
 public class UwtPanel extends VehicleCommAdapterPanel {
 
   private static final Logger LOG = LoggerFactory.getLogger(VehicleCommAdapterPanel.class);
