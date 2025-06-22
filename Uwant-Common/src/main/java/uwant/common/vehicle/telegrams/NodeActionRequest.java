@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * @author zhuchang
  */
+@SuppressWarnings("this-escape")
 public class NodeActionRequest
     extends Request {
 

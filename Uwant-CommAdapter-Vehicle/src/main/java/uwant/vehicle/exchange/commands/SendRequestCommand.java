@@ -18,6 +18,7 @@ import uwant.vehicle.UwtCommAdapter;
  *
  * @author zhuchang
  */
+@SuppressWarnings("deprecation")
 public class SendRequestCommand implements AdapterCommand {
 
   /** The request to send. */

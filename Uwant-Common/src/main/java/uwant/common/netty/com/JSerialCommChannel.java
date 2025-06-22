@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A channel to a serial device using the jSerialComm library.
  */
+@SuppressWarnings({"deprecation","this-escape"})
 public class JSerialCommChannel extends OioByteStreamChannel {
 
 

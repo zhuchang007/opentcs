@@ -13,6 +13,7 @@
 package uwant.vehicle.route.edit;
 
 /** @author zhuchang */
+@SuppressWarnings("this-escape")
 public class RouteAddPanel extends javax.swing.JPanel {
 
   /** Creates new form RouteAddPanel */

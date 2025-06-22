@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
  *
  * @author zhangdan
  */
+@SuppressWarnings("this-escape")
 public class StateResponse extends Response {
 
   /** The response type.命令字 */

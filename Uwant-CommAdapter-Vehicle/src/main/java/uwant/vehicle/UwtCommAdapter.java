@@ -43,6 +43,7 @@ import uwant.common.vehicle.telegrams.StateResponse;
 /**
  * @author zhuchang
  */
+@SuppressWarnings("deprecation")
 public class UwtCommAdapter
     extends BasicVehicleCommAdapter
     implements ConnectionEventListener<Response>,

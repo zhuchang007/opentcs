@@ -16,6 +16,7 @@ import uwant.common.telegrams.Request;
 import static uwant.common.telegrams.Telegram.getCheckSum;
 
 /** @author zhuchang */
+@SuppressWarnings("this-escape")
 public class ActionRequest extends Request {
 
   /** The command type.命令字 */

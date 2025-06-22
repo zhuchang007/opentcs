@@ -101,11 +101,8 @@ public class TcpServerChannelManager<I, O> {
                 }
                 ch.pipeline()
                     .addLast(
-                        new ChannelHandler[] {
-                          (ChannelHandler)
-                              new ServerConnectionStateNotifier(
-                                  TcpServerChannelManager.this.clientEntries)
-                        });
+                        new ServerConnectionStateNotifier<>(
+                            TcpServerChannelManager.this.clientEntries));
               }
             });
 
