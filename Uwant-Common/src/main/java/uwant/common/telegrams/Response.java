@@ -18,6 +18,7 @@ import uwant.common.vehicle.telegrams.StateResponse;
  *
  * @author Mats Wilhelm (Fraunhofer IML)
  */
+@SuppressWarnings("this-escape")
 public class Response extends Telegram {
   protected boolean isOK;
   /**
