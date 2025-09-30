@@ -16,7 +16,9 @@ import java.io.Serializable;
 import uwant.common.telegrams.Request;
 
 /** @author zhuchang */
-public class SendRequestEvent implements Serializable {
+public class SendRequestEvent
+    implements
+      Serializable {
 
   private static final long serialVersionUID = -588552123127735593L;
 
@@ -26,7 +28,9 @@ public class SendRequestEvent implements Serializable {
   private final int sendCount;
   private final boolean sendSuccess;
 
-  public SendRequestEvent(String vehicleName, Request request, int routeId, int sendCount, boolean sendSuccess) {
+  public SendRequestEvent(
+      String vehicleName, Request request, int routeId, int sendCount, boolean sendSuccess
+  ) {
     this.vehicleName = vehicleName;
     this.request = request;
     this.routeId = routeId;
@@ -42,7 +46,8 @@ public class SendRequestEvent implements Serializable {
   public String toString() {
     if (routeId < 0) {
       return request.getHexRawContent() + " >> " + sendCount;
-    } else {
+    }
+    else {
       return "Route " + routeId + ": " + request.getHexRawContent() + " >> " + sendCount;
     }
   }

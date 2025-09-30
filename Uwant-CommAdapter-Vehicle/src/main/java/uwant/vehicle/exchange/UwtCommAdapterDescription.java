@@ -12,12 +12,15 @@
  */
 package uwant.vehicle.exchange;
 
-import java.util.ResourceBundle;
-import org.opentcs.drivers.vehicle.VehicleCommAdapterDescription;
 import static uwant.vehicle.exchange.I18nUwantComAdapter.BUNDLE_PATH;
 
+import java.util.ResourceBundle;
+import org.opentcs.drivers.vehicle.VehicleCommAdapterDescription;
+
 /** @author zhuchang */
-public class UwtCommAdapterDescription extends VehicleCommAdapterDescription {
+public class UwtCommAdapterDescription
+    extends
+      VehicleCommAdapterDescription {
 
   @Override
   public String getDescription() {

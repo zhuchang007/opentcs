@@ -12,6 +12,8 @@
  */
 package uwant.vehicle.route.edit;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import java.awt.Component;
@@ -26,7 +28,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
@@ -59,14 +60,16 @@ import org.opentcs.util.event.EventBus;
 import org.opentcs.util.gui.BoundsPopupMenuListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uwant.common.vehicle.telegrams.NodeActionRequest;
 import uwant.vehicle.exchange.AdapterPanelComponentsFactory;
 import uwant.vehicle.exchange.UwtProcessModelTO;
 import uwant.vehicle.exchange.commands.SendRequestCommand;
-import uwant.common.vehicle.telegrams.NodeActionRequest;
 
 /** @author zhuchang */
-@SuppressWarnings({"deprecation","unchecked","rawtypes","this-escape"})
-public class RoutePanel extends VehicleCommAdapterPanel {
+@SuppressWarnings({"deprecation", "unchecked", "rawtypes", "this-escape"})
+public class RoutePanel
+    extends
+      VehicleCommAdapterPanel {
 
   private static final Logger LOG = LoggerFactory.getLogger(RoutePanel.class);
 
@@ -88,7 +91,8 @@ public class RoutePanel extends VehicleCommAdapterPanel {
     if (!tabelConfigXMLFile.exists()) {
       try {
         tabelConfigXMLFile.createNewFile();
-      } catch (IOException e) {
+      }
+      catch (IOException e) {
       }
     }
     RouteTableConfigXML routeTableConfigXML = new RouteTableConfigXML(tabelConfigXMLFile);
@@ -116,11 +120,18 @@ public class RoutePanel extends VehicleCommAdapterPanel {
    */
   @Inject
   public RoutePanel(
-      @Assisted VehicleService vehicleService,
-      @ServiceCallWrapper CallWrapper callWrapper,
-      @Nonnull AdapterPanelComponentsFactory adapterPanelComponentsFactory,
-      @Nonnull @ApplicationEventBus EventBus eventBus,
-      @Assisted VehicleProcessModelTO processModel) {
+      @Assisted
+      VehicleService vehicleService,
+      @ServiceCallWrapper
+      CallWrapper callWrapper,
+      @Nonnull
+      AdapterPanelComponentsFactory adapterPanelComponentsFactory,
+      @Nonnull
+      @ApplicationEventBus
+      EventBus eventBus,
+      @Assisted
+      VehicleProcessModelTO processModel
+  ) {
     initComponents();
 
     this.vehicleService = requireNonNull(vehicleService, "vehicleService");
@@ -130,14 +141,17 @@ public class RoutePanel extends VehicleCommAdapterPanel {
     this.processModel = (UwtProcessModelTO) processModel;
     if (this.processModel != null && this.processModel.isCommAdapterConnected()) {
       SwingUtilities.invokeLater(
-        () -> {
-          sendRouteButton.setEnabled(true);
-        });
-    } else {
+          () -> {
+            sendRouteButton.setEnabled(true);
+          }
+      );
+    }
+    else {
       SwingUtilities.invokeLater(
-        () -> {
-          sendRouteButton.setEnabled(false);
-        });
+          () -> {
+            sendRouteButton.setEnabled(false);
+          }
+      );
     }
     this.vehicleName = processModel.getName();
 
@@ -150,13 +164,12 @@ public class RoutePanel extends VehicleCommAdapterPanel {
             routeTable.setDefaultRenderer(Integer.class, new RouteTableCellRenderer());
 
             // 给每列ACTION_ID_COLUMN添加下拉框
-            String[] actionIdColumnIdentifiers =
-                new String[] {
-                  RouteTableModel.ACTION1_ID_COLUMN_IDENTIFIER,
-                  RouteTableModel.ACTION2_ID_COLUMN_IDENTIFIER,
-                  RouteTableModel.ACTION3_ID_COLUMN_IDENTIFIER,
-                  RouteTableModel.ACTION4_ID_COLUMN_IDENTIFIER
-                };
+            String[] actionIdColumnIdentifiers = new String[]{
+                RouteTableModel.ACTION1_ID_COLUMN_IDENTIFIER,
+                RouteTableModel.ACTION2_ID_COLUMN_IDENTIFIER,
+                RouteTableModel.ACTION3_ID_COLUMN_IDENTIFIER,
+                RouteTableModel.ACTION4_ID_COLUMN_IDENTIFIER
+            };
             for (String actionIdColumnIdentifier : actionIdColumnIdentifiers) {
               initActionIdColumnComboBox(actionIdColumnIdentifier);
             }
@@ -175,7 +188,8 @@ public class RoutePanel extends VehicleCommAdapterPanel {
                       initParamComboBox(row - 1, RouteTableModel.ACTION2_ID_COLUMN);
                       initParamComboBox(row - 1, RouteTableModel.ACTION3_ID_COLUMN);
                       initParamComboBox(row - 1, RouteTableModel.ACTION4_ID_COLUMN);
-                    } else if (type == TableModelEvent.UPDATE) {
+                    }
+                    else if (type == TableModelEvent.UPDATE) {
                       switch (col) {
                         case RouteTableModel.ACTION1_ID_COLUMN:
                         case RouteTableModel.ACTION2_ID_COLUMN:
@@ -194,8 +208,9 @@ public class RoutePanel extends VehicleCommAdapterPanel {
                       // 添加param1的下拉框
                       JComboBox<Integer> actionComboParam1 = new JComboBox<>();
                       actionComboParam1.setEditor(new MyComboBoxEditor());
-                      RouteDisplayAction routeDisplayAction =
-                          mapRouteDisplayAction.get((Integer) routeTable.getValueAt(row, col));
+                      RouteDisplayAction routeDisplayAction = mapRouteDisplayAction.get(
+                          (Integer) routeTable.getValueAt(row, col)
+                      );
                       Boolean isParam1Edit = routeDisplayAction.isParam1Edit();
                       actionComboParam1.setEditable(isParam1Edit);
                       Map<Integer, String> param1 = routeDisplayAction.getParam1();
@@ -210,10 +225,9 @@ public class RoutePanel extends VehicleCommAdapterPanel {
                       actionComboParam2.setEditor(new MyComboBoxEditor());
                       Boolean isParam2Edit = routeDisplayAction.isParam2Edit();
                       actionComboParam2.setEditable(isParam2Edit);
-                      Map<Integer, String> param2 =
-                          mapRouteDisplayAction
-                              .get((Integer) routeTable.getValueAt(row, col))
-                              .getParam2();
+                      Map<Integer, String> param2 = mapRouteDisplayAction
+                          .get((Integer) routeTable.getValueAt(row, col))
+                          .getParam2();
                       param2.forEach((k, v) -> actionComboParam2.addItem(k));
                       actionComboParam2.setRenderer(new ParamListCellRenderer(param2));
                       actionComboParam2.addPopupMenuListener(new BoundsPopupMenuListener());
@@ -222,12 +236,14 @@ public class RoutePanel extends VehicleCommAdapterPanel {
                           .setCellEditor(new MyCellEditor(actionComboParam2));
                     }
                   }
-                });
+                }
+            );
 
             routeList.setModel(routeListModel);
             routeList.setCellRenderer(new RouteListModelCellRenderer());
           }
-        });
+        }
+    );
   }
 
   private void initActionIdColumnComboBox(String actionIdColumnIdentifier) {
@@ -243,20 +259,22 @@ public class RoutePanel extends VehicleCommAdapterPanel {
               RouteDisplayAction value,
               int index,
               boolean isSelected,
-              boolean cellHasFocus) {
+              boolean cellHasFocus
+          ) {
 
-            JLabel label =
-                (JLabel)
-                    defaultRenderer.getListCellRendererComponent(
-                        list, value, index, isSelected, cellHasFocus);
+            JLabel label = (JLabel) defaultRenderer.getListCellRendererComponent(
+                list, value, index, isSelected, cellHasFocus
+            );
             if (value != null) {
               label.setText(value.getActionName());
-            } else {
+            }
+            else {
               label.setText(" ");
             }
             return label;
           }
-        });
+        }
+    );
     // 添加下拉框的列表元素
     mapRouteDisplayAction.forEach((k, v) -> nodeActionCombo.addItem(v));
     // 下拉框边界正对Table Cell
@@ -270,7 +288,8 @@ public class RoutePanel extends VehicleCommAdapterPanel {
               public Object getCellEditorValue() {
                 return ((RouteDisplayAction) super.getCellEditorValue()).getActionId();
               }
-            });
+            }
+        );
   }
 
   @Override
@@ -284,8 +303,10 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   private void sendAdapterCommand(AdapterCommand command) {
     try {
       callWrapper.call(
-          () -> vehicleService.sendCommAdapterCommand(processModel.getVehicleRef(), command));
-    } catch (Exception ex) {
+          () -> vehicleService.sendCommAdapterCommand(processModel.getVehicleRef(), command)
+      );
+    }
+    catch (Exception ex) {
       LOG.warn("Error sending comm adapter command '{}'", command, ex);
     }
   }
@@ -299,12 +320,14 @@ public class RoutePanel extends VehicleCommAdapterPanel {
           // sendTextArea.append("发送路线" + e.get(0).getRouteId() + ":\n");
           e.forEach(
               r -> {
-                NodeActionRequest nodeActionRequest =
-                    new NodeActionRequest(
-                        addr, agvId, r.getNodeId(), new ArrayList<>(r.getNodeActionsMap().values()));
+                NodeActionRequest nodeActionRequest = new NodeActionRequest(
+                    addr, agvId, r.getNodeId(), new ArrayList<>(r.getNodeActionsMap().values())
+                );
                 sendAdapterCommand(new SendRequestCommand(nodeActionRequest, r.getRouteId()));
-              });
-        });
+              }
+          );
+        }
+    );
   }
 
   /**
@@ -347,19 +370,23 @@ public class RoutePanel extends VehicleCommAdapterPanel {
 
     jPanel1.add(routeListScrollPane, java.awt.BorderLayout.LINE_START);
 
-    routeTable.setModel(new javax.swing.table.DefaultTableModel(
-      new Object [][] {
+    routeTable.setModel(
+        new javax.swing.table.DefaultTableModel(
+            new Object[][]{
 
-      },
-      new String [] {
+            },
+            new String[]{
 
-      }
-    ));
+            }
+        )
+    );
     routeTableScrollPane.setViewportView(routeTable);
 
     jPanel1.add(routeTableScrollPane, java.awt.BorderLayout.CENTER);
 
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("i18n/uwant/vehicle/commadapter/Bundle"); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
+        "i18n/uwant/vehicle/commadapter/Bundle"
+    ); // NOI18N
     addRouteButton.setText(bundle.getString("RoutePanel.addRouteButton")); // NOI18N
     addRouteButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -412,41 +439,70 @@ public class RoutePanel extends VehicleCommAdapterPanel {
     javax.swing.GroupLayout buttonsPanelLayout = new javax.swing.GroupLayout(buttonsPanel);
     buttonsPanel.setLayout(buttonsPanelLayout);
     buttonsPanelLayout.setHorizontalGroup(
-      buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(buttonsPanelLayout.createSequentialGroup()
-        .addContainerGap()
-        .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addGroup(buttonsPanelLayout.createSequentialGroup()
-            .addComponent(addRouteButton)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(delRouteButton)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(addNodeButton)
-            .addGap(18, 18, 18)
-            .addComponent(delNodeButton)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(sendRouteButton))
-          .addGroup(javax.swing.GroupLayout.Alignment.LEADING, buttonsPanelLayout.createSequentialGroup()
-            .addComponent(saveRouteButton)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-            .addComponent(importRouteButton)))
-        .addContainerGap(102, Short.MAX_VALUE))
+        buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(
+                buttonsPanelLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addGroup(
+                        buttonsPanelLayout.createParallelGroup(
+                            javax.swing.GroupLayout.Alignment.TRAILING
+                        )
+                            .addGroup(
+                                buttonsPanelLayout.createSequentialGroup()
+                                    .addComponent(addRouteButton)
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED
+                                    )
+                                    .addComponent(delRouteButton)
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED
+                                    )
+                                    .addComponent(addNodeButton)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(delNodeButton)
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED
+                                    )
+                                    .addComponent(sendRouteButton)
+                            )
+                            .addGroup(
+                                javax.swing.GroupLayout.Alignment.LEADING, buttonsPanelLayout
+                                    .createSequentialGroup()
+                                    .addComponent(saveRouteButton)
+                                    .addPreferredGap(
+                                        javax.swing.LayoutStyle.ComponentPlacement.UNRELATED
+                                    )
+                                    .addComponent(importRouteButton)
+                            )
+                    )
+                    .addContainerGap(102, Short.MAX_VALUE)
+            )
     );
     buttonsPanelLayout.setVerticalGroup(
-      buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(buttonsPanelLayout.createSequentialGroup()
-        .addGap(14, 14, 14)
-        .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(addRouteButton)
-          .addComponent(delRouteButton)
-          .addComponent(addNodeButton)
-          .addComponent(delNodeButton)
-          .addComponent(sendRouteButton))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addGroup(buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-          .addComponent(saveRouteButton)
-          .addComponent(importRouteButton))
-        .addContainerGap(16, Short.MAX_VALUE))
+        buttonsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(
+                buttonsPanelLayout.createSequentialGroup()
+                    .addGap(14, 14, 14)
+                    .addGroup(
+                        buttonsPanelLayout.createParallelGroup(
+                            javax.swing.GroupLayout.Alignment.BASELINE
+                        )
+                            .addComponent(addRouteButton)
+                            .addComponent(delRouteButton)
+                            .addComponent(addNodeButton)
+                            .addComponent(delNodeButton)
+                            .addComponent(sendRouteButton)
+                    )
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(
+                        buttonsPanelLayout.createParallelGroup(
+                            javax.swing.GroupLayout.Alignment.BASELINE
+                        )
+                            .addComponent(saveRouteButton)
+                            .addComponent(importRouteButton)
+                    )
+                    .addContainerGap(16, Short.MAX_VALUE)
+            )
     );
 
     jPanel1.add(buttonsPanel, java.awt.BorderLayout.PAGE_END);
@@ -457,12 +513,12 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void addRouteButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_addRouteButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_addRouteButtonActionPerformed
     // TODO add your handling code here:
-    Optional<Integer> maxValue =
-        Collections.list(routeListModel.elements()).stream()
-            .map(u -> u.get(0).getRouteId())
-            .max(Integer::compare);
+    Optional<Integer> maxValue = Collections.list(routeListModel.elements()).stream()
+        .map(u -> u.get(0).getRouteId())
+        .max(Integer::compare);
 
     int maxRouteId = maxValue.isPresent() ? maxValue.get() : 0;
 
@@ -479,11 +535,12 @@ public class RoutePanel extends VehicleCommAdapterPanel {
               .map(u -> u.get(0).getRouteId())
               .anyMatch(u -> u == routeId)
           || nodeCount < 1) {
-        java.util.ResourceBundle bundle =
-            java.util.ResourceBundle.getBundle(
-                "uwant/opentcs/vehicle/commadapter/Bundle"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
+            "uwant/opentcs/vehicle/commadapter/Bundle"
+        ); // NOI18N
         JOptionPane.showMessageDialog(
-            this, bundle.getString("RoutePanel.routeAddErrorMessageDialog"));
+            this, bundle.getString("RoutePanel.routeAddErrorMessageDialog")
+        );
         return;
       }
 
@@ -500,22 +557,26 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   } // GEN-LAST:event_addRouteButtonActionPerformed
 
   private void delRouteButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_delRouteButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_delRouteButtonActionPerformed
     // TODO add your handling code here:
     List<List<RouteTableEntry>> routeTableEntryList = routeList.getSelectedValuesList();
     routeTableEntryList.forEach(
-        (List<RouteTableEntry> entryList) -> routeListModel.removeElement(entryList));
+        (List<RouteTableEntry> entryList) -> routeListModel.removeElement(entryList)
+    );
   } // GEN-LAST:event_delRouteButtonActionPerformed
 
   private void addNodeButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_addNodeButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_addNodeButtonActionPerformed
     // TODO add your handling code here:
     if (routeTableModel.getRowCount() == 0) {
       return;
     }
     RouteTableEntry routeTableEntry = new RouteTableEntry();
     routeTableEntry.setRouteId(
-        (int) routeTableModel.getValueAt(routeTableModel.getRowCount() - 1, 0));
+        (int) routeTableModel.getValueAt(routeTableModel.getRowCount() - 1, 0)
+    );
     routeTableModel.addData(routeTableEntry);
     Collections.list(routeListModel.elements()).stream()
         .filter(u -> u.get(0).getRouteId() == routeTableEntry.getRouteId())
@@ -523,7 +584,8 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   } // GEN-LAST:event_addNodeButtonActionPerformed
 
   private void delNodeButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_delNodeButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_delNodeButtonActionPerformed
     // TODO add your handling code here:
     if (routeTableModel.getRowCount() == 0) {
       return;
@@ -537,14 +599,16 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   } // GEN-LAST:event_delNodeButtonActionPerformed
 
   private void sendRouteButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_sendRouteButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_sendRouteButtonActionPerformed
     // TODO add your handling code here:
     List<List<RouteTableEntry>> routes = routeList.getSelectedValuesList();
     sendRoutes(routes);
   } // GEN-LAST:event_sendRouteButtonActionPerformed
 
   private void routeListValueChanged(
-      javax.swing.event.ListSelectionEvent evt) { // GEN-FIRST:event_routeListValueChanged
+      javax.swing.event.ListSelectionEvent evt
+  ) { // GEN-FIRST:event_routeListValueChanged
     // TODO add your handling code here:
     if (evt.getValueIsAdjusting()) {
       return;
@@ -554,11 +618,13 @@ public class RoutePanel extends VehicleCommAdapterPanel {
     routeTableEntryList.forEach(
         (List<RouteTableEntry> entryList) -> {
           entryList.forEach(entry -> routeTableModel.addData(entry));
-        });
+        }
+    );
   } // GEN-LAST:event_routeListValueChanged
 
   private void saveRouteButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_saveRouteButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_saveRouteButtonActionPerformed
     // TODO add your handling code here:
     if (routeListModel.getSize() == 0) {
       return;
@@ -567,15 +633,17 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   } // GEN-LAST:event_saveRouteButtonActionPerformed
 
   private void importRouteButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_importRouteButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_importRouteButtonActionPerformed
     // TODO add your handling code here:
     routeListModel.clear();
     List<RouteTableEntry> allRouteTableEntries = routeTableEntryXML.importRouteFile();
     if (allRouteTableEntries == null) {
       return;
     }
-    Map<Integer, List<RouteTableEntry>> routeMap =
-        allRouteTableEntries.stream().collect(Collectors.groupingBy(e -> e.getRouteId()));
+    Map<Integer, List<RouteTableEntry>> routeMap = allRouteTableEntries.stream().collect(
+        Collectors.groupingBy(e -> e.getRouteId())
+    );
     boolean firstValue = true;
     for (Map.Entry<Integer, List<RouteTableEntry>> entry : routeMap.entrySet()) {
       // Integer key = entry.getKey();
@@ -602,30 +670,39 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   private javax.swing.JScrollPane routeTableScrollPane;
   private javax.swing.JButton saveRouteButton;
   private javax.swing.JButton sendRouteButton;
+
   // End of variables declaration//GEN-END:variables
-  private class RouteListModelCellRenderer extends DefaultListCellRenderer {
+  private class RouteListModelCellRenderer
+      extends
+        DefaultListCellRenderer {
     @Override
     public Component getListCellRendererComponent(
-        JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-      JLabel label =
-          (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+        JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus
+    ) {
+      JLabel label = (JLabel) super.getListCellRendererComponent(
+          list, value, index, isSelected, cellHasFocus
+      );
       label.setText("路线" + ((List<RouteTableEntry>) value).get(0).getRouteId());
 
       return label;
     }
   }
 
-  private class RouteTableCellRenderer extends DefaultTableCellRenderer {
+  private class RouteTableCellRenderer
+      extends
+        DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(
-        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column)
+        JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
+    )
         throws IllegalArgumentException {
 
       super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
       if (value == null) {
         setText("");
-      } else if (value instanceof Integer) {
+      }
+      else if (value instanceof Integer) {
         Integer i = (Integer) value;
         Integer actionId;
         switch (column) {
@@ -671,7 +748,8 @@ public class RoutePanel extends VehicleCommAdapterPanel {
           default:
             break;
         }
-      } else {
+      }
+      else {
         throw new IllegalArgumentException("value");
       }
       return this;
@@ -679,7 +757,9 @@ public class RoutePanel extends VehicleCommAdapterPanel {
   }
 
   // 组合框的下拉显示renderer
-  private class ParamListCellRenderer implements ListCellRenderer<Integer> {
+  private class ParamListCellRenderer
+      implements
+        ListCellRenderer<Integer> {
     private final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
     Map<Integer, String> param;
 
@@ -693,22 +773,27 @@ public class RoutePanel extends VehicleCommAdapterPanel {
         Integer value,
         int index,
         boolean isSelected,
-        boolean cellHasFocus) {
+        boolean cellHasFocus
+    ) {
 
-      JLabel label =
-          (JLabel)
-              defaultRenderer.getListCellRendererComponent(
-                  list, value, index, isSelected, cellHasFocus);
+      JLabel label = (JLabel) defaultRenderer.getListCellRendererComponent(
+          list, value, index, isSelected, cellHasFocus
+      );
       if (value != null) {
         label.setText(param.get(value));
-      } else {
+      }
+      else {
         label.setText(" ");
       }
       return label;
     }
   }
 
-  private class MyCellEditor extends DefaultCellEditor implements FocusListener {
+  private class MyCellEditor
+      extends
+        DefaultCellEditor
+      implements
+        FocusListener {
 
     JComboBox<?> comboBox;
     private int editedRow;
@@ -745,11 +830,13 @@ public class RoutePanel extends VehicleCommAdapterPanel {
     }
   }
 
-  private class MyComboBoxEditor implements ComboBoxEditor {
+  private class MyComboBoxEditor
+      implements
+        ComboBoxEditor {
 
-    private final JFormattedTextField textField =
-        new JFormattedTextField(
-            new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0"))));
+    private final JFormattedTextField textField = new JFormattedTextField(
+        new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0")))
+    );
 
     @Override
     public Component getEditorComponent() {
@@ -760,7 +847,8 @@ public class RoutePanel extends VehicleCommAdapterPanel {
     public void setItem(Object anObject) {
       if (anObject instanceof Integer) {
         textField.setText(Integer.toString((Integer) anObject));
-      } else {
+      }
+      else {
         textField.setText("");
       }
     }

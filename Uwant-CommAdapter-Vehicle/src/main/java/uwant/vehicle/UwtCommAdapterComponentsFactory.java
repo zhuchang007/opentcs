@@ -12,10 +12,10 @@
  */
 package uwant.vehicle;
 
-import uwant.common.telegrams.RequestResponseMatcherCom;
-import uwant.common.telegrams.TelegramSender;
 import org.opentcs.data.model.Vehicle;
 import uwant.common.netty.ChannelManager;
+import uwant.common.telegrams.RequestResponseMatcherCom;
+import uwant.common.telegrams.TelegramSender;
 
 /** @author zhuchang */
 public interface UwtCommAdapterComponentsFactory {
@@ -24,9 +24,12 @@ public interface UwtCommAdapterComponentsFactory {
 
   /**
    * Creates a new {@link RequestResponseMatcherCom}.
+   * 
    * @param vehicleName
    * @param telegramSender Sends telegrams/requests.
    * @return The created {@link RequestResponseMatcherCom}.
    */
-  RequestResponseMatcherCom createRequestResponseMatcherCom(String vehicleName, TelegramSender telegramSender);
+  RequestResponseMatcherCom createRequestResponseMatcherCom(
+      String vehicleName, TelegramSender telegramSender
+  );
 }

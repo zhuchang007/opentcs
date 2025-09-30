@@ -16,8 +16,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import org.jdom2.Element;
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
@@ -38,27 +38,31 @@ public class RouteTableEntryXML {
     Element root = new Element("root");
 
     routeTableEntries.forEach(
-        (List<RouteTableEntry> u) ->
-            u.forEach(
-                e -> {
-                  Element routeTableEntry = new Element("routeTableEntry");
-                  routeTableEntry.setAttribute("routeId", Integer.toString(e.getRouteId()));
-                  routeTableEntry.setAttribute("nodeId", Integer.toString(e.getNodeId()));
-                  routeTableEntry.setAttribute("count", "4");
+        (List<RouteTableEntry> u) -> u.forEach(
+            e -> {
+              Element routeTableEntry = new Element("routeTableEntry");
+              routeTableEntry.setAttribute("routeId", Integer.toString(e.getRouteId()));
+              routeTableEntry.setAttribute("nodeId", Integer.toString(e.getNodeId()));
+              routeTableEntry.setAttribute("count", "4");
 
-                  for (int i = 1; i < 5; i++) {
-                    Element nodeAction = new Element("nodeAction");
-                    nodeAction.setAttribute(
-                        "id", Integer.toString(e.getNodeActionsMap().get(i).getActionId()));
-                    nodeAction.setAttribute(
-                        "param1", Integer.toString(e.getNodeActionsMap().get(i).getActionParam1()));
-                    nodeAction.setAttribute(
-                        "param2", Integer.toString(e.getNodeActionsMap().get(i).getActionParam2()));
-                    routeTableEntry.addContent(nodeAction);
-                  }
+              for (int i = 1; i < 5; i++) {
+                Element nodeAction = new Element("nodeAction");
+                nodeAction.setAttribute(
+                    "id", Integer.toString(e.getNodeActionsMap().get(i).getActionId())
+                );
+                nodeAction.setAttribute(
+                    "param1", Integer.toString(e.getNodeActionsMap().get(i).getActionParam1())
+                );
+                nodeAction.setAttribute(
+                    "param2", Integer.toString(e.getNodeActionsMap().get(i).getActionParam2())
+                );
+                routeTableEntry.addContent(nodeAction);
+              }
 
-                  root.addContent(routeTableEntry);
-                }));
+              root.addContent(routeTableEntry);
+            }
+        )
+    );
 
     // 保存xml文件
     try {
@@ -80,7 +84,8 @@ public class RouteTableEntryXML {
         xmlOutput.setFormat(Format.getPrettyFormat());
         xmlOutput.output(doc, new FileOutputStream(file));
       }
-    } catch (IOException exception) {
+    }
+    catch (IOException exception) {
     }
   }
 
@@ -105,7 +110,8 @@ public class RouteTableEntryXML {
         parseElement(classElement, null);
 
         return routeTableEntries;
-      } catch (JDOMException | IOException ex) {
+      }
+      catch (JDOMException | IOException ex) {
         Logger.getLogger(RouteTableConfigXML.class.getName()).log(Level.SEVERE, null, ex);
         return null;
       }
@@ -126,17 +132,18 @@ public class RouteTableEntryXML {
       }
 
       if ("nodeAction".equals(element.getName())) {
-        NodeAction nodeAction =
-            new NodeAction(
-                Integer.valueOf(element.getAttributeValue("id")),
-                Integer.valueOf(element.getAttributeValue("param1")),
-                Integer.valueOf(element.getAttributeValue("param2")));
+        NodeAction nodeAction = new NodeAction(
+            Integer.valueOf(element.getAttributeValue("id")),
+            Integer.valueOf(element.getAttributeValue("param1")),
+            Integer.valueOf(element.getAttributeValue("param2"))
+        );
         routeTableEntry.getNodeActionsMap().put(i + 1, nodeAction);
       }
 
       if (!element.getChildren().isEmpty()) {
         parseElement(element, routeTableEntry);
-      } else if (i == elementList.size() - 1) {
+      }
+      else if (i == elementList.size() - 1) {
         routeTableEntries.add(routeTableEntry);
       }
     }

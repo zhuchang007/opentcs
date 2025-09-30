@@ -11,7 +11,6 @@ import com.fazecast.jSerialComm.SerialPort;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.oio.OioByteStreamChannel;
-
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -20,11 +19,15 @@ import java.util.concurrent.TimeUnit;
 /**
  * A channel to a serial device using the jSerialComm library.
  */
-@SuppressWarnings({"deprecation","this-escape"})
-public class JSerialCommChannel extends OioByteStreamChannel {
+@SuppressWarnings({"deprecation", "this-escape"})
+public class JSerialCommChannel
+    extends
+      OioByteStreamChannel {
 
 
-  private static final JSerialCommDeviceAddress LOCAL_ADDRESS = new JSerialCommDeviceAddress("localhost");
+  private static final JSerialCommDeviceAddress LOCAL_ADDRESS = new JSerialCommDeviceAddress(
+      "localhost"
+  );
 
   private final JSerialCommChannelConfig config;
 
@@ -53,8 +56,10 @@ public class JSerialCommChannel extends OioByteStreamChannel {
   }
 
   @Override
-  protected void doConnect(SocketAddress remoteAddress,
-                           SocketAddress localAddress)
+  protected void doConnect(
+      SocketAddress remoteAddress,
+      SocketAddress localAddress
+  )
       throws Exception {
     JSerialCommDeviceAddress remote = (JSerialCommDeviceAddress) remoteAddress;
     SerialPort commPort = SerialPort.getCommPort(remote.value());
@@ -62,8 +67,10 @@ public class JSerialCommChannel extends OioByteStreamChannel {
       throw new IOException("Could not open port: " + remote.value());
     }
 
-    commPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_BLOCKING,
-                                config().getOption(JSerialCommChannelOption.READ_TIMEOUT), 0);
+    commPort.setComPortTimeouts(
+        SerialPort.TIMEOUT_READ_BLOCKING,
+        config().getOption(JSerialCommChannelOption.READ_TIMEOUT), 0
+    );
 
     deviceAddress = remote;
     serialPort = commPort;
@@ -72,10 +79,10 @@ public class JSerialCommChannel extends OioByteStreamChannel {
   protected void doInit()
       throws Exception {
     serialPort.setComPortParameters(
-      config().getOption(JSerialCommChannelOption.BAUD_RATE),
-      config().getOption(JSerialCommChannelOption.DATA_BITS),
-      config().getOption(JSerialCommChannelOption.STOP_BITS).value(),
-      config().getOption(JSerialCommChannelOption.PARITY_BIT).value()
+        config().getOption(JSerialCommChannelOption.BAUD_RATE),
+        config().getOption(JSerialCommChannelOption.DATA_BITS),
+        config().getOption(JSerialCommChannelOption.STOP_BITS).value(),
+        config().getOption(JSerialCommChannelOption.PARITY_BIT).value()
     );
 
     activate(serialPort.getInputStream(), serialPort.getOutputStream());
@@ -118,7 +125,7 @@ public class JSerialCommChannel extends OioByteStreamChannel {
       throws Exception {
     open = false;
     try {
-       super.doClose();
+      super.doClose();
     }
     finally {
       if (serialPort != null) {
@@ -139,12 +146,15 @@ public class JSerialCommChannel extends OioByteStreamChannel {
   }
 
 
-  private final class JSCUnsafe extends AbstractUnsafe {
+  private final class JSCUnsafe
+      extends
+        AbstractUnsafe {
     @Override
     public void connect(
-      final SocketAddress remoteAddress,
-      final SocketAddress localAddress,
-      final ChannelPromise promise) {
+        final SocketAddress remoteAddress,
+        final SocketAddress localAddress,
+        final ChannelPromise promise
+    ) {
       if (!promise.setUncancellable() || !isOpen()) {
         return;
       }
@@ -155,30 +165,30 @@ public class JSerialCommChannel extends OioByteStreamChannel {
 
         int waitTime = config().getOption(JSerialCommChannelOption.WAIT_TIME);
         if (waitTime > 0) {
-            eventLoop().schedule(new Runnable() {
-                @Override
-                public void run() {
-                  try {
-                    doInit();
-                    safeSetSuccess(promise);
-                    if (!wasActive && isActive()) {
-                        pipeline().fireChannelActive();
-                    }
-                  }
-                  catch (Exception t) {
-                    safeSetFailure(promise, t);
-                    closeIfClosed();
-                  }
+          eventLoop().schedule(new Runnable() {
+            @Override
+            public void run() {
+              try {
+                doInit();
+                safeSetSuccess(promise);
+                if (!wasActive && isActive()) {
+                  pipeline().fireChannelActive();
                 }
-           }, waitTime, TimeUnit.MILLISECONDS);
-          }
-          else {
-            doInit();
-            safeSetSuccess(promise);
-            if (!wasActive && isActive()) {
-              pipeline().fireChannelActive();
+              }
+              catch (Exception t) {
+                safeSetFailure(promise, t);
+                closeIfClosed();
+              }
             }
+          }, waitTime, TimeUnit.MILLISECONDS);
+        }
+        else {
+          doInit();
+          safeSetSuccess(promise);
+          if (!wasActive && isActive()) {
+            pipeline().fireChannelActive();
           }
+        }
       }
       catch (Exception t) {
         safeSetFailure(promise, t);

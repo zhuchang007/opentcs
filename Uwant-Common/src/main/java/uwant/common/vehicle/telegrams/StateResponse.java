@@ -8,14 +8,14 @@
 package uwant.common.vehicle.telegrams;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import com.google.common.primitives.Ints;
-import uwant.common.telegrams.Response;
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.primitives.Ints;
 import java.util.BitSet;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.ResourceBundle;
+import uwant.common.telegrams.Response;
 
 /**
  * Represents a vehicle status response sent from the vehicle.
@@ -23,7 +23,9 @@ import java.util.ResourceBundle;
  * @author zhangdan
  */
 @SuppressWarnings("this-escape")
-public class StateResponse extends Response {
+public class StateResponse
+    extends
+      Response {
 
   /** The response type.命令字 */
   public static final byte TYPE = 0x01;
@@ -126,14 +128,15 @@ public class StateResponse extends Response {
 
 
   protected void decodeTelegramContent() {
-   super.decodeTelegramContent();
+    super.decodeTelegramContent();
     direction = Direction.fromInt(Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[7]));
     speed = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[8]);
-    rollingState =
-        RollingState.fromInt(
-            Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[11]) & 0xF0 >> 4);
-    jackingState =
-        JackingState.fromInt(Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[11]) & 0x0F);
+    rollingState = RollingState.fromInt(
+        Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[11]) & 0xF0 >> 4
+    );
+    jackingState = JackingState.fromInt(
+        Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[11]) & 0x0F
+    );
     errorCode = decodeIntToErrorCode(Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[18]));
     positionId = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[19]);
 
@@ -244,10 +247,12 @@ public class StateResponse extends Response {
     static {
       enumMap.put(STOP, BUNDLE.getString("StateResponse.RollingState.STOP"));
       enumMap.put(
-          ROLLING_CLOCKWISE, BUNDLE.getString("StateResponse.RollingState.ROLLING_CLOCKWISE"));
+          ROLLING_CLOCKWISE, BUNDLE.getString("StateResponse.RollingState.ROLLING_CLOCKWISE")
+      );
       enumMap.put(
           ROLLING_COUNTER_CLOCKWISE,
-          BUNDLE.getString("StateResponse.RollingState.ROLLING_COUNTER_CLOCKWISE"));
+          BUNDLE.getString("StateResponse.RollingState.ROLLING_COUNTER_CLOCKWISE")
+      );
       enumMap.put(UNKNOWN, BUNDLE.getString("StateResponse.RollingState.UNKNOWN"));
     }
 

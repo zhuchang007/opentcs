@@ -12,7 +12,9 @@ import uwant.common.netty.tcp.ConnectionEventListener;
 import uwant.common.telegrams.Request;
 import uwant.common.telegrams.Response;
 
-public interface ChannelManager extends Lifecycle {
+public interface ChannelManager
+    extends
+      Lifecycle {
 
   void send(int agvId, Request telegram);
 

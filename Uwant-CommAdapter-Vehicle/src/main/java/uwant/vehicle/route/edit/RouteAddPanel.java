@@ -14,7 +14,9 @@ package uwant.vehicle.route.edit;
 
 /** @author zhuchang */
 @SuppressWarnings("this-escape")
-public class RouteAddPanel extends javax.swing.JPanel {
+public class RouteAddPanel
+    extends
+      javax.swing.JPanel {
 
   /** Creates new form RouteAddPanel */
   public RouteAddPanel() {
@@ -50,19 +52,24 @@ public class RouteAddPanel extends javax.swing.JPanel {
     routeIdFormattedTextField = new javax.swing.JFormattedTextField();
     nodeCountFormattedTextField = new javax.swing.JFormattedTextField();
 
-    java.util.ResourceBundle bundle =
-        java.util.ResourceBundle.getBundle("i18n/uwant/vehicle/commadapter/Bundle"); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
+        "i18n/uwant/vehicle/commadapter/Bundle"
+    ); // NOI18N
     routeIdLabel.setText(bundle.getString("RouteAddPanel.routeIdLabel")); // NOI18N
 
     nodeCountLabel.setText(bundle.getString("RouteAddPanel.nodeCountLabel")); // NOI18N
 
     routeIdFormattedTextField.setFormatterFactory(
         new javax.swing.text.DefaultFormatterFactory(
-            new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+            new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))
+        )
+    );
 
     nodeCountFormattedTextField.setFormatterFactory(
         new javax.swing.text.DefaultFormatterFactory(
-            new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+            new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))
+        )
+    );
     nodeCountFormattedTextField.setText("5");
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -78,7 +85,8 @@ public class RouteAddPanel extends javax.swing.JPanel {
                         layout
                             .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(nodeCountLabel)
-                            .addComponent(routeIdLabel))
+                            .addComponent(routeIdLabel)
+                    )
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(
                         layout
@@ -87,9 +95,13 @@ public class RouteAddPanel extends javax.swing.JPanel {
                                 routeIdFormattedTextField,
                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                 98,
-                                Short.MAX_VALUE)
-                            .addComponent(nodeCountFormattedTextField))
-                    .addContainerGap(70, Short.MAX_VALUE)));
+                                Short.MAX_VALUE
+                            )
+                            .addComponent(nodeCountFormattedTextField)
+                    )
+                    .addContainerGap(70, Short.MAX_VALUE)
+            )
+    );
     layout.setVerticalGroup(
         layout
             .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,7 +117,9 @@ public class RouteAddPanel extends javax.swing.JPanel {
                                 routeIdFormattedTextField,
                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                javax.swing.GroupLayout.PREFERRED_SIZE
+                            )
+                    )
                     .addGap(23, 23, 23)
                     .addGroup(
                         layout
@@ -115,8 +129,12 @@ public class RouteAddPanel extends javax.swing.JPanel {
                                 nodeCountFormattedTextField,
                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                 javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(40, Short.MAX_VALUE)));
+                                javax.swing.GroupLayout.PREFERRED_SIZE
+                            )
+                    )
+                    .addContainerGap(40, Short.MAX_VALUE)
+            )
+    );
   } // </editor-fold>//GEN-END:initComponents
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

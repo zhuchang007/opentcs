@@ -7,13 +7,14 @@
  */
 package uwant.common.telegrams;
 
-import com.google.inject.assistedinject.Assisted;
-import java.util.LinkedList;
 import static java.util.Objects.requireNonNull;
+
+import com.google.inject.assistedinject.Assisted;
+import jakarta.inject.Inject;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 import javax.annotation.Nonnull;
-import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,11 +44,13 @@ public class RequestResponseMatcher {
    * @param telegramSender Sends the queued {@link Request}s.
    */
   @Inject
-  public RequestResponseMatcher(@Assisted TelegramSender telegramSender) {
+  public RequestResponseMatcher(@Assisted
+  TelegramSender telegramSender) {
     this.telegramSender = requireNonNull(telegramSender, "telegramSender");
   }
 
-  public void enqueueRequest(@Nonnull Request request) {
+  public void enqueueRequest(@Nonnull
+  Request request) {
     requireNonNull(request, "request");
     boolean emptyQueueBeforeEnqueue = requests.isEmpty();
 
@@ -88,7 +91,8 @@ public class RequestResponseMatcher {
    * @param response The response to match
    * @return <code>true</code> if the response matches to the first request in the queue.
    */
-  public boolean tryMatchWithCurrentRequest(@Nonnull Response response) {
+  public boolean tryMatchWithCurrentRequest(@Nonnull
+  Response response) {
     requireNonNull(response, "response");
 
     Request currentRequest = requests.peek();
@@ -98,12 +102,16 @@ public class RequestResponseMatcher {
     }
 
     if (currentRequest != null) {
-      LOG.info("No request matching response with counter {}. Latest request counter is {}.",
-               response.getAgvId(), currentRequest.getAgvId());
+      LOG.info(
+          "No request matching response with counter {}. Latest request counter is {}.",
+          response.getAgvId(), currentRequest.getAgvId()
+      );
     }
     else {
-      LOG.info("Received response with counter {}, but no request is waiting for a response.",
-               response.getAgvId());
+      LOG.info(
+          "Received response with counter {}, but no request is waiting for a response.",
+          response.getAgvId()
+      );
     }
 
     return false;

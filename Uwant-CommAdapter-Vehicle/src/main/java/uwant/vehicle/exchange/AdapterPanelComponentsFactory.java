@@ -20,7 +20,10 @@ import uwant.vehicle.route.edit.RoutePanel;
 
 /** @author zhuchang */
 public interface AdapterPanelComponentsFactory {
-  UwtPanel createCOMPanel(TCSObjectReference<Vehicle> vehicle, VehicleService vehicleService, VehicleProcessModelTO processModel);
+  UwtPanel createCOMPanel(
+      TCSObjectReference<Vehicle> vehicle, VehicleService vehicleService,
+      VehicleProcessModelTO processModel
+  );
 
   RoutePanel createRoutePanel(VehicleService vehicleService, VehicleProcessModelTO processModel);
 

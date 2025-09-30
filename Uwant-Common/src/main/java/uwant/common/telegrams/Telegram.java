@@ -8,15 +8,18 @@
 package uwant.common.telegrams;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import java.io.Serializable;
 import static java.util.Objects.requireNonNull;
+
+import java.io.Serializable;
 
 /**
  * The base class for all telegram types used for communication with the vehicle.
  *
  * @author Stefan Walter (Fraunhofer IML)
  */
-public class Telegram implements Serializable {
+public class Telegram
+    implements
+      Serializable {
 
   /** The expected length of a telegram of this type. */
   public static final int TELEGRAM_LENGTH = 22;
@@ -72,7 +75,9 @@ public class Telegram implements Serializable {
     return addr;
   }
 
-  public int getCommandType() {return commandType;}
+  public int getCommandType() {
+    return commandType;
+  }
 
   public static byte getCheckSum(byte[] rawContent, int startPos, int endPos) {
     requireNonNull(rawContent, "rawContent");

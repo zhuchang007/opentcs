@@ -13,17 +13,17 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import org.junit.jupiter.api.Test;
-import org.opentcs.configuration.ConfigurationBindingProvider;
-
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.junit.jupiter.api.Test;
+import org.opentcs.configuration.ConfigurationBindingProvider;
 import org.opentcs.configuration.gestalt.GestaltConfigurationBindingProvider;
 
 public class ComManagerTest {
   @Test
-  public void commManagerTest() throws InterruptedException {
+  public void commManagerTest()
+      throws InterruptedException {
     //    ComCommAdapterConfiguration configuration =
     //        configurationBindingProvider()
     //            .get(ComCommAdapterConfiguration.PREFIX, ComCommAdapterConfiguration.class);
@@ -38,18 +38,21 @@ public class ComManagerTest {
         .handler(
             new SimpleChannelInboundHandler<ByteBuf>() { // 7
               @Override
-              protected void channelRead0(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+              protected void channelRead0(ChannelHandlerContext ctx, ByteBuf in)
+                  throws Exception {
                 System.out.println("Reveived data");
               }
-            });
+            }
+        );
     bootstrap.group(new NioEventLoopGroup()); // 8 connectFuture =
     bootstrap.connect(new InetSocketAddress("localhost", 8088));
   }
 
   private static ConfigurationBindingProvider configurationBindingProvider() {
-    Path path =
-        Paths.get(System.getProperty("opentcs.base", "."), "config", "opentcs-kernel.properties")
-            .toAbsolutePath();
+    Path path = Paths.get(
+        System.getProperty("opentcs.base", "."), "config", "opentcs-kernel.properties"
+    )
+        .toAbsolutePath();
     return new GestaltConfigurationBindingProvider(path);
   }
 }

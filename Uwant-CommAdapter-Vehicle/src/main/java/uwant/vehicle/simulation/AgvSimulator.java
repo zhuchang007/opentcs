@@ -10,29 +10,33 @@ package uwant.vehicle.simulation;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortPacketListener;
-
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import uwant.common.telegrams.Telegram;
 import uwant.common.vehicle.telegrams.*;
 
-public class AgvSimulator implements SerialPortPacketListener {
+public class AgvSimulator
+    implements
+      SerialPortPacketListener {
 
-  public AgvSimulator() {}
+  public AgvSimulator() {
+  }
 
   @Override
-  public int getListeningEvents() { return SerialPort.LISTENING_EVENT_DATA_RECEIVED; }
+  public int getListeningEvents() {
+    return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
+  }
 
   @Override
-  public int getPacketSize() { return Telegram.TELEGRAM_LENGTH; }
+  public int getPacketSize() {
+    return Telegram.TELEGRAM_LENGTH;
+  }
 
   private static SerialPort comPort;
 
   @Override
-  public void serialEvent(SerialPortEvent event)
-  {
+  public void serialEvent(SerialPortEvent event) {
     byte[] recvTelegram = event.getReceivedData();
 
     if (recvTelegram.length != Telegram.TELEGRAM_LENGTH) {
@@ -53,7 +57,7 @@ public class AgvSimulator implements SerialPortPacketListener {
       byte[] newData = new byte[Telegram.TELEGRAM_LENGTH];
       newData[0] = recvTelegram[0];
       newData[1] = recvTelegram[1];
-      newData[2] = (byte)(recvTelegram[2] ^ 0x80);
+      newData[2] = (byte) (recvTelegram[2] ^ 0x80);
       newData[3] = ActionResponse.TYPE;
       newData[4] = 1;
       newData[20] = (byte) (newData[3] + newData[4]);
@@ -65,7 +69,7 @@ public class AgvSimulator implements SerialPortPacketListener {
       catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
-      comPort.writeBytes(actionResponse.getRawContent(),Telegram.TELEGRAM_LENGTH);
+      comPort.writeBytes(actionResponse.getRawContent(), Telegram.TELEGRAM_LENGTH);
       System.out.println("send actionResponse: " + actionResponse.getHexRawContent());
     }
     else if (recvTelegram[3] == NodeActionRequest.TYPE) {
@@ -74,7 +78,7 @@ public class AgvSimulator implements SerialPortPacketListener {
       byte[] newData = new byte[Telegram.TELEGRAM_LENGTH];
       newData[0] = recvTelegram[0];
       newData[1] = recvTelegram[1];
-      newData[2] = (byte)(recvTelegram[2] ^ 0x80);
+      newData[2] = (byte) (recvTelegram[2] ^ 0x80);
       newData[3] = NodeActionResponse.TYPE;
       newData[4] = 1;
       newData[20] = (byte) (newData[3] + newData[4]);
@@ -86,12 +90,13 @@ public class AgvSimulator implements SerialPortPacketListener {
       catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
-      comPort.writeBytes(nodeActionResponse.getRawContent(),Telegram.TELEGRAM_LENGTH);
+      comPort.writeBytes(nodeActionResponse.getRawContent(), Telegram.TELEGRAM_LENGTH);
       System.out.println("send nodeActionResponse: " + nodeActionResponse.getHexRawContent());
     }
   }
 
-  public static void main(String[] args) throws InterruptedException {
+  public static void main(String[] args)
+      throws InterruptedException {
     AgvSimulator agvSimulator = new AgvSimulator();
 
     byte[] rawStateResponse = new byte[22];
@@ -125,9 +130,9 @@ public class AgvSimulator implements SerialPortPacketListener {
 
     System.out.println("send stateResponse every second：" + stateResponse.getHexRawContent());
     ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
-    executorService.scheduleAtFixedRate(()->{
-      comPort.writeBytes(stateResponse.getRawContent(),Telegram.TELEGRAM_LENGTH);
-    },0, 1000, TimeUnit.MILLISECONDS);
+    executorService.scheduleAtFixedRate(() -> {
+      comPort.writeBytes(stateResponse.getRawContent(), Telegram.TELEGRAM_LENGTH);
+    }, 0, 1000, TimeUnit.MILLISECONDS);
 
     while (true) {
       Thread.sleep(1000);
@@ -135,5 +140,3 @@ public class AgvSimulator implements SerialPortPacketListener {
   }
 
 }
-
-

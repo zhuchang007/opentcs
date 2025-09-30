@@ -12,42 +12,45 @@
  */
 package uwant.vehicle;
 
-import java.util.concurrent.*;
-import javax.annotation.Nonnull;
-import org.opentcs.customizations.kernel.KernelExecutor;
-import org.opentcs.data.order.TransportOrder;
-import org.opentcs.drivers.vehicle.MovementCommand;
+import static java.util.Objects.requireNonNull;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import uwant.common.telegrams.Request;
-import uwant.common.telegrams.RequestResponseMatcherCom;
-import uwant.common.telegrams.Response;
-import uwant.common.telegrams.TelegramSender;
 import java.util.*;
-import static java.util.Objects.requireNonNull;
-import uwant.common.netty.tcp.ConnectionEventListener;
+import java.util.concurrent.*;
+import javax.annotation.Nonnull;
 import org.opentcs.customizations.ApplicationEventBus;
+import org.opentcs.customizations.kernel.KernelExecutor;
 import org.opentcs.data.model.Vehicle;
+import org.opentcs.data.order.TransportOrder;
 import org.opentcs.drivers.vehicle.BasicVehicleCommAdapter;
+import org.opentcs.drivers.vehicle.MovementCommand;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 import org.opentcs.util.ExplainedBoolean;
 import org.opentcs.util.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uwant.common.netty.ChannelManager;
-import uwant.vehicle.exchange.UwtProcessModelTO;
+import uwant.common.netty.tcp.ConnectionEventListener;
+import uwant.common.telegrams.Request;
+import uwant.common.telegrams.RequestResponseMatcherCom;
+import uwant.common.telegrams.Response;
+import uwant.common.telegrams.TelegramSender;
 import uwant.common.vehicle.telegrams.ActionResponse;
 import uwant.common.vehicle.telegrams.NodeActionResponse;
 import uwant.common.vehicle.telegrams.StateResponse;
+import uwant.vehicle.exchange.UwtProcessModelTO;
 
 /**
  * @author zhuchang
  */
 @SuppressWarnings("deprecation")
 public class UwtCommAdapter
-    extends BasicVehicleCommAdapter
-    implements ConnectionEventListener<Response>,
-               TelegramSender {
+    extends
+      BasicVehicleCommAdapter
+    implements
+      ConnectionEventListener<Response>,
+      TelegramSender {
 
   private static final Logger LOG = LoggerFactory.getLogger(UwtCommAdapter.class);
 
@@ -73,17 +76,24 @@ public class UwtCommAdapter
 
   @Inject
   public UwtCommAdapter(
-      @Assisted Vehicle vehicle,
-      @Assisted ChannelManager vehicleChannelManager,
+      @Assisted
+      Vehicle vehicle,
+      @Assisted
+      ChannelManager vehicleChannelManager,
       UwtCommAdapterComponentsFactory uwtCommAdapterComponentsFactory,
-      @KernelExecutor ScheduledExecutorService kernelExecutor,
-      @ApplicationEventBus EventBus eventBus) {
+      @KernelExecutor
+      ScheduledExecutorService kernelExecutor,
+      @ApplicationEventBus
+      EventBus eventBus
+  ) {
     super(new UwtProcessModel(vehicle), 2, "CHARGE", kernelExecutor);
-    UwtCommAdapter.vehicleChannelManager =
-        requireNonNull(vehicleChannelManager, "vehicleChannelManager");
+    UwtCommAdapter.vehicleChannelManager = requireNonNull(
+        vehicleChannelManager, "vehicleChannelManager"
+    );
     this.vehicle = requireNonNull(vehicle, "vehicle");
-    this.uwtCommAdapterComponentsFactory =
-        requireNonNull(uwtCommAdapterComponentsFactory, "comCommAdapterComponentsFactory");
+    this.uwtCommAdapterComponentsFactory = requireNonNull(
+        uwtCommAdapterComponentsFactory, "comCommAdapterComponentsFactory"
+    );
     this.eventBus = requireNonNull(eventBus, "eventBus");
     this.agvId = parseAgvId();
   }
@@ -91,8 +101,9 @@ public class UwtCommAdapter
   @Override
   public void initialize() {
     super.initialize();
-    requestResponseMatcher =
-        uwtCommAdapterComponentsFactory.createRequestResponseMatcherCom(vehicle.getName(), this);
+    requestResponseMatcher = uwtCommAdapterComponentsFactory.createRequestResponseMatcherCom(
+        vehicle.getName(), this
+    );
     checkConnectedTimer.scheduleAtFixedRate(new TimerTask() {
       @Override
       public void run() {
@@ -205,8 +216,8 @@ public class UwtCommAdapter
   @Override
   protected VehicleProcessModelTO createCustomTransferableProcessModel() {
     return new UwtProcessModelTO()
-               .setCurrentState(getProcessModel().getCurrentState())
-               .setResponse(getProcessModel().getResponse());
+        .setCurrentState(getProcessModel().getCurrentState())
+        .setResponse(getProcessModel().getResponse());
   }
 
   private int parseAgvId() {

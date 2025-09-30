@@ -23,48 +23,49 @@ import org.slf4j.LoggerFactory;
 import uwant.vehicle.exchange.I18nUwantComAdapter;
 
 /** @author zhuchang */
-public class RouteTableModel extends AbstractTableModel {
+public class RouteTableModel
+    extends
+      AbstractTableModel {
   /** This class's logger. */
   private static final Logger LOG = LoggerFactory.getLogger(RouteTableModel.class);
   /** This class's resource bundle. */
-  private static final ResourceBundle BUNDLE =
-      ResourceBundle.getBundle(I18nUwantComAdapter.BUNDLE_PATH);
+  private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+      I18nUwantComAdapter.BUNDLE_PATH
+  );
   /** The column names. */
-  public static final String[] COLUMN_NAMES =
-      new String[] {
-        BUNDLE.getString("RoutTableModel.column_routeId.headerText"),
-        BUNDLE.getString("RoutTableModel.column_nodeId.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action1_Id.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action1_param1.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action1_param2.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action2_Id.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action2_param1.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action2_param2.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action3_Id.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action3_param1.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action3_param2.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action4_Id.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action4_param1.headerText"),
-        BUNDLE.getString("RoutTableModel.column_action4_param2.headerText")
-      };
+  public static final String[] COLUMN_NAMES = new String[]{
+      BUNDLE.getString("RoutTableModel.column_routeId.headerText"),
+      BUNDLE.getString("RoutTableModel.column_nodeId.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action1_Id.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action1_param1.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action1_param2.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action2_Id.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action2_param1.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action2_param2.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action3_Id.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action3_param1.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action3_param2.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action4_Id.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action4_param1.headerText"),
+      BUNDLE.getString("RoutTableModel.column_action4_param2.headerText")
+  };
   /** The column classes. */
-  private static final Class<?>[] COLUMN_CLASSES =
-      new Class<?>[] {
-        Integer.class, // 路线编号
-        Integer.class, // 节点编号
-        Integer.class, // action1
-        Integer.class,
-        Integer.class,
-        Integer.class, // action2
-        Integer.class,
-        Integer.class,
-        Integer.class, // action3
-        Integer.class,
-        Integer.class,
-        Integer.class, // action4
-        Integer.class,
-        Integer.class,
-      };
+  private static final Class<?>[] COLUMN_CLASSES = new Class<?>[]{
+      Integer.class, // 路线编号
+      Integer.class, // 节点编号
+      Integer.class, // action1
+      Integer.class,
+      Integer.class,
+      Integer.class, // action2
+      Integer.class,
+      Integer.class,
+      Integer.class, // action3
+      Integer.class,
+      Integer.class,
+      Integer.class, // action4
+      Integer.class,
+      Integer.class,
+  };
 
   public static final int ROUTID_COLUMN = 0;
   public static final int NODEID_COLUMN = 1;
@@ -97,6 +98,7 @@ public class RouteTableModel extends AbstractTableModel {
 
   private final List<RouteTableEntry> entries = new ArrayList<>();
   private DefaultListModel<List<RouteTableEntry>> routeListModel;
+
   /**
    * Adds a new entry to this model.
    *
@@ -124,7 +126,8 @@ public class RouteTableModel extends AbstractTableModel {
               if (u.isEmpty()) {
                 routeListModel.removeElement(u);
               }
-            });
+            }
+        );
   }
 
   public void delData(int row) {
@@ -139,7 +142,8 @@ public class RouteTableModel extends AbstractTableModel {
   public String getColumnName(int columnIndex) {
     try {
       return COLUMN_NAMES[columnIndex];
-    } catch (ArrayIndexOutOfBoundsException exc) {
+    }
+    catch (ArrayIndexOutOfBoundsException exc) {
       LOG.warn("Invalid columnIndex", exc);
       return "Invalid column index " + columnIndex;
     }

@@ -7,10 +7,11 @@
  */
 package uwant.vehicle.exchange;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import javax.swing.SwingUtilities;
 import org.opentcs.components.kernel.services.VehicleService;
 import org.opentcs.customizations.ServiceCallWrapper;
@@ -23,14 +24,16 @@ import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
 import org.opentcs.util.CallWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import uwant.vehicle.UwtProcessModel;
-import uwant.vehicle.exchange.commands.SendRequestCommand;
 import uwant.common.vehicle.telegrams.ActionRequest;
 import uwant.common.vehicle.telegrams.StateResponse;
+import uwant.vehicle.UwtProcessModel;
+import uwant.vehicle.exchange.commands.SendRequestCommand;
 
 /** @author zhuchang */
-@SuppressWarnings({"deprecation","this-escape"})
-public class UwtPanel extends VehicleCommAdapterPanel {
+@SuppressWarnings({"deprecation", "this-escape"})
+public class UwtPanel
+    extends
+      VehicleCommAdapterPanel {
 
   private static final Logger LOG = LoggerFactory.getLogger(VehicleCommAdapterPanel.class);
 
@@ -52,10 +55,15 @@ public class UwtPanel extends VehicleCommAdapterPanel {
    */
   @Inject
   public UwtPanel(
-      @Assisted TCSObjectReference<Vehicle> vehicle,
-      @ServiceCallWrapper CallWrapper callWrapper,
-      @Assisted VehicleService vehicleService,
-      @Assisted VehicleProcessModelTO processModelTO) {
+      @Assisted
+      TCSObjectReference<Vehicle> vehicle,
+      @ServiceCallWrapper
+      CallWrapper callWrapper,
+      @Assisted
+      VehicleService vehicleService,
+      @Assisted
+      VehicleProcessModelTO processModelTO
+  ) {
     initComponents();
     this.vehicle = vehicle;
     this.vehicleService = requireNonNull(vehicleService, "vehicleService");
@@ -72,7 +80,10 @@ public class UwtPanel extends VehicleCommAdapterPanel {
     processModelTO = (UwtProcessModelTO) newProcessModel;
     if (Objects.equals(attributeChanged, UwtProcessModel.Attribute.CURRENT_STATE.name())) {
       updateStatePanel(processModelTO.getCurrentState());
-    } else if (Objects.equals(attributeChanged, VehicleProcessModel.Attribute.COMM_ADAPTER_CONNECTED.name())) {
+    }
+    else if (Objects.equals(
+        attributeChanged, VehicleProcessModel.Attribute.COMM_ADAPTER_CONNECTED.name()
+    )) {
       setButtonsEnabled(processModelTO.isCommAdapterConnected());
     }
   }
@@ -80,8 +91,10 @@ public class UwtPanel extends VehicleCommAdapterPanel {
   private void sendAdapterCommand(AdapterCommand command) {
     try {
       callWrapper.call(
-          () -> vehicleService.sendCommAdapterCommand(vehicle, command));
-    } catch (Exception ex) {
+          () -> vehicleService.sendCommAdapterCommand(vehicle, command)
+      );
+    }
+    catch (Exception ex) {
       LOG.warn("Error sending comm adapter command '{}'", command, ex);
     }
   }
@@ -91,43 +104,46 @@ public class UwtPanel extends VehicleCommAdapterPanel {
       return;
     }
 
-    ActionRequest actionRequest =
-        new ActionRequest(
-            processModelTO.getCurrentState().getAddr(),
-            processModelTO.getCurrentState().getAgvId(),
-            action,
-            speedComboBox.getSelectedIndex() + 1);
+    ActionRequest actionRequest = new ActionRequest(
+        processModelTO.getCurrentState().getAddr(),
+        processModelTO.getCurrentState().getAgvId(),
+        action,
+        speedComboBox.getSelectedIndex() + 1
+    );
     sendAdapterCommand(new SendRequestCommand(actionRequest, -1));
   }
 
   private void setButtonsEnabled(Boolean b) {
     SwingUtilities.invokeLater(
-      () -> {
-        onLineLabel.setEnabled(b);
-        fowardButton.setEnabled(b);
-        backwardButton.setEnabled(b);
-        patrolForwardButton.setEnabled(b);
-        patrolBackwardButton.setEnabled(b);
-        stopButton.setEnabled(b);
-        turnLeftButton.setEnabled(b);
-        turnRightButton.setEnabled(b);
-        quickStopButton.setEnabled(b);
-        speedComboBox.setEnabled(b);
-    });
+        () -> {
+          onLineLabel.setEnabled(b);
+          fowardButton.setEnabled(b);
+          backwardButton.setEnabled(b);
+          patrolForwardButton.setEnabled(b);
+          patrolBackwardButton.setEnabled(b);
+          stopButton.setEnabled(b);
+          turnLeftButton.setEnabled(b);
+          turnRightButton.setEnabled(b);
+          quickStopButton.setEnabled(b);
+          speedComboBox.setEnabled(b);
+        }
+    );
   }
 
   private void updateStatePanel(StateResponse stateResponse) {
     SwingUtilities.invokeLater(
-      () -> {
-        statusDirection.setText(stateResponse.getDirection().getName());
-        statusSpeed.setText(stateResponse.getSpeedText());
-        statusNode.setText(Integer.toString(stateResponse.getPositionId()));
-        statusErrorCode.setText(stateResponse.getErrorCode());
-        statusJacking.setText(stateResponse.getRollingState().getName());
-        statusRolling.setText(stateResponse.getJackingState().getName());
-        statusInput.setText(stateResponse.getInput());
-    });
+        () -> {
+          statusDirection.setText(stateResponse.getDirection().getName());
+          statusSpeed.setText(stateResponse.getSpeedText());
+          statusNode.setText(Integer.toString(stateResponse.getPositionId()));
+          statusErrorCode.setText(stateResponse.getErrorCode());
+          statusJacking.setText(stateResponse.getRollingState().getName());
+          statusRolling.setText(stateResponse.getJackingState().getName());
+          statusInput.setText(stateResponse.getInput());
+        }
+    );
   }
+
   /**
    * This method is called from within the constructor to initialize the form. WARNING: Do NOT
    * modify this code. The content of this method is always regenerated by the Form Editor.
@@ -169,8 +185,12 @@ public class UwtPanel extends VehicleCommAdapterPanel {
 
     setLayout(new java.awt.GridLayout(2, 0));
 
-    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("i18n/uwant/vehicle/commadapter/Bundle"); // NOI18N
-    statusPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("COMPanel.statusPanelTitle"))); // NOI18N
+    java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle(
+        "i18n/uwant/vehicle/commadapter/Bundle"
+    ); // NOI18N
+    statusPanel.setBorder(
+        javax.swing.BorderFactory.createTitledBorder(bundle.getString("COMPanel.statusPanelTitle"))
+    ); // NOI18N
     statusPanel.setLayout(new javax.swing.BoxLayout(statusPanel, javax.swing.BoxLayout.LINE_AXIS));
 
     agvStatusPanel.setMaximumSize(new java.awt.Dimension(260, 300));
@@ -180,8 +200,16 @@ public class UwtPanel extends VehicleCommAdapterPanel {
     agvStatusPanel.setLayout(new java.awt.GridLayout(8, 2));
 
     onLineLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    onLineLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uwant/vehicle/res/icons/online_icon32.png"))); // NOI18N
-    onLineLabel.setDisabledIcon(new javax.swing.ImageIcon(getClass().getResource("/uwant/vehicle/res/icons/offline-icon32.png"))); // NOI18N
+    onLineLabel.setIcon(
+        new javax.swing.ImageIcon(
+            getClass().getResource("/uwant/vehicle/res/icons/online_icon32.png")
+        )
+    ); // NOI18N
+    onLineLabel.setDisabledIcon(
+        new javax.swing.ImageIcon(
+            getClass().getResource("/uwant/vehicle/res/icons/offline-icon32.png")
+        )
+    ); // NOI18N
     agvStatusPanel.add(onLineLabel);
     agvStatusPanel.add(nullLabel);
 
@@ -189,74 +217,106 @@ public class UwtPanel extends VehicleCommAdapterPanel {
     statusDirectionLabel.setText(bundle.getString("COMPanel.statusDirectionLabel")); // NOI18N
     agvStatusPanel.add(statusDirectionLabel);
 
-    statusDirection.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    statusDirection.setBorder(
+        javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)
+    );
     agvStatusPanel.add(statusDirection);
 
     statusSpeedLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     statusSpeedLabel.setText(bundle.getString("COMPanel.statusSpeedLabel")); // NOI18N
     agvStatusPanel.add(statusSpeedLabel);
 
-    statusSpeed.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    statusSpeed.setBorder(
+        javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)
+    );
     agvStatusPanel.add(statusSpeed);
 
     statusNodeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     statusNodeLabel.setText(bundle.getString("COMPanel.statusNodeLabel")); // NOI18N
     agvStatusPanel.add(statusNodeLabel);
 
-    statusNode.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    statusNode.setBorder(
+        javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)
+    );
     agvStatusPanel.add(statusNode);
 
     statusErrorCodeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     statusErrorCodeLabel.setText(bundle.getString("COMPanel.statusErrorCodeLabel")); // NOI18N
     agvStatusPanel.add(statusErrorCodeLabel);
 
-    statusErrorCode.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    statusErrorCode.setBorder(
+        javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)
+    );
     agvStatusPanel.add(statusErrorCode);
 
     statusJackLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     statusJackLabel.setText(bundle.getString("COMPanel.statusJackLabel")); // NOI18N
     agvStatusPanel.add(statusJackLabel);
 
-    statusJacking.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    statusJacking.setBorder(
+        javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)
+    );
     agvStatusPanel.add(statusJacking);
 
     statusRollerLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     statusRollerLabel.setText(bundle.getString("COMPanel.statusRollerLabel")); // NOI18N
     agvStatusPanel.add(statusRollerLabel);
 
-    statusRolling.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+    statusRolling.setBorder(
+        javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED)
+    );
     agvStatusPanel.add(statusRolling);
 
     statusPanel.add(agvStatusPanel);
 
-    statusInput.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("COMPanel.statusInputTitle"))); // NOI18N
+    statusInput.setBorder(
+        javax.swing.BorderFactory.createTitledBorder(bundle.getString("COMPanel.statusInputTitle"))
+    ); // NOI18N
 
     javax.swing.GroupLayout agvInputPanelLayout = new javax.swing.GroupLayout(agvInputPanel);
     agvInputPanel.setLayout(agvInputPanelLayout);
     agvInputPanelLayout.setHorizontalGroup(
-      agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 400, Short.MAX_VALUE)
-      .addGroup(agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agvInputPanelLayout.createSequentialGroup()
-          .addGap(42, 42, 42)
-          .addComponent(statusInput, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
-          .addContainerGap()))
+        agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(
+                agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(
+                        javax.swing.GroupLayout.Alignment.TRAILING, agvInputPanelLayout
+                            .createSequentialGroup()
+                            .addGap(42, 42, 42)
+                            .addComponent(
+                                statusInput, javax.swing.GroupLayout.DEFAULT_SIZE, 352,
+                                Short.MAX_VALUE
+                            )
+                            .addContainerGap()
+                    )
+            )
     );
     agvInputPanelLayout.setVerticalGroup(
-      agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 306, Short.MAX_VALUE)
-      .addGroup(agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, agvInputPanelLayout.createSequentialGroup()
-          .addContainerGap(32, Short.MAX_VALUE)
-          .addComponent(statusInput, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-          .addContainerGap(38, Short.MAX_VALUE)))
+        agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 306, Short.MAX_VALUE)
+            .addGroup(
+                agvInputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(
+                        javax.swing.GroupLayout.Alignment.TRAILING, agvInputPanelLayout
+                            .createSequentialGroup()
+                            .addContainerGap(32, Short.MAX_VALUE)
+                            .addComponent(
+                                statusInput, javax.swing.GroupLayout.PREFERRED_SIZE, 236,
+                                javax.swing.GroupLayout.PREFERRED_SIZE
+                            )
+                            .addContainerGap(38, Short.MAX_VALUE)
+                    )
+            )
     );
 
     statusPanel.add(agvInputPanel);
 
     add(statusPanel);
 
-    manualPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(bundle.getString("COMPanel.manualPanelTitle"))); // NOI18N
+    manualPanel.setBorder(
+        javax.swing.BorderFactory.createTitledBorder(bundle.getString("COMPanel.manualPanelTitle"))
+    ); // NOI18N
     manualPanel.setMinimumSize(new java.awt.Dimension(100, 80));
     manualPanel.setLayout(new javax.swing.BoxLayout(manualPanel, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -341,7 +401,10 @@ public class UwtPanel extends VehicleCommAdapterPanel {
     });
     sendButtonPanel1.add(quickStopButton);
 
-    speedComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(bundle.getString("COMPanel.speedCombList").split(","))
+    speedComboBox.setModel(
+        new javax.swing.DefaultComboBoxModel<>(
+            bundle.getString("COMPanel.speedCombList").split(",")
+        )
     );
     speedComboBox.setPreferredSize(new java.awt.Dimension(95, 29));
     sendButtonPanel1.add(speedComboBox);
@@ -356,49 +419,57 @@ public class UwtPanel extends VehicleCommAdapterPanel {
   }// </editor-fold>//GEN-END:initComponents
 
   private void fowardButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_fowardButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_fowardButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.FORWARD);
   } // GEN-LAST:event_fowardButtonActionPerformed
 
   private void stopButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_stopButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_stopButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.STOP);
   } // GEN-LAST:event_stopButtonActionPerformed
 
   private void backwardButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_backwardButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_backwardButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.BACKWARD);
   } // GEN-LAST:event_backwardButtonActionPerformed
 
   private void turnLeftButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_turnLeftButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_turnLeftButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.TURN_LEFT);
   } // GEN-LAST:event_turnLeftButtonActionPerformed
 
   private void turnRightButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_turnRightButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_turnRightButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.TURN_RIGHT);
   } // GEN-LAST:event_turnRightButtonActionPerformed
 
   private void patrolForwardButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_patrolForwardButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_patrolForwardButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.PATROL_FORWARD);
   } // GEN-LAST:event_patrolForwardButtonActionPerformed
 
   private void patrolBackwardButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_patrolBackwardButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_patrolBackwardButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.PATROL_BACKWARD);
   } // GEN-LAST:event_patrolBackwardButtonActionPerformed
 
   private void quickStopButtonActionPerformed(
-      java.awt.event.ActionEvent evt) { // GEN-FIRST:event_quickStopButtonActionPerformed
+      java.awt.event.ActionEvent evt
+  ) { // GEN-FIRST:event_quickStopButtonActionPerformed
     // TODO add your handling code here:
     sendActionRequest(ActionRequest.Action.QUICK_STOP);
   } // GEN-LAST:event_quickStopButtonActionPerformed

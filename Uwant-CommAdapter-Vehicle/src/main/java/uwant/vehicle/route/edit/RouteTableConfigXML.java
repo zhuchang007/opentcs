@@ -42,128 +42,139 @@ public class RouteTableConfigXML {
 
     // 创建一个action"前进"
     createOneActionElement(
-        0, "检测", true, new String[][] {{"20", "020"}}, true, new String[][] {{"0", "0"}});
+        0, "检测", true, new String[][]{{"20", "020"}}, true, new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
         1,
         "前进",
         false,
-        new String[][] {
-          {"1", "1档"},
-          {"2", "2档"},
-          {"3", "3档"},
-          {"4", "4档"},
-          {"5", "5档"},
-          {"6", "6档"},
-          {"7", "7档"},
-          {"8", "8档"},
-          {"9", "9档"},
-          {"10", "10档"}
+        new String[][]{
+            {"1", "1档"},
+            {"2", "2档"},
+            {"3", "3档"},
+            {"4", "4档"},
+            {"5", "5档"},
+            {"6", "6档"},
+            {"7", "7档"},
+            {"8", "8档"},
+            {"9", "9档"},
+            {"10", "10档"}
         },
         true,
-        new String[][] {{"0", "0"}});
+        new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
         2,
         "后退",
         false,
-        new String[][] {
-          {"1", "1档"},
-          {"2", "2档"},
-          {"3", "3档"},
-          {"4", "4档"},
-          {"5", "5档"},
-          {"6", "6档"},
-          {"7", "7档"},
-          {"8", "8档"},
-          {"9", "9档"},
-          {"10", "10档"}
+        new String[][]{
+            {"1", "1档"},
+            {"2", "2档"},
+            {"3", "3档"},
+            {"4", "4档"},
+            {"5", "5档"},
+            {"6", "6档"},
+            {"7", "7档"},
+            {"8", "8档"},
+            {"9", "9档"},
+            {"10", "10档"}
         },
         true,
-        new String[][] {{"0", "0"}});
+        new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
         3,
         "左转",
         false,
-        new String[][] {
-          {"1", "1档"},
-          {"2", "2档"},
-          {"3", "3档"},
-          {"4", "4档"},
-          {"5", "5档"},
-          {"6", "6档"},
-          {"7", "7档"},
-          {"8", "8档"},
-          {"9", "9档"},
-          {"10", "10档"}
+        new String[][]{
+            {"1", "1档"},
+            {"2", "2档"},
+            {"3", "3档"},
+            {"4", "4档"},
+            {"5", "5档"},
+            {"6", "6档"},
+            {"7", "7档"},
+            {"8", "8档"},
+            {"9", "9档"},
+            {"10", "10档"}
         },
         true,
-        new String[][] {{"0", "0"}});
+        new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
         4,
         "右转",
         false,
-        new String[][] {
-          {"1", "1档"},
-          {"2", "2档"},
-          {"3", "3档"},
-          {"4", "4档"},
-          {"5", "5档"},
-          {"6", "6档"},
-          {"7", "7档"},
-          {"8", "8档"},
-          {"9", "9档"},
-          {"10", "10档"}
+        new String[][]{
+            {"1", "1档"},
+            {"2", "2档"},
+            {"3", "3档"},
+            {"4", "4档"},
+            {"5", "5档"},
+            {"6", "6档"},
+            {"7", "7档"},
+            {"8", "8档"},
+            {"9", "9档"},
+            {"10", "10档"}
         },
         true,
-        new String[][] {{"0", "0"}});
+        new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
         5,
         "前巡",
         false,
-        new String[][] {
-          {"1", "1档"},
-          {"2", "2档"},
-          {"3", "3档"},
-          {"4", "4档"},
-          {"5", "5档"},
-          {"6", "6档"},
-          {"7", "7档"},
-          {"8", "8档"},
-          {"9", "9档"},
-          {"10", "10档"}
+        new String[][]{
+            {"1", "1档"},
+            {"2", "2档"},
+            {"3", "3档"},
+            {"4", "4档"},
+            {"5", "5档"},
+            {"6", "6档"},
+            {"7", "7档"},
+            {"8", "8档"},
+            {"9", "9档"},
+            {"10", "10档"}
         },
         true,
-        new String[][] {{"0", "0"}});
+        new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
         6,
         "后巡",
         false,
-        new String[][] {
-          {"1", "1档"},
-          {"2", "2档"},
-          {"3", "3档"},
-          {"4", "4档"},
-          {"5", "5档"},
-          {"6", "6档"},
-          {"7", "7档"},
-          {"8", "8档"},
-          {"9", "9档"},
-          {"10", "10档"}
+        new String[][]{
+            {"1", "1档"},
+            {"2", "2档"},
+            {"3", "3档"},
+            {"4", "4档"},
+            {"5", "5档"},
+            {"6", "6档"},
+            {"7", "7档"},
+            {"8", "8档"},
+            {"9", "9档"},
+            {"10", "10档"}
         },
         true,
-        new String[][] {{"0", "0"}});
+        new String[][]{{"0", "0"}}
+    );
     createOneActionElement(
-        7, "直行分叉", false, new String[][] {{"0", "0"}}, true, new String[][] {{"83", "83"}});
+        7, "直行分叉", false, new String[][]{{"0", "0"}}, true, new String[][]{{"83", "83"}}
+    );
     createOneActionElement(
-        8, "左叉分叉", false, new String[][] {{"0", "0"}}, true, new String[][] {{"83", "83"}});
+        8, "左叉分叉", false, new String[][]{{"0", "0"}}, true, new String[][]{{"83", "83"}}
+    );
     createOneActionElement(
-        9, "右叉分叉", false, new String[][] {{"0", "0"}}, true, new String[][] {{"83", "83"}});
+        9, "右叉分叉", false, new String[][]{{"0", "0"}}, true, new String[][]{{"83", "83"}}
+    );
     createOneActionElement(
         10,
         "停止/延时",
         false,
-        new String[][] {{"0", "不记录"}, {"1", "原速原向"}, {"2", "缓慢停止"}},
+        new String[][]{{"0", "不记录"}, {"1", "原速原向"}, {"2", "缓慢停止"}},
         true,
-        new String[][] {{"83", "83"}});
+        new String[][]{{"83", "83"}}
+    );
 
     Document doc = new Document(root);
     // 创建xml输出流操作类
@@ -174,7 +185,8 @@ public class RouteTableConfigXML {
     try {
       // 把xml输出到指定位置
       xmlOutput.output(doc, new FileOutputStream(xmlFile));
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
     }
   }
 
@@ -184,7 +196,8 @@ public class RouteTableConfigXML {
       boolean param1Edit,
       String[][] param1s,
       boolean param2Edit,
-      String[][] param2s) {
+      String[][] param2s
+  ) {
     Element action = new Element("action");
 
     action
@@ -222,7 +235,8 @@ public class RouteTableConfigXML {
       parseElement(classElement, null);
 
       return mapRouteDisplayAction;
-    } catch (JDOMException | IOException ex) {
+    }
+    catch (JDOMException | IOException ex) {
       Logger.getLogger(RouteTableConfigXML.class.getName()).log(Level.SEVERE, null, ex);
       return null;
     }
@@ -256,7 +270,8 @@ public class RouteTableConfigXML {
 
       if (!element.getChildren().isEmpty()) {
         parseElement(element, routeDisplayAction);
-      } else if (i == elementList.size() - 1) {
+      }
+      else if (i == elementList.size() - 1) {
         mapRouteDisplayAction.put(routeDisplayAction.getActionId(), routeDisplayAction);
       }
     }

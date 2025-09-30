@@ -12,14 +12,16 @@
  */
 package uwant.vehicle.exchange;
 
-import uwant.common.telegrams.Response;
 import org.opentcs.data.TCSObjectReference;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.management.VehicleProcessModelTO;
+import uwant.common.telegrams.Response;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
-public class UwtProcessModelTO extends VehicleProcessModelTO {
+public class UwtProcessModelTO
+    extends
+      VehicleProcessModelTO {
   /** The vehicle reference. */
   private TCSObjectReference<Vehicle> vehicleRef;
 

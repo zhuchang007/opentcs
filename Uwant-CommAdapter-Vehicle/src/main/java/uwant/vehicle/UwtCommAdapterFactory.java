@@ -12,8 +12,9 @@
  */
 package uwant.vehicle;
 
-import com.google.inject.Inject;
 import static java.util.Objects.requireNonNull;
+
+import com.google.inject.Inject;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.VehicleCommAdapter;
 import org.opentcs.drivers.vehicle.VehicleCommAdapterDescription;
@@ -24,7 +25,9 @@ import uwant.common.netty.ChannelManager;
 import uwant.vehicle.exchange.UwtCommAdapterDescription;
 
 /** @author zhuchang */
-public class UwtCommAdapterFactory implements VehicleCommAdapterFactory {
+public class UwtCommAdapterFactory
+    implements
+      VehicleCommAdapterFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(UwtCommAdapterFactory.class);
 
@@ -34,7 +37,8 @@ public class UwtCommAdapterFactory implements VehicleCommAdapterFactory {
 
   @Inject
   public UwtCommAdapterFactory(
-      UwtCommAdapterComponentsFactory componentsFactory, ChannelManager vehicleChannelManager) {
+      UwtCommAdapterComponentsFactory componentsFactory, ChannelManager vehicleChannelManager
+  ) {
     this.componentsFactory = requireNonNull(componentsFactory, "componentsFactory");
     this.vehicleChannelManager = requireNonNull(vehicleChannelManager, "vehicleChannelManager");
   }

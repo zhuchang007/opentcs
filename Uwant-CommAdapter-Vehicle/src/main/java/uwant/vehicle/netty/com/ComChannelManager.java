@@ -12,22 +12,21 @@
  */
 package uwant.vehicle.netty.com;
 
+import static java.util.Objects.requireNonNull;
+
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortPacketListener;
 import com.google.inject.Inject;
-import uwant.common.telegrams.Request;
-import uwant.common.telegrams.Response;
-
 import java.util.Collections;
 import java.util.HashSet;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import javax.annotation.Nonnull;
-
-import uwant.common.netty.tcp.ConnectionEventListener;
 import org.slf4j.LoggerFactory;
 import uwant.common.netty.ChannelManager;
+import uwant.common.netty.tcp.ConnectionEventListener;
+import uwant.common.telegrams.Request;
+import uwant.common.telegrams.Response;
 import uwant.common.telegrams.Telegram;
 import uwant.common.vehicle.telegrams.ActionResponse;
 import uwant.common.vehicle.telegrams.NodeActionResponse;
@@ -38,7 +37,8 @@ import uwant.vehicle.UwtCommAdapterConfiguration;
  * @author zhuchang
  */
 public class ComChannelManager
-    implements ChannelManager {
+    implements
+      ChannelManager {
 
   /**
    * This class's Logger.
@@ -49,8 +49,9 @@ public class ComChannelManager
 
   private static SerialPort serialPort;
 
-  private final Set<ConnectionEventListener<Response>> listeners =
-      Collections.synchronizedSet(new HashSet<>());
+  private final Set<ConnectionEventListener<Response>> listeners = Collections.synchronizedSet(
+      new HashSet<>()
+  );
 
   /**
    * Whether this component is initialized or not.
@@ -59,7 +60,9 @@ public class ComChannelManager
 
   @Inject
   public ComChannelManager(
-      @Nonnull UwtCommAdapterConfiguration comCommAdapterConfiguration) {
+      @Nonnull
+      UwtCommAdapterConfiguration comCommAdapterConfiguration
+  ) {
     requireNonNull(comCommAdapterConfiguration, "comCommAdapterConfiguration");
     this.comPortName = comCommAdapterConfiguration.comName();
     this.comBaudRate = comCommAdapterConfiguration.comBaudRate();
@@ -121,7 +124,7 @@ public class ComChannelManager
   }
 
   public boolean isConnected() {
-    return serialPort!=null && serialPort.isOpen();
+    return serialPort != null && serialPort.isOpen();
   }
 
   @Override
@@ -151,7 +154,8 @@ public class ComChannelManager
   }
 
   private final class PacketListener
-      implements SerialPortPacketListener {
+      implements
+        SerialPortPacketListener {
     @Override
     public int getListeningEvents() {
       return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
@@ -180,19 +184,22 @@ public class ComChannelManager
         listeners.forEach(
             (responseHandler) -> {
               responseHandler.onIncomingTelegram(new StateResponse(recvTelegram));
-            });
+            }
+        );
       }
       else if (recvTelegram[3] == ActionResponse.TYPE) {
         listeners.forEach(
             (responseHandler) -> {
               responseHandler.onIncomingTelegram(new ActionResponse(recvTelegram));
-            });
+            }
+        );
       }
       else if (recvTelegram[3] == NodeActionResponse.TYPE) {
         listeners.forEach(
             (responseHandler) -> {
               responseHandler.onIncomingTelegram(new NodeActionResponse(recvTelegram));
-            });
+            }
+        );
       }
     }
   }

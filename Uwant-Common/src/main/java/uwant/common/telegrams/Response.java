@@ -8,8 +8,9 @@
 package uwant.common.telegrams;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import com.google.common.primitives.Ints;
 import static java.util.Objects.requireNonNull;
+
+import com.google.common.primitives.Ints;
 import javax.annotation.Nonnull;
 import uwant.common.vehicle.telegrams.StateResponse;
 
@@ -19,8 +20,11 @@ import uwant.common.vehicle.telegrams.StateResponse;
  * @author Mats Wilhelm (Fraunhofer IML)
  */
 @SuppressWarnings("this-escape")
-public class Response extends Telegram {
+public class Response
+    extends
+      Telegram {
   protected boolean isOK;
+
   /**
    * Creates a new instance.
    */
@@ -38,7 +42,8 @@ public class Response extends Telegram {
    * @param request The request to check with.
    * @return {@code true} if, and only if, the given request's id matches this response's id.
    */
-  public boolean isResponseSuccessfulTo(@Nonnull Request request) {
+  public boolean isResponseSuccessfulTo(@Nonnull
+  Request request) {
     requireNonNull(request, "request");
     return request.getAgvId() == getAgvId() && request.getCommandType() == getCommandType() && isOK;
   }
@@ -46,7 +51,7 @@ public class Response extends Telegram {
   protected void decodeTelegramContent() {
     addr = (rawContent[0] << 8) | (rawContent[1]);
     agvId = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[2]) ^ 0x80;
-    if(this.getCommandType() != StateResponse.TYPE) {
+    if (this.getCommandType() != StateResponse.TYPE) {
       isOK = Ints.fromBytes((byte) 0, (byte) 0, (byte) 0, rawContent[4]) == 1;
     }
   }

@@ -8,6 +8,7 @@ import jakarta.inject.Singleton;
 import org.opentcs.components.kernelcontrolcenter.ControlCenterPanel;
 import org.opentcs.customizations.controlcenter.ControlCenterInjectionModule;
 import org.opentcs.kernelcontrolcenter.peripherals.PeripheralsPanel;
+import org.opentcs.kernelcontrolcenter.samples.SamplesPanel;
 import org.opentcs.kernelcontrolcenter.util.KernelControlCenterConfiguration;
 import org.opentcs.kernelcontrolcenter.vehicles.DriverGUI;
 
@@ -49,6 +50,7 @@ public class DefaultKernelControlCenterExtensionsModule
     if (configuration.enablePeripheralsPanel()) {
       operatingBinder.addBinding().to(PeripheralsPanel.class);
     }
+    operatingBinder.addBinding().to(SamplesPanel.class);
 
     install(new FactoryModuleBuilder().build(ControlCenterInfoHandlerFactory.class));
 
