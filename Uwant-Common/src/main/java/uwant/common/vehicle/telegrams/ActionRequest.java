@@ -12,12 +12,15 @@
  */
 package uwant.common.vehicle.telegrams;
 
-import uwant.common.telegrams.Request;
 import static uwant.common.telegrams.Telegram.getCheckSum;
+
+import uwant.common.telegrams.Request;
 
 /** @author zhuchang */
 @SuppressWarnings("this-escape")
-public class ActionRequest extends Request {
+public class ActionRequest
+    extends
+      Request {
 
   /** The command type.命令字 */
   public static final byte TYPE = 0x03;
@@ -33,7 +36,7 @@ public class ActionRequest extends Request {
   }
 
   private void encodeTelegramContent(Action action, int speed) {
-    encodeTelegramHead(this.addr,this.agvId);
+    encodeTelegramHead(this.addr, this.agvId);
     // Payload of the request
     this.commandType = TYPE;
     rawContent[3] = this.commandType;

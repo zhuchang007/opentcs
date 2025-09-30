@@ -12,17 +12,19 @@
  */
 package uwant.common.vehicle.telegrams;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
+import java.util.List;
 import org.w3c.dom.Node;
 import uwant.common.telegrams.Request;
-import java.util.List;
-import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * @author zhuchang
  */
 @SuppressWarnings("this-escape")
 public class NodeActionRequest
-    extends Request {
+    extends
+      Request {
 
   /**
    * The Request type.命令字
@@ -42,7 +44,7 @@ public class NodeActionRequest
   private void encodeTelegramContent(int nodeId, List<NodeAction> listNodeAction) {
     checkArgument(listNodeAction.size() < 5, "listNodeAction larger than 4!");
 
-    encodeTelegramHead(this.addr,this.agvId);
+    encodeTelegramHead(this.addr, this.agvId);
     // Payload of the telegram
     rawContent[2] = (byte) (agvId & 0xff);
     rawContent[3] = TYPE;

@@ -14,9 +14,12 @@ import uwant.common.vehicle.telegrams.ActionResponse;
 import uwant.common.vehicle.telegrams.NodeActionResponse;
 import uwant.common.vehicle.telegrams.StateResponse;
 
-public class NetTelegramDecoder extends ChannelInboundHandlerAdapter {
+public class NetTelegramDecoder
+    extends
+      ChannelInboundHandlerAdapter {
   @Override
-  public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+  public void channelRead(ChannelHandlerContext ctx, Object msg)
+      throws Exception {
     // ctx.fireChannelRead(msg);
     if (!(msg instanceof byte[])) {
       return;
@@ -26,11 +29,14 @@ public class NetTelegramDecoder extends ChannelInboundHandlerAdapter {
     Response response;
     if (byteMsg[4] == StateResponse.TYPE) {
       response = new StateResponse(byteMsg);
-    } else if (byteMsg[4] == ActionResponse.TYPE) {
+    }
+    else if (byteMsg[4] == ActionResponse.TYPE) {
       response = new ActionResponse(byteMsg);
-    } else if (byteMsg[4] == NodeActionResponse.TYPE) {
+    }
+    else if (byteMsg[4] == NodeActionResponse.TYPE) {
       response = new NodeActionResponse(byteMsg);
-    } else {
+    }
+    else {
       return;
     }
 

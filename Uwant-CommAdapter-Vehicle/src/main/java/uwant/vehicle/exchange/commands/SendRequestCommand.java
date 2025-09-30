@@ -7,10 +7,11 @@
  */
 package uwant.vehicle.exchange.commands;
 
-import uwant.common.telegrams.Request;
 import static java.util.Objects.requireNonNull;
+
 import org.opentcs.drivers.vehicle.AdapterCommand;
 import org.opentcs.drivers.vehicle.VehicleCommAdapter;
+import uwant.common.telegrams.Request;
 import uwant.vehicle.UwtCommAdapter;
 
 /**
@@ -19,7 +20,9 @@ import uwant.vehicle.UwtCommAdapter;
  * @author zhuchang
  */
 @SuppressWarnings("deprecation")
-public class SendRequestCommand implements AdapterCommand {
+public class SendRequestCommand
+    implements
+      AdapterCommand {
 
   /** The request to send. */
   private final Request request;

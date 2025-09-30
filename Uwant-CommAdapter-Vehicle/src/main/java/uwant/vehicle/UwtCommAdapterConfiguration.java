@@ -24,7 +24,8 @@ public interface UwtCommAdapterConfiguration {
   @ConfigurationEntry(
       type = "String",
       description = "the mode of communication adapter,COM or TCP",
-      orderKey = "0_commMode")
+      orderKey = "0_commMode"
+  )
   String commMode();
 
   @ConfigurationEntry(type = "String", description = "The Com Name.", orderKey = "0_comName")
@@ -36,6 +37,7 @@ public interface UwtCommAdapterConfiguration {
   @ConfigurationEntry(
       type = "Integer",
       description = "TCP listening Port",
-      orderKey = "0_tcpPort")
+      orderKey = "0_tcpPort"
+  )
   int tcpPort();
 }

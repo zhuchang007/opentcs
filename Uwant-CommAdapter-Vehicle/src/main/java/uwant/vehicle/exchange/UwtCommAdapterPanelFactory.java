@@ -12,10 +12,11 @@
  */
 package uwant.vehicle.exchange;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import javax.annotation.Nonnull;
 import org.opentcs.access.KernelServicePortal;
 import org.opentcs.data.TCSObjectReference;
@@ -28,7 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** @author zhuchang */
-public class UwtCommAdapterPanelFactory implements VehicleCommAdapterPanelFactory {
+public class UwtCommAdapterPanelFactory
+    implements
+      VehicleCommAdapterPanelFactory {
 
   private static final Logger LOG = LoggerFactory.getLogger(UwtCommAdapterPanelFactory.class);
 
@@ -41,22 +44,29 @@ public class UwtCommAdapterPanelFactory implements VehicleCommAdapterPanelFactor
 
   @Inject
   public UwtCommAdapterPanelFactory(
-      AdapterPanelComponentsFactory componentsFactory, KernelServicePortal servicePortal) {
+      AdapterPanelComponentsFactory componentsFactory, KernelServicePortal servicePortal
+  ) {
     this.componentsFactory = requireNonNull(componentsFactory, "componentsFactory");
     this.servicePortal = requireNonNull(servicePortal, "servicePortal");
   }
 
   @Override
   public List<VehicleCommAdapterPanel> getPanelsFor(
-      @Nonnull VehicleCommAdapterDescription description,
-      @Nonnull TCSObjectReference<Vehicle> vehicle,
-      @Nonnull VehicleProcessModelTO processModel) {
+      @Nonnull
+      VehicleCommAdapterDescription description,
+      @Nonnull
+      TCSObjectReference<Vehicle> vehicle,
+      @Nonnull
+      VehicleProcessModelTO processModel
+  ) {
     if (!providesPanelsFor(description, processModel)) {
       LOG.debug("Cannot provide panels for '{}' with '{}'.", description, processModel);
       return new ArrayList<>();
     }
     List<VehicleCommAdapterPanel> panels = new ArrayList<>();
-    panels.add(componentsFactory.createCOMPanel(vehicle, servicePortal.getVehicleService(), processModel));
+    panels.add(
+        componentsFactory.createCOMPanel(vehicle, servicePortal.getVehicleService(), processModel)
+    );
     panels.add(componentsFactory.createRoutePanel(servicePortal.getVehicleService(), processModel));
     return panels;
   }
@@ -68,10 +78,11 @@ public class UwtCommAdapterPanelFactory implements VehicleCommAdapterPanelFactor
    * @param description The description to check for.
    * @param processModel The process model.
    * @return {@code true} if, and only if, this factory can provide comm adapter panels for the
-   *     given description and the given type of process model.
+   * given description and the given type of process model.
    */
   private boolean providesPanelsFor(
-      VehicleCommAdapterDescription description, VehicleProcessModelTO processModel) {
+      VehicleCommAdapterDescription description, VehicleProcessModelTO processModel
+  ) {
     return (description instanceof UwtCommAdapterDescription)
         && (processModel instanceof UwtProcessModelTO);
   }

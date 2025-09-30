@@ -24,7 +24,9 @@ import javax.swing.table.TableCellEditor;
  *
  * @author Philipp Seifert (Fraunhofer IML)
  */
-final class SingleCellEditor implements TableCellEditor {
+final class SingleCellEditor
+    implements
+      TableCellEditor {
 
   /** The TableCellEditors for every cell. */
   private final Map<Integer, TableCellEditor> editors;
@@ -58,7 +60,8 @@ final class SingleCellEditor implements TableCellEditor {
 
   @Override
   public Component getTableCellEditorComponent(
-      JTable whichTable, Object value, boolean isSelected, int row, int column) {
+      JTable whichTable, Object value, boolean isSelected, int row, int column
+  ) {
     return editor.getTableCellEditorComponent(whichTable, value, isSelected, row, column);
   }
 
@@ -111,7 +114,8 @@ final class SingleCellEditor implements TableCellEditor {
     int row;
     if (e == null) {
       row = table.getSelectionModel().getAnchorSelectionIndex();
-    } else {
+    }
+    else {
       row = table.rowAtPoint(e.getPoint());
     }
     editor = editors.get(row);
@@ -122,6 +126,7 @@ final class SingleCellEditor implements TableCellEditor {
         row,
         table.getColumn(RouteTableModel.NODEID_COLUMN_IDENTIFIER).getModelIndex(),
         false,
-        false);
+        false
+    );
   }
 }

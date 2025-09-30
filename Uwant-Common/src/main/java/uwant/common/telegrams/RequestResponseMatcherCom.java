@@ -7,18 +7,19 @@
  */
 package uwant.common.telegrams;
 
-import java.util.concurrent.*;
-import uwant.common.event.SendRequestEvent;
-import org.opentcs.util.event.EventBus;
-import com.google.inject.assistedinject.Assisted;
-import java.util.LinkedList;
 import static java.util.Objects.requireNonNull;
-import java.util.Queue;
-import javax.annotation.Nonnull;
+
+import com.google.inject.assistedinject.Assisted;
 import jakarta.inject.Inject;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.*;
+import javax.annotation.Nonnull;
 import org.opentcs.customizations.ApplicationEventBus;
+import org.opentcs.util.event.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import uwant.common.event.SendRequestEvent;
 
 /**
  * Keeps {@link Request}s in a queue and matches them with incoming {@link Response}s.
@@ -61,14 +62,20 @@ public class RequestResponseMatcherCom {
    */
   @Inject
   public RequestResponseMatcherCom(
-      @Assisted String vehicleName,
-      @Assisted TelegramSender telegramSender, @Nonnull @ApplicationEventBus EventBus eventBus) {
+      @Assisted
+      String vehicleName,
+      @Assisted
+      TelegramSender telegramSender, @Nonnull
+      @ApplicationEventBus
+      EventBus eventBus
+  ) {
     this.vehicleName = vehicleName;
     this.telegramSender = requireNonNull(telegramSender, "telegramSender");
     this.eventBus = requireNonNull(eventBus, "eventBus");
   }
 
-  public void enqueueRequest(@Nonnull Request request, int routeId) {
+  public void enqueueRequest(@Nonnull
+  Request request, int routeId) {
     requireNonNull(request, "request");
     LOG.debug("Enqueuing request: {}", request);
     WrapRequest wrapRequest = new WrapRequest(routeId, request);
@@ -97,29 +104,43 @@ public class RequestResponseMatcherCom {
         }
         TimeUnit.MILLISECONDS.sleep(2000);
         if (sendCount == 3) {
-          LOG.info("Send {} for 3 times failed! Give up and send next!", sendingRequest.getRequest().getHexRawContent()); //todo-zc
-          eventBus.onEvent(new SendRequestEvent(vehicleName, sendingRequest.getRequest(), sendingRequest.getRouteId(), sendCount, false));
+          LOG.info(
+              "Send {} for 3 times failed! Give up and send next!", sendingRequest.getRequest()
+                  .getHexRawContent()
+          ); //todo-zc
+          eventBus.onEvent(
+              new SendRequestEvent(
+                  vehicleName, sendingRequest.getRequest(), sendingRequest.getRouteId(), sendCount,
+                  false
+              )
+          );
           resetSendingRequest();
           triggerNextRequestSending();
         }
       }
-    } catch (InterruptedException e) {
+    }
+    catch (InterruptedException e) {
       LOG.debug("sending thread sleep interrupted!");
     }
   }
 
-  public void tryMatchWithCurrentRequest(@Nonnull Response response) {
+  public void tryMatchWithCurrentRequest(@Nonnull
+  Response response) {
     requireNonNull(response, "response");
     if (sendingRequest != null && response.isResponseSuccessfulTo(sendingRequest.getRequest())) {
       LOG.info("send successful: " + sendCount); //todo-zc
-      eventBus.onEvent(new SendRequestEvent(vehicleName, sendingRequest.getRequest(), sendingRequest.getRouteId(), sendCount, true));
+      eventBus.onEvent(
+          new SendRequestEvent(
+              vehicleName, sendingRequest.getRequest(), sendingRequest.getRouteId(), sendCount, true
+          )
+      );
       resetSendingRequest();
       service.shutdownNow();
       triggerNextRequestSending();
     }
   }
 
-  private synchronized  void resetSendingRequest() {
+  private synchronized void resetSendingRequest() {
     sendingRequest = null;
     sendCount = 0;
   }

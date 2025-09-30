@@ -7,11 +7,12 @@
  */
 package uwant.common.telegrams;
 
-import com.google.inject.assistedinject.Assisted;
-import java.awt.event.ActionListener;
 import static java.util.Objects.requireNonNull;
-import javax.annotation.Nonnull;
+
+import com.google.inject.assistedinject.Assisted;
 import jakarta.inject.Inject;
+import java.awt.event.ActionListener;
+import javax.annotation.Nonnull;
 import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +47,11 @@ public class StateRequesterTask {
    * @param stateRequestAction The actual action to be performed to enqueue requests.
    */
   @Inject
-  public StateRequesterTask(@Nonnull @Assisted ActionListener stateRequestAction) {
+  public StateRequesterTask(
+      @Nonnull
+      @Assisted
+      ActionListener stateRequestAction
+  ) {
     this.stateRequestAction = requireNonNull(stateRequestAction, "stateRequestAction");
   }
 

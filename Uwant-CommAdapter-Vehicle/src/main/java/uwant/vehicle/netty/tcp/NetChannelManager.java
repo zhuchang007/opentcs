@@ -7,25 +7,27 @@
  */
 package uwant.vehicle.netty.tcp;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.inject.Inject;
 import io.netty.channel.ChannelHandler;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.annotation.Nonnull;
 import org.slf4j.LoggerFactory;
+import uwant.common.netty.ChannelManager;
 import uwant.common.netty.tcp.ClientEntry;
 import uwant.common.netty.tcp.ConnectionEventListener;
 import uwant.common.netty.tcp.TcpServerChannelManager;
 import uwant.common.telegrams.Request;
 import uwant.common.telegrams.Response;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import javax.annotation.Nonnull;
-import uwant.common.netty.ChannelManager;
 import uwant.vehicle.UwtCommAdapterConfiguration;
 
-public class NetChannelManager implements ChannelManager {
+public class NetChannelManager
+    implements
+      ChannelManager {
   private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(NetChannelManager.class);
 
   private final UwtCommAdapterConfiguration commAdapterConfig;
@@ -34,9 +36,11 @@ public class NetChannelManager implements ChannelManager {
   private boolean initialized;
 
   @Inject
-  public NetChannelManager(@Nonnull UwtCommAdapterConfiguration comCommAdapterConfiguration){
-    this.commAdapterConfig =
-        requireNonNull(comCommAdapterConfiguration, "comCommAdapterConfiguration");
+  public NetChannelManager(@Nonnull
+  UwtCommAdapterConfiguration comCommAdapterConfiguration) {
+    this.commAdapterConfig = requireNonNull(
+        comCommAdapterConfiguration, "comCommAdapterConfiguration"
+    );
   }
 
   @Override
@@ -65,9 +69,10 @@ public class NetChannelManager implements ChannelManager {
       return;
     }
 
-    vehicleServer =
-        new TcpServerChannelManager<>(commAdapterConfig.tcpPort(),
-            clients, this::getChannelHandlers, 5000, true);
+    vehicleServer = new TcpServerChannelManager<>(
+        commAdapterConfig.tcpPort(),
+        clients, this::getChannelHandlers, 5000, true
+    );
 
     vehicleServer.initialize();
 
@@ -93,6 +98,7 @@ public class NetChannelManager implements ChannelManager {
         new NetTelegramDecodeToFrame(),
         new NetTelegramDecoder(),
         new NetTelegramEncoder(),
-        new NetConnectionAssociator(clients));
+        new NetConnectionAssociator(clients)
+    );
   }
 }

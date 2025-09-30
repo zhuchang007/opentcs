@@ -14,3 +14,5 @@
 *Test*.received.txt
 
 /uwant-*/build/
+*/bin/*
+/.vscode

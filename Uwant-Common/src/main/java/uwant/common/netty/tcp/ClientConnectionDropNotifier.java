@@ -7,12 +7,15 @@ import io.netty.handler.timeout.IdleStateEvent;
 import java.util.Objects;
 
 public class ClientConnectionDropNotifier
-    extends ChannelDuplexHandler {
+    extends
+      ChannelDuplexHandler {
 
   private final ConnectionEventListener<?> connectionEventListener;
 
   public ClientConnectionDropNotifier(ConnectionEventListener<?> stateMessageHandler) {
-    this.connectionEventListener = Objects.requireNonNull(stateMessageHandler, "stateMessageHandler");
+    this.connectionEventListener = Objects.requireNonNull(
+        stateMessageHandler, "stateMessageHandler"
+    );
   }
 
   @Override

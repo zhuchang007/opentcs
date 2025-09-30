@@ -12,15 +12,18 @@
  */
 package uwant.vehicle;
 
-import uwant.common.telegrams.Response;
 import static java.util.Objects.requireNonNull;
+
 import javax.annotation.Nonnull;
 import org.opentcs.data.model.Vehicle;
 import org.opentcs.drivers.vehicle.VehicleProcessModel;
+import uwant.common.telegrams.Response;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author zhuchang */
-public class UwtProcessModel extends VehicleProcessModel {
+public class UwtProcessModel
+    extends
+      VehicleProcessModel {
   /** The current/most recent state reported by the vehicle. */
   private StateResponse currentState;
 
@@ -38,7 +41,8 @@ public class UwtProcessModel extends VehicleProcessModel {
     return currentState;
   }
 
-  public void setCurrentState(@Nonnull StateResponse currentState) {
+  public void setCurrentState(@Nonnull
+  StateResponse currentState) {
     StateResponse oldValue = this.currentState;
     this.currentState = requireNonNull(currentState, "currentState");
 
@@ -51,7 +55,8 @@ public class UwtProcessModel extends VehicleProcessModel {
     return response;
   }
 
-  public synchronized void setResponse(@Nonnull Response response) {
+  public synchronized void setResponse(@Nonnull
+  Response response) {
     Response oldValue = this.response;
     this.response = requireNonNull(response, "response");
 

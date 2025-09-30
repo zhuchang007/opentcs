@@ -14,7 +14,8 @@ package uwant.common.telegrams;
  * @author Mats Wilhelm (Fraunhofer IML)
  */
 public class Request
-    extends Telegram {
+    extends
+      Telegram {
   public Request() {
   }
 

@@ -7,25 +7,26 @@
  */
 package uwant.vehicle.netty.tcp;
 
+import static java.util.Objects.requireNonNull;
+
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import java.util.Map;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import uwant.common.netty.tcp.ClientEntry;
 import uwant.common.netty.tcp.ConnectionAssociatedEvent;
 import uwant.common.telegrams.Response;
 
-import java.util.Map;
-import java.util.Objects;
-
-import static java.util.Objects.requireNonNull;
-
 /**
  * Associates incoming messages with clients interested in these. Here it is always only one client.
  *
  * @author Martin Grzenia (Fraunhofer IML)
  */
-public class NetConnectionAssociator extends ChannelInboundHandlerAdapter {
+public class NetConnectionAssociator
+    extends
+      ChannelInboundHandlerAdapter {
 
   /** This class's Logger. */
   private static final Logger LOG = LoggerFactory.getLogger(NetConnectionAssociator.class);
@@ -64,7 +65,8 @@ public class NetConnectionAssociator extends ChannelInboundHandlerAdapter {
       // notifying the comm adapter that a connection has been established.
       // 把objectClient传递给ConnectionEventListener的onConnect()函数
       ctx.fireUserEventTriggered(new ConnectionAssociatedEvent(objectClient));
-    } else {
+    }
+    else {
       client = clientEntries.get(objectClient);
     }
 

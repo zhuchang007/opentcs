@@ -19,10 +19,13 @@ import java.util.List;
 import uwant.common.vehicle.telegrams.StateResponse;
 
 /** @author SXXX */
-public class NetTelegramDecodeToFrame extends ByteToMessageDecoder {
+public class NetTelegramDecodeToFrame
+    extends
+      ByteToMessageDecoder {
 
   @Override
-  protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+  protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
+      throws Exception {
     int actualLength = StateResponse.TELEGRAM_LENGTH - 2;
     if (in.readableBytes() >= actualLength) {
       byte[] telegramData;
@@ -32,7 +35,8 @@ public class NetTelegramDecodeToFrame extends ByteToMessageDecoder {
       in.readBytes(telegramData);
       if (((telegramData[0] ^ telegramData[actualLength - 1]) & 0xff) == 0xff) {
         out.add(telegramData);
-      } else {
+      }
+      else {
         in.resetReaderIndex();
         int readIndex = in.readerIndex();
         in.readerIndex(++readIndex);

@@ -43,10 +43,12 @@ public class BoundedCounter {
    * @param maxValue The maximum counter value.
    */
   public BoundedCounter(int initialValue, int maxValue) {
-    checkArgument(initialValue < maxValue,
-                  "initialValue has to lower than maxValue: %d < %d",
-                  initialValue,
-                  maxValue);
+    checkArgument(
+        initialValue < maxValue,
+        "initialValue has to lower than maxValue: %d < %d",
+        initialValue,
+        maxValue
+    );
     this.initialValue = initialValue;
     this.maxValue = maxValue;
     this.counterValue = initialValue;

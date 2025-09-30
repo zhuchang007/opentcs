@@ -12,7 +12,10 @@ public class ClientEntry<I> {
   private Channel channel;
 
   public ClientEntry(
-      @Nonnull Integer key, @Nonnull ConnectionEventListener<I> connectionEventListener) {
+      @Nonnull
+      Integer key, @Nonnull
+      ConnectionEventListener<I> connectionEventListener
+  ) {
     this.key = Objects.requireNonNull(key, "key");
     this.connectionEventListener = Objects.requireNonNull(connectionEventListener);
   }
@@ -32,7 +35,8 @@ public class ClientEntry<I> {
     return this.channel;
   }
 
-  public void setChannel(@Nullable Channel channel) {
+  public void setChannel(@Nullable
+  Channel channel) {
     this.channel = channel;
   }
 

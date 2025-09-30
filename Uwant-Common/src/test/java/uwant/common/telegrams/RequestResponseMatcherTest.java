@@ -7,11 +7,12 @@
  */
 package uwant.common.telegrams;
 
-import org.junit.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+
+import org.junit.*;
 import uwant.common.vehicle.telegrams.ActionRequest;
 import uwant.common.vehicle.telegrams.ActionResponse;
 
@@ -59,8 +60,10 @@ public class RequestResponseMatcherTest {
     matcher.enqueueRequest(createRequest(1));
     verify(sender, times(1)).sendTelegram(any());
     matcher.tryMatchWithCurrentRequest(createResponse(1));
-    Assert.assertFalse("A request is waiting in the matcher but should not.",
-                       matcher.peekCurrentRequest().isPresent());
+    Assert.assertFalse(
+        "A request is waiting in the matcher but should not.",
+        matcher.peekCurrentRequest().isPresent()
+    );
   }
 
   @Test
@@ -69,15 +72,14 @@ public class RequestResponseMatcherTest {
     verify(sender, times(1)).sendTelegram(any());
     matcher.enqueueRequest(createRequest(2));
     verify(sender, times(1)).sendTelegram(any());
-    if(matcher.tryMatchWithCurrentRequest(createResponse(1))) {
+    if (matcher.tryMatchWithCurrentRequest(createResponse(1))) {
       matcher.checkForSendingNextRequest();
     }
     verify(sender, times(2)).sendTelegram(any());
   }
 
   @Test
-  public void seeTelegramHexOperations()
-  {
+  public void seeTelegramHexOperations() {
     System.out.println(createRequest(1).getHexRawContent());
     System.out.println(createResponse(1).getHexRawContent());
   }
@@ -107,7 +109,7 @@ public class RequestResponseMatcherTest {
 //    };
 //    request.updateRequestContent(telegramCounter);
 //    return request;
-    return new ActionRequest(0x00, 1, ActionRequest.Action.FORWARD,1);
+    return new ActionRequest(0x00, 1, ActionRequest.Action.FORWARD, 1);
   }
 
   /**
@@ -136,7 +138,11 @@ public class RequestResponseMatcherTest {
 //    response.id = telegramCounter;
 //    System.arraycopy(telegramData, 0, response.rawContent, 0, telegramSize);
 //    return response;
-    return new ActionResponse(HexConvert.hexToByteArray("00 00 81 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 7e"));
+    return new ActionResponse(
+        HexConvert.hexToByteArray(
+            "00 00 81 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 7e"
+        )
+    );
   }
 
 }

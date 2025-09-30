@@ -76,15 +76,14 @@ public class RouteDisplayAction {
 
   @Override
   public String toString() {
-    String str =
-        "actionId:"
-            + actionId
-            + " actionName:"
-            + actionName
-            + " param1Edit:"
-            + param1Edit
-            + " param2Edit:"
-            + param2Edit;
+    String str = "actionId:"
+        + actionId
+        + " actionName:"
+        + actionName
+        + " param1Edit:"
+        + param1Edit
+        + " param2Edit:"
+        + param2Edit;
 
     for (Map.Entry<Integer, String> entry : param1.entrySet()) {
       str += " param1_id:" + entry.getKey();

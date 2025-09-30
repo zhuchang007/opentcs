@@ -17,7 +17,7 @@ package uwant.common.vehicle.telegrams;
  * @author SXXX
  */
 public interface I18nTelegrams {
-    /**
+  /**
    * The path to the project's resource bundle.
    */
   String BUNDLE_PATH = "i18n/uwant/vehicle/telegrams/Bundle";

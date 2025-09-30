@@ -13,12 +13,14 @@
 package uwant.common.vehicle.telegrams;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import uwant.common.telegrams.Response;
 import static java.util.Objects.requireNonNull;
+
+import uwant.common.telegrams.Response;
 
 /** @author zhuchang */
 public class NodeActionResponse
-    extends Response {
+    extends
+      Response {
   /** The response type.命令字 */
   public static final byte TYPE = 0x16;
 

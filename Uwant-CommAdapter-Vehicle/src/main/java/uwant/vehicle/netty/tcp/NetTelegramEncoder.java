@@ -20,13 +20,16 @@ import uwant.common.vehicle.telegrams.StateResponse;
  *
  * @author Martin Grzenia (Fraunhofer IML)
  */
-public class NetTelegramEncoder extends MessageToByteEncoder<Request> {
+public class NetTelegramEncoder
+    extends
+      MessageToByteEncoder<Request> {
 
   /** This class's Logger. */
   private static final Logger LOG = LoggerFactory.getLogger(NetTelegramEncoder.class);
 
   @Override
-  protected void encode(ChannelHandlerContext ctx, Request msg, ByteBuf out) throws Exception {
+  protected void encode(ChannelHandlerContext ctx, Request msg, ByteBuf out)
+      throws Exception {
     LOG.debug("Encoding bytes: {}", msg);
     byte[] byteMsg = new byte[StateResponse.TELEGRAM_LENGTH - 2];
     System.arraycopy(msg.getRawContent(), 2, byteMsg, 0, StateResponse.TELEGRAM_LENGTH - 2);

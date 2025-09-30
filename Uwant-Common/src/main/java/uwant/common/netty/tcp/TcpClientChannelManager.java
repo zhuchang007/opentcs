@@ -47,10 +47,12 @@ public class TcpClientChannelManager<O, I> {
   private final boolean loggingEnabled;
 
   public TcpClientChannelManager(
-      @Nonnull ConnectionEventListener<I> connEventListener,
+      @Nonnull
+      ConnectionEventListener<I> connEventListener,
       Supplier<List<ChannelHandler>> channelSupplier,
       int readTimeout,
-      boolean enableLogging) {
+      boolean enableLogging
+  ) {
     this.connectionEventListener = Objects.requireNonNull(connEventListener, "connEventListener");
     this.channelSupplier = Objects.requireNonNull(channelSupplier, "channelSupplier");
     this.readTimeout = readTimeout;
@@ -70,41 +72,43 @@ public class TcpClientChannelManager<O, I> {
     this.bootstrap.option(ChannelOption.TCP_NODELAY, Boolean.valueOf(true));
     this.bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, Integer.valueOf(10000));
     this.bootstrap.handler(
-        (ChannelHandler)
-            new ChannelInitializer<SocketChannel>() {
-              @Override
-              protected void initChannel(SocketChannel ch) {
-                if (TcpClientChannelManager.this.loggingEnabled) {
-                  ch.pipeline()
-                      .addFirst(
-                          "ChannelLoggingHandler",
-                          (ChannelHandler)
-                              new LoggingHandler(TcpClientChannelManager.this.getClass()));
-                }
-                if (TcpClientChannelManager.this.readTimeout > 0) {
-                  ch.pipeline()
-                      .addLast(
-                          new ChannelHandler[] {
-                            (ChannelHandler)
-                                new IdleStateHandler(
-                                    (long) TcpClientChannelManager.this.readTimeout,
-                                    0L,
-                                    0L,
-                                    TimeUnit.MILLISECONDS)
-                          });
-                }
-                ch.pipeline()
-                    .addLast(
-                        new ChannelHandler[] {
-                          (ChannelHandler)
-                              new ClientConnectionDropNotifier(
-                                  TcpClientChannelManager.this.connectionEventListener)
-                        });
-                for (ChannelHandler handler : TcpClientChannelManager.this.channelSupplier.get()) {
-                  ch.pipeline().addLast(new ChannelHandler[] {handler});
-                }
-              }
-            });
+        (ChannelHandler) new ChannelInitializer<SocketChannel>() {
+          @Override
+          protected void initChannel(SocketChannel ch) {
+            if (TcpClientChannelManager.this.loggingEnabled) {
+              ch.pipeline()
+                  .addFirst(
+                      "ChannelLoggingHandler",
+                      (ChannelHandler) new LoggingHandler(TcpClientChannelManager.this.getClass())
+                  );
+            }
+            if (TcpClientChannelManager.this.readTimeout > 0) {
+              ch.pipeline()
+                  .addLast(
+                      new ChannelHandler[]{
+                          (ChannelHandler) new IdleStateHandler(
+                              (long) TcpClientChannelManager.this.readTimeout,
+                              0L,
+                              0L,
+                              TimeUnit.MILLISECONDS
+                          )
+                      }
+                  );
+            }
+            ch.pipeline()
+                .addLast(
+                    new ChannelHandler[]{
+                        (ChannelHandler) new ClientConnectionDropNotifier(
+                            TcpClientChannelManager.this.connectionEventListener
+                        )
+                    }
+                );
+            for (ChannelHandler handler : TcpClientChannelManager.this.channelSupplier.get()) {
+              ch.pipeline().addLast(new ChannelHandler[]{handler});
+            }
+          }
+        }
+    );
 
     this.initialized = true;
   }
@@ -127,7 +131,8 @@ public class TcpClientChannelManager<O, I> {
     this.initialized = false;
   }
 
-  public void connect(@Nonnull String host, int port) {
+  public void connect(@Nonnull
+  String host, int port) {
     Objects.requireNonNull(host, "host");
     Assertions.checkState(isInitialized(), "Not initialized");
     if (isConnected()) {
@@ -147,21 +152,25 @@ public class TcpClientChannelManager<O, I> {
         future -> {
           if (future.isSuccess()) {
             this.connectionEventListener.onConnect(null);
-          } else {
+          }
+          else {
 
             this.connectionEventListener.onFailedConnectionAttempt();
           }
-        });
+        }
+    );
     this.connectFuture = null;
   }
 
-  public void scheduleConnect(@Nonnull String host, int port, long delay) {
+  public void scheduleConnect(@Nonnull
+  String host, int port, long delay) {
     Objects.requireNonNull(host, "host");
     Assertions.checkState(isInitialized(), "Not initialized");
     Assertions.checkState((this.connectFuture == null), "Connection attempt already scheduled");
 
-    this.connectFuture =
-        this.workerGroup.schedule(() -> connect(host, port), delay, TimeUnit.MILLISECONDS);
+    this.connectFuture = this.workerGroup.schedule(
+        () -> connect(host, port), delay, TimeUnit.MILLISECONDS
+    );
   }
 
   public void cancelConnect() {
@@ -192,7 +201,8 @@ public class TcpClientChannelManager<O, I> {
     }
     try {
       this.channelFuture.channel().writeAndFlush(telegram).sync();
-    } catch (Exception e) {
+    }
+    catch (Exception e) {
       e.printStackTrace();
     }
   }
@@ -208,7 +218,8 @@ public class TcpClientChannelManager<O, I> {
     ChannelPipeline pipeline = this.channelFuture.channel().pipeline();
     if (enabled && pipeline.get("ChannelLoggingHandler") == null) {
       pipeline.addFirst("ChannelLoggingHandler", (ChannelHandler) new LoggingHandler(getClass()));
-    } else if (!enabled && pipeline.get("ChannelLoggingHandler") != null) {
+    }
+    else if (!enabled && pipeline.get("ChannelLoggingHandler") != null) {
       pipeline.remove("ChannelLoggingHandler");
     }
   }

@@ -9,7 +9,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ServerConnectionStateNotifier<I> extends ChannelDuplexHandler {
+public class ServerConnectionStateNotifier<I>
+    extends
+      ChannelDuplexHandler {
 
   private static final Logger LOG = LoggerFactory.getLogger(ServerConnectionStateNotifier.class);
 
@@ -36,17 +38,18 @@ public class ServerConnectionStateNotifier<I> extends ChannelDuplexHandler {
     ctx.fireChannelInactive();
   }
 
-  public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+  public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
+      throws Exception {
     if (evt instanceof IdleStateEvent) {
       if (((IdleStateEvent) evt).state() == IdleState.READER_IDLE
           && this.connectionEventListener != null) {
         this.connectionEventListener.onIdle();
       }
-    } else if (evt instanceof ConnectionAssociatedEvent) {
+    }
+    else if (evt instanceof ConnectionAssociatedEvent) {
       this.key = ((ConnectionAssociatedEvent) evt).getKey();
       LOG.debug("Connection associated to key: '{}'", this.key);
-      this.connectionEventListener =
-          this.clientEntries.get(this.key).getConnectionEventListener();
+      this.connectionEventListener = this.clientEntries.get(this.key).getConnectionEventListener();
       this.connectionEventListener.onConnect(this.key);
     }
     super.userEventTriggered(ctx, evt);

@@ -24,7 +24,8 @@ import uwant.vehicle.netty.tcp.NetChannelManager;
  * @author zhuchang
  */
 public class UwantKernelInjectionModule
-    extends KernelInjectionModule {
+    extends
+      KernelInjectionModule {
 
   private static final Logger LOG = LoggerFactory.getLogger(UwantKernelInjectionModule.class);
 
@@ -34,9 +35,8 @@ public class UwantKernelInjectionModule
   @Override
   protected void configure() {
 
-    UwtCommAdapterConfiguration config =
-        getConfigBindingProvider()
-            .get(UwtCommAdapterConfiguration.PREFIX, UwtCommAdapterConfiguration.class);
+    UwtCommAdapterConfiguration config = getConfigBindingProvider()
+        .get(UwtCommAdapterConfiguration.PREFIX, UwtCommAdapterConfiguration.class);
 
     bind(UwtCommAdapterConfiguration.class).toInstance(config);
 
