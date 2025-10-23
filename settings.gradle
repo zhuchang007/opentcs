@@ -24,3 +24,5 @@ include 'opentcs-plantoverview-themes-default'
 include 'opentcs-documentation'
 include 'uwant-common'
 include 'uwant-commadapter-vehicle'
+
+include 'opentcs-kernel-extension-extra'

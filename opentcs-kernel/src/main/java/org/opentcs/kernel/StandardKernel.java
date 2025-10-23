@@ -1,5 +1,5 @@
 // SPDX-FileCopyrightText: The openTCS Authors
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifi
 package org.opentcs.kernel;
 
 import static java.util.Objects.requireNonNull;

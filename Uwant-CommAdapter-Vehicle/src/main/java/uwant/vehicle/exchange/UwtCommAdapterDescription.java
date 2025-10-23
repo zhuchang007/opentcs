@@ -1,6 +1,5 @@
 /**
  * Copyright (c) The openTCS Authors.
- *
  * This program is free software and subject to the MIT license. (For details,
  * see the licensing information (LICENSE.txt) you should have received with
  * this copy of the software.)
@@ -17,10 +16,18 @@ import static uwant.vehicle.exchange.I18nUwantComAdapter.BUNDLE_PATH;
 import java.util.ResourceBundle;
 import org.opentcs.drivers.vehicle.VehicleCommAdapterDescription;
 
-/** @author zhuchang */
+/**
+ * uwt commAdapter Description.
+ *
+ * @author zhuchang
+ */
 public class UwtCommAdapterDescription
     extends
       VehicleCommAdapterDescription {
+
+
+  public UwtCommAdapterDescription() {
+  }
 
   @Override
   public String getDescription() {

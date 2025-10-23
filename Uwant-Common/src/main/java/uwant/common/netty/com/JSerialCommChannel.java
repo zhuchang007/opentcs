@@ -149,6 +149,9 @@ public class JSerialCommChannel
   private final class JSCUnsafe
       extends
         AbstractUnsafe {
+    JSCUnsafe() {
+    }
+
     @Override
     public void connect(
         final SocketAddress remoteAddress,

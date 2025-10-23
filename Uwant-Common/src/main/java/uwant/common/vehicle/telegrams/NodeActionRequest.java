@@ -15,7 +15,6 @@ package uwant.common.vehicle.telegrams;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
-import org.w3c.dom.Node;
 import uwant.common.telegrams.Request;
 
 /**

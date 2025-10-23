@@ -24,7 +24,7 @@ public interface UwtCommAdapterComponentsFactory {
 
   /**
    * Creates a new {@link RequestResponseMatcherCom}.
-   * 
+   *
    * @param vehicleName
    * @param telegramSender Sends telegrams/requests.
    * @return The created {@link RequestResponseMatcherCom}.

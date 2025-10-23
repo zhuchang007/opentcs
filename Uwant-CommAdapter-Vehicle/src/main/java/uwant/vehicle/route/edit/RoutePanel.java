@@ -70,15 +70,14 @@ import uwant.vehicle.exchange.commands.SendRequestCommand;
 public class RoutePanel
     extends
       VehicleCommAdapterPanel {
-
+  /** xml配置文件 */
+  public static final String CONFIG_XML_FILE = "./config/uwtRouteTableConfig.xml";
   private static final Logger LOG = LoggerFactory.getLogger(RoutePanel.class);
 
-  public static final String CONFIG_XML_FILE = "./config/uwtRouteTableConfig.xml";
-
-  DefaultListModel<List<RouteTableEntry>> routeListModel;
-  RouteTableModel routeTableModel;
-  Map<Integer, RouteDisplayAction> mapRouteDisplayAction;
-  RouteTableEntryXML routeTableEntryXML = new RouteTableEntryXML();
+  private DefaultListModel<List<RouteTableEntry>> routeListModel;
+  private RouteTableModel routeTableModel;
+  private Map<Integer, RouteDisplayAction> mapRouteDisplayAction;
+  private RouteTableEntryXML routeTableEntryXML = new RouteTableEntryXML();
 
   {
     // 初始化表格模型
@@ -105,9 +104,25 @@ public class RoutePanel
   /** The call wrapper to use for service calls. */
   private final CallWrapper callWrapper;
 
-  UwtProcessModelTO processModel;
+  private UwtProcessModelTO processModel;
 
   private final String vehicleName;
+
+  // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JButton addNodeButton;
+  private javax.swing.JButton addRouteButton;
+  private javax.swing.JPanel buttonsPanel;
+  private javax.swing.JButton delNodeButton;
+  private javax.swing.JButton delRouteButton;
+  private javax.swing.JButton importRouteButton;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JList<List<RouteTableEntry>> routeList;
+  private javax.swing.JScrollPane routeListScrollPane;
+  private javax.swing.JTable routeTable;
+  private javax.swing.JScrollPane routeTableScrollPane;
+  private javax.swing.JButton saveRouteButton;
+  private javax.swing.JButton sendRouteButton;
+  // End of variables declaration//GEN-END:variables
 
   /**
    * Creates new form RoutePanel
@@ -509,7 +524,9 @@ public class RoutePanel
 
     add(jPanel1, java.awt.BorderLayout.CENTER);
 
-    getAccessibleContext().setAccessibleName(bundle.getString("RoutTableModel.accessibleName")); // NOI18N
+    getAccessibleContext().setAccessibleName(
+        bundle.getString("RoutTableModel.accessibleName")
+    ); // NOI18N
   }// </editor-fold>//GEN-END:initComponents
 
   private void addRouteButtonActionPerformed(
@@ -656,25 +673,12 @@ public class RoutePanel
     }
   } // GEN-LAST:event_importRouteButtonActionPerformed
 
-  // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JButton addNodeButton;
-  private javax.swing.JButton addRouteButton;
-  private javax.swing.JPanel buttonsPanel;
-  private javax.swing.JButton delNodeButton;
-  private javax.swing.JButton delRouteButton;
-  private javax.swing.JButton importRouteButton;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JList<List<RouteTableEntry>> routeList;
-  private javax.swing.JScrollPane routeListScrollPane;
-  private javax.swing.JTable routeTable;
-  private javax.swing.JScrollPane routeTableScrollPane;
-  private javax.swing.JButton saveRouteButton;
-  private javax.swing.JButton sendRouteButton;
-
-  // End of variables declaration//GEN-END:variables
   private class RouteListModelCellRenderer
       extends
         DefaultListCellRenderer {
+    RouteListModelCellRenderer() {
+    }
+
     @Override
     public Component getListCellRendererComponent(
         JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus
@@ -691,6 +695,9 @@ public class RoutePanel
   private class RouteTableCellRenderer
       extends
         DefaultTableCellRenderer {
+    RouteTableCellRenderer() {
+    }
+
     @Override
     public Component getTableCellRendererComponent(
         JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column
@@ -761,9 +768,9 @@ public class RoutePanel
       implements
         ListCellRenderer<Integer> {
     private final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
-    Map<Integer, String> param;
+    private Map<Integer, String> param;
 
-    public ParamListCellRenderer(Map<Integer, String> param) {
+    ParamListCellRenderer(Map<Integer, String> param) {
       this.param = param;
     }
 
@@ -795,12 +802,12 @@ public class RoutePanel
       implements
         FocusListener {
 
-    JComboBox<?> comboBox;
+    private JComboBox<?> comboBox;
     private int editedRow;
     private int editedColumn;
     private int oldValue;
 
-    public MyCellEditor(JComboBox comboBox) {
+    MyCellEditor(JComboBox comboBox) {
       super(comboBox);
       this.comboBox = comboBox;
       comboBox.getEditor().getEditorComponent().addFocusListener(this);
@@ -837,6 +844,9 @@ public class RoutePanel
     private final JFormattedTextField textField = new JFormattedTextField(
         new DefaultFormatterFactory(new NumberFormatter(new DecimalFormat("#0")))
     );
+
+    MyComboBoxEditor() {
+    }
 
     @Override
     public Component getEditorComponent() {

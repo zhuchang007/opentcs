@@ -1,9 +1,13 @@
 package uwant.common.telegrams;
 
 public class HexConvert {
+
+  private HexConvert() {
+  }
+
   /**
    * 字节转十六进制
-   * 
+   *
    * @param b 需要进行转换的byte字节
    * @return 转换后的Hex字符串
    */
@@ -17,7 +21,7 @@ public class HexConvert {
 
   /**
    * 字节数组转16进制
-   * 
+   *
    * @param bytes 需要转换的byte数组
    * @return 转换后的Hex字符串
    */
@@ -37,7 +41,7 @@ public class HexConvert {
 
   /**
    * Hex字符串转byte
-   * 
+   *
    * @param inHex 待转换的Hex字符串
    * @return 转换后的byte
    */
@@ -47,20 +51,20 @@ public class HexConvert {
 
   /**
    * hex字符串转byte数组
-   * 
+   *
    * @param inHex 待转换的Hex字符串
    * @return 转换后的byte数组结果
    */
   public static byte[] hexToByteArray(String inHex) {
     //去除字符串内的所有空格
-    inHex = inHex.replaceAll("\\s", "");
-    int hexlen = inHex.length();
+    int hexlen = inHex.replaceAll("\\s", "").length();
+    String inHex1 = inHex;
     byte[] result;
     if (hexlen % 2 == 1) {
       //奇数
       hexlen++;
       result = new byte[(hexlen / 2)];
-      inHex = "0" + inHex;
+      inHex1 = "0" + inHex;
     }
     else {
       //偶数
@@ -68,7 +72,7 @@ public class HexConvert {
     }
     int j = 0;
     for (int i = 0; i < hexlen; i += 2) {
-      result[j] = hexToByte(inHex.substring(i, i + 2));
+      result[j] = hexToByte(inHex1.substring(i, i + 2));
       j++;
     }
     return result;

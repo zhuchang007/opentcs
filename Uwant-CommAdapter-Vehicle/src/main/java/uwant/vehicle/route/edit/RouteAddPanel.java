@@ -137,10 +137,12 @@ public class RouteAddPanel
     );
   } // </editor-fold>//GEN-END:initComponents
 
+  // CHECKSTYLE:OFF
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JFormattedTextField nodeCountFormattedTextField;
   private javax.swing.JLabel nodeCountLabel;
   private javax.swing.JFormattedTextField routeIdFormattedTextField;
   private javax.swing.JLabel routeIdLabel;
   // End of variables declaration//GEN-END:variables
+  // CHECKSTYLE:ON
 }

@@ -82,8 +82,6 @@ public class UwtCommAdapterFactory
       return null;
     }
 
-    UwtCommAdapter adapter = componentsFactory.createUwtCommAdapter(vehicle, vehicleChannelManager);
-
-    return adapter;
+    return componentsFactory.createUwtCommAdapter(vehicle, vehicleChannelManager);
   }
 }

@@ -18,5 +18,5 @@ public enum AllocationState {
   /**
    * The resource is allocated by a vehicle but its related transport order is withdrawn.
    */
-  ALLOCATED_WITHDRAWN;
+  ALLOCATED_WITHDRAWN
 }

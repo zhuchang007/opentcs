@@ -24,7 +24,7 @@ import javax.swing.table.TableCellEditor;
  *
  * @author Philipp Seifert (Fraunhofer IML)
  */
-final class SingleCellEditor
+public final class SingleCellEditor
     implements
       TableCellEditor {
 

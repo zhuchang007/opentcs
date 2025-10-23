@@ -17,6 +17,9 @@ import uwant.common.vehicle.telegrams.StateResponse;
 public class NetTelegramDecoder
     extends
       ChannelInboundHandlerAdapter {
+  public NetTelegramDecoder() {
+  }
+
   @Override
   public void channelRead(ChannelHandlerContext ctx, Object msg)
       throws Exception {

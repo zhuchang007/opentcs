@@ -474,6 +474,7 @@ public class UwtPanel
     sendActionRequest(ActionRequest.Action.QUICK_STOP);
   } // GEN-LAST:event_quickStopButtonActionPerformed
 
+  // CHECKSTYLE:OFF
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel agvInputPanel;
   private javax.swing.JPanel agvStatusPanel;
@@ -506,4 +507,5 @@ public class UwtPanel
   private javax.swing.JButton turnLeftButton;
   private javax.swing.JButton turnRightButton;
   // End of variables declaration//GEN-END:variables
+  // CHECKSTYLE:ON
 }

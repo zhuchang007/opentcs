@@ -12,13 +12,7 @@
  */
 package uwant.common.vehicle.telegrams;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static java.util.Objects.requireNonNull;
-import static uwant.common.telegrams.Telegram.getCheckSum;
-
-import com.google.common.primitives.Ints;
 import uwant.common.telegrams.Response;
-import uwant.common.telegrams.Telegram;
 
 /** @author zhuchang */
 public class ActionResponse

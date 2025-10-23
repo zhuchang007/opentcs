@@ -14,11 +14,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import uwant.common.telegrams.Telegram;
-import uwant.common.vehicle.telegrams.*;
+import uwant.common.vehicle.telegrams.ActionRequest;
+import uwant.common.vehicle.telegrams.ActionResponse;
+import uwant.common.vehicle.telegrams.NodeActionRequest;
+import uwant.common.vehicle.telegrams.NodeActionResponse;
+import uwant.common.vehicle.telegrams.StateResponse;
 
 public class AgvSimulator
     implements
       SerialPortPacketListener {
+
+  private static SerialPort comPort;
 
   public AgvSimulator() {
   }
@@ -32,8 +38,6 @@ public class AgvSimulator
   public int getPacketSize() {
     return Telegram.TELEGRAM_LENGTH;
   }
-
-  private static SerialPort comPort;
 
   @Override
   public void serialEvent(SerialPortEvent event) {

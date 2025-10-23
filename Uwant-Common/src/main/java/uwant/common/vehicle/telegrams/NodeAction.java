@@ -48,6 +48,7 @@ public class NodeAction {
     this.actionParam2 = actionParam2;
   }
 
+  // CHECKSTYLE:OFF
   public enum NodeActionType {
     DETECTION(0, "检测"),
     FORWARD(1, "前进"),
@@ -85,11 +86,12 @@ public class NodeAction {
     VEHICLE_CHANGE_OVER(33, "车体换向"),
     LOGICAL_CHANGE_OVER(34, "逻辑换向"),
     WAIT(35, "等待");
+    // CHECKSTYLE:ON
 
     private int value;
     private String name;
 
-    private NodeActionType(int value, String name) {
+    NodeActionType(int value, String name) {
       this.value = value;
       this.name = name;
     }

@@ -24,6 +24,9 @@ public class RouteDisplayAction {
   private final Map<Integer, String> param1 = new HashMap<>();
   private final Map<Integer, String> param2 = new HashMap<>();
 
+  public RouteDisplayAction() {
+  }
+
   /** @return the actionId */
   public int getActionId() {
     return actionId;

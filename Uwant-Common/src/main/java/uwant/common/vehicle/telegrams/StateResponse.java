@@ -7,9 +7,6 @@
  */
 package uwant.common.vehicle.telegrams;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static java.util.Objects.requireNonNull;
-
 import com.google.common.primitives.Ints;
 import java.util.BitSet;
 import java.util.EnumMap;
@@ -26,11 +23,23 @@ import uwant.common.telegrams.Response;
 public class StateResponse
     extends
       Response {
+  /**
+   * This class's resource bundle.
+   */
+  public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(I18nTelegrams.BUNDLE_PATH);
+  /** error code */
+  public static final String[] ERRORCODE = BUNDLE.getString("StateResponse.errorCode").split(",");
+  /** input0 */
+  public static final String[] INPUT0 = BUNDLE.getString("StateResponse.Input0").split(",");
+  /** input1 */
+  public static final String[] INPUT1 = BUNDLE.getString("StateResponse.Input1").split(",");
+  /** input2 */
+  public static final String[] INPUT2 = BUNDLE.getString("StateResponse.Input2").split(",");
+
 
   /** The response type.命令字 */
   public static final byte TYPE = 0x01;
-
-  private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(I18nTelegrams.BUNDLE_PATH);
+  private static int num;
 
   private Direction direction;
   private int speed;
@@ -45,7 +54,6 @@ public class StateResponse
   private BitSet input1;
   private BitSet input2;
 
-  private static int num;
 
   /**
    * Creates a new instance.
@@ -187,6 +195,7 @@ public class StateResponse
     return input.toString();
   }
 
+  // CHECKSTYLE:OFF
   public enum Direction {
     STOP,
     FORWARD,
@@ -196,6 +205,7 @@ public class StateResponse
     PATROL_FORWARD,
     PATROL_BACKWARD,
     UNKNOWN;
+    // CHECKSTYLE:ON
 
     private static Map<Direction, String> enumMap = new EnumMap<>(Direction.class);
 
@@ -236,11 +246,13 @@ public class StateResponse
     }
   }
 
+  // CHECKSTYLE:OFF
   public enum RollingState {
     STOP,
     ROLLING_CLOCKWISE,
     ROLLING_COUNTER_CLOCKWISE,
     UNKNOWN;
+    // CHECKSTYLE:ON
 
     private static Map<RollingState, String> enumMap = new EnumMap<>(RollingState.class);
 
@@ -274,11 +286,13 @@ public class StateResponse
     }
   }
 
+  // CHECKSTYLE:OFF
   public enum JackingState {
     STOP,
     ASCENDING,
     DESCENDING,
     UNKNOWN;
+    // CHECKSTYLE:ON
 
     private static Map<JackingState, String> enumMap = new EnumMap<>(JackingState.class);
 
@@ -313,9 +327,4 @@ public class StateResponse
     }
     return ERRORCODE[errorCode];
   }
-
-  public static final String[] ERRORCODE = BUNDLE.getString("StateResponse.errorCode").split(",");
-  public static final String[] INPUT0 = BUNDLE.getString("StateResponse.Input0").split(",");
-  public static final String[] INPUT1 = BUNDLE.getString("StateResponse.Input1").split(",");
-  public static final String[] INPUT2 = BUNDLE.getString("StateResponse.Input2").split(",");
 }

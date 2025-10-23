@@ -23,13 +23,12 @@ import org.slf4j.LoggerFactory;
 import uwant.vehicle.exchange.I18nUwantComAdapter;
 
 /** @author zhuchang */
+@SuppressWarnings("checkstyle:JavadocStyle")
 public class RouteTableModel
     extends
       AbstractTableModel {
-  /** This class's logger. */
-  private static final Logger LOG = LoggerFactory.getLogger(RouteTableModel.class);
   /** This class's resource bundle. */
-  private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
+  public static final ResourceBundle BUNDLE = ResourceBundle.getBundle(
       I18nUwantComAdapter.BUNDLE_PATH
   );
   /** The column names. */
@@ -49,6 +48,65 @@ public class RouteTableModel
       BUNDLE.getString("RoutTableModel.column_action4_param1.headerText"),
       BUNDLE.getString("RoutTableModel.column_action4_param2.headerText")
   };
+
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ROUTID_COLUMN = 0;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int NODEID_COLUMN = 1;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION1_ID_COLUMN = 2;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION1_PARAM1_COLUMN = 3;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION1_PARAM2_COLUMN = 4;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION2_ID_COLUMN = 5;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION2_PARAM1_COLUMN = 6;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION2_PARAM2_COLUMN = 7;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION3_ID_COLUMN = 8;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION3_PARAM1_COLUMN = 9;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION3_PARAM2_COLUMN = 10;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION4_ID_COLUMN = 11;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION4_PARAM1_COLUMN = 12;
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final int ACTION4_PARAM2_COLUMN = 13;
+
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String NODEID_COLUMN_IDENTIFIER = COLUMN_NAMES[NODEID_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION1_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION1_ID_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION1_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION1_PARAM1_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION1_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION1_PARAM2_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION2_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION2_ID_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION2_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION2_PARAM1_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION2_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION2_PARAM2_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION3_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION3_ID_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION3_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION3_PARAM1_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION3_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION3_PARAM2_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION4_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION4_ID_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION4_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION4_PARAM1_COLUMN];
+  @SuppressWarnings("checkstyle:JavadocVariable")
+  public static final String ACTION4_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION4_PARAM2_COLUMN];
+  /** This class's logger. */
+  private static final Logger LOG = LoggerFactory.getLogger(RouteTableModel.class);
+
   /** The column classes. */
   private static final Class<?>[] COLUMN_CLASSES = new Class<?>[]{
       Integer.class, // 路线编号
@@ -67,37 +125,12 @@ public class RouteTableModel
       Integer.class,
   };
 
-  public static final int ROUTID_COLUMN = 0;
-  public static final int NODEID_COLUMN = 1;
-  public static final int ACTION1_ID_COLUMN = 2;
-  public static final int ACTION1_PARAM1_COLUMN = 3;
-  public static final int ACTION1_PARAM2_COLUMN = 4;
-  public static final int ACTION2_ID_COLUMN = 5;
-  public static final int ACTION2_PARAM1_COLUMN = 6;
-  public static final int ACTION2_PARAM2_COLUMN = 7;
-  public static final int ACTION3_ID_COLUMN = 8;
-  public static final int ACTION3_PARAM1_COLUMN = 9;
-  public static final int ACTION3_PARAM2_COLUMN = 10;
-  public static final int ACTION4_ID_COLUMN = 11;
-  public static final int ACTION4_PARAM1_COLUMN = 12;
-  public static final int ACTION4_PARAM2_COLUMN = 13;
-
-  public static final String NODEID_COLUMN_IDENTIFIER = COLUMN_NAMES[NODEID_COLUMN];
-  public static final String ACTION1_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION1_ID_COLUMN];
-  public static final String ACTION1_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION1_PARAM1_COLUMN];
-  public static final String ACTION1_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION1_PARAM2_COLUMN];
-  public static final String ACTION2_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION2_ID_COLUMN];
-  public static final String ACTION2_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION2_PARAM1_COLUMN];
-  public static final String ACTION2_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION2_PARAM2_COLUMN];
-  public static final String ACTION3_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION3_ID_COLUMN];
-  public static final String ACTION3_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION3_PARAM1_COLUMN];
-  public static final String ACTION3_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION3_PARAM2_COLUMN];
-  public static final String ACTION4_ID_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION4_ID_COLUMN];
-  public static final String ACTION4_PARAM1_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION4_PARAM1_COLUMN];
-  public static final String ACTION4_PARAM2_COLUMN_IDENTIFIER = COLUMN_NAMES[ACTION4_PARAM2_COLUMN];
-
   private final List<RouteTableEntry> entries = new ArrayList<>();
   private DefaultListModel<List<RouteTableEntry>> routeListModel;
+
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
+  public RouteTableModel() {
+  }
 
   /**
    * Adds a new entry to this model.
@@ -109,11 +142,13 @@ public class RouteTableModel
     fireTableRowsInserted(entries.size(), entries.size());
   }
 
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public void clear() {
     fireTableRowsDeleted(0, entries.size());
     entries.clear();
   }
 
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public void delData(RouteTableEntry delEntry) {
     entries.remove(delEntry);
     fireTableRowsDeleted(entries.indexOf(delEntry), entries.indexOf(delEntry));
@@ -130,6 +165,7 @@ public class RouteTableModel
         );
   }
 
+  @SuppressWarnings("checkstyle:MissingJavadocMethod")
   public void delData(int row) {
     delData(entries.get(row));
   }

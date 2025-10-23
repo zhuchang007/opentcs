@@ -27,6 +27,9 @@ public class NetTelegramEncoder
   /** This class's Logger. */
   private static final Logger LOG = LoggerFactory.getLogger(NetTelegramEncoder.class);
 
+  public NetTelegramEncoder() {
+  }
+
   @Override
   protected void encode(ChannelHandlerContext ctx, Request msg, ByteBuf out)
       throws Exception {

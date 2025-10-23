@@ -12,8 +12,6 @@
  */
 package uwant.common.vehicle.telegrams;
 
-import static uwant.common.telegrams.Telegram.getCheckSum;
-
 import uwant.common.telegrams.Request;
 
 /** @author zhuchang */
@@ -45,14 +43,23 @@ public class ActionRequest
     encodeTelegramTail();
   }
 
+  /** action */
   public enum Action {
+    /** stop */
     STOP(0),
+    /** forward */
     FORWARD(1),
+    /** backword */
     BACKWARD(2),
+    /** turn left */
     TURN_LEFT(3),
+    /** turn right */
     TURN_RIGHT(4),
+    /** patrol forward */
     PATROL_FORWARD(5),
+    /** patrol backword */
     PATROL_BACKWARD(6),
+    /** quick stop */
     QUICK_STOP(0xff);
 
     private int value = 0;

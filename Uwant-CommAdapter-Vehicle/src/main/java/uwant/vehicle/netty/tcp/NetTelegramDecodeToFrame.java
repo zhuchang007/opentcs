@@ -23,6 +23,9 @@ public class NetTelegramDecodeToFrame
     extends
       ByteToMessageDecoder {
 
+  public NetTelegramDecodeToFrame() {
+  }
+
   @Override
   protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out)
       throws Exception {

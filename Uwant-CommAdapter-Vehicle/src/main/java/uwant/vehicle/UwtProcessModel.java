@@ -65,7 +65,9 @@ public class UwtProcessModel
 
   /** Model attributes specific to this implementation. */
   public enum Attribute {
+    /** current state */
     CURRENT_STATE,
+    /** resonse */
     RESPONSE,
   }
 }

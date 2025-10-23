@@ -44,10 +44,10 @@ public class ComChannelManager
    * This class's Logger.
    */
   private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(ComChannelManager.class);
+  private static SerialPort serialPort;
+
   private String comPortName = "COM1";
   private int comBaudRate = 57600;
-
-  private static SerialPort serialPort;
 
   private final Set<ConnectionEventListener<Response>> listeners = Collections.synchronizedSet(
       new HashSet<>()
@@ -156,6 +156,9 @@ public class ComChannelManager
   private final class PacketListener
       implements
         SerialPortPacketListener {
+    PacketListener() {
+    }
+
     @Override
     public int getListeningEvents() {
       return SerialPort.LISTENING_EVENT_DATA_RECEIVED;

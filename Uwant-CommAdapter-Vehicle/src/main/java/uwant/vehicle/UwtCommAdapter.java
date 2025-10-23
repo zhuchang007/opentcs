@@ -16,8 +16,9 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ScheduledExecutorService;
 import javax.annotation.Nonnull;
 import org.opentcs.customizations.ApplicationEventBus;
 import org.opentcs.customizations.kernel.KernelExecutor;
@@ -54,12 +55,14 @@ public class UwtCommAdapter
 
   private static final Logger LOG = LoggerFactory.getLogger(UwtCommAdapter.class);
 
-  private final Vehicle vehicle;
-  private final int agvId;
   /**
    * static com read source, all the adapters share only one channel
    */
   private static ChannelManager vehicleChannelManager;
+
+  private final Vehicle vehicle;
+  private final int agvId;
+
   /**
    * Matches requests to responses and holds a queue for pending requests.
    */

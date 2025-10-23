@@ -12,9 +12,6 @@
  */
 package uwant.common.vehicle.telegrams;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static java.util.Objects.requireNonNull;
-
 import uwant.common.telegrams.Response;
 
 /** @author zhuchang */

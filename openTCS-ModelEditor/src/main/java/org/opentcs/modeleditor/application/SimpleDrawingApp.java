@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: MIT
 package org.opentcs.modeleditor.application;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import javax.swing.JFrame;
 import org.jhotdraw.draw.DefaultDrawing;
 import org.jhotdraw.draw.DefaultDrawingView;

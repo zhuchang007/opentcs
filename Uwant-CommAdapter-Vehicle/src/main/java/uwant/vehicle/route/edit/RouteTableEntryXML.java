@@ -34,6 +34,9 @@ import uwant.common.vehicle.telegrams.NodeAction;
 public class RouteTableEntryXML {
   private List<RouteTableEntry> routeTableEntries;
 
+  public RouteTableEntryXML() {
+  }
+
   public void saveRouteFile(List<List<RouteTableEntry>> routeTableEntries) {
     Element root = new Element("root");
 

@@ -18,11 +18,17 @@ public final class JSerialCommChannelOption<T>
     extends
       ChannelOption<T> {
 
+  /** 波特率 */
   public static final ChannelOption<Integer> BAUD_RATE = valueOf("BAUD_RATE");
+  /** 停止位 */
   public static final ChannelOption<Stopbits> STOP_BITS = valueOf("STOP_BITS");
+  /** 数据位 */
   public static final ChannelOption<Integer> DATA_BITS = valueOf("DATA_BITS");
+  /** 奇偶校验位 */
   public static final ChannelOption<Paritybit> PARITY_BIT = valueOf("PARITY_BIT");
+  /** 等待时间 */
   public static final ChannelOption<Integer> WAIT_TIME = valueOf("WAIT_TIME");
+  /** 读取超时 */
   public static final ChannelOption<Integer> READ_TIMEOUT = valueOf("READ_TIMEOUT");
 
   @SuppressWarnings({"unused", "deprecation"})

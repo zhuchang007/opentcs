@@ -33,6 +33,9 @@ public class UwtProcessModelTO
 
   private long recvCount;
 
+  public UwtProcessModelTO() {
+  }
+
   /**
    * Returns the vehicle reference.
    *
