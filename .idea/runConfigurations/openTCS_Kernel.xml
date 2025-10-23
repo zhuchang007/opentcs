@@ -11,6 +11,7 @@
       <option name="taskNames">
         <list>
           <option value=":openTCS-Kernel:run" />
+          <option value="--debug-jvm" />
         </list>
       </option>
       <option name="vmOptions" />
