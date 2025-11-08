@@ -31,6 +31,7 @@ class CommandProcessingTrackerTest {
   private Point pointD;
   private Path pathAB;
   private Path pathBC;
+  private Path pathBC2;
   private Path pathCD;
   private Path pathC2D;
 
@@ -45,7 +46,7 @@ class CommandProcessingTrackerTest {
     pointD = new Point("D");
     pathAB = new Path("A --- B", pointA.getReference(), pointB.getReference());
     pathBC = new Path("B --- C", pointB.getReference(), pointC.getReference());
-    pathBC = new Path("B --- C2", pointB.getReference(), pointC2.getReference());
+    pathBC2 = new Path("B --- C2", pointB.getReference(), pointC2.getReference());
     pathCD = new Path("C --- D", pointC.getReference(), pointD.getReference());
     pathC2D = new Path("C2 --- D", pointC2.getReference(), pointD.getReference());
 
@@ -243,13 +244,13 @@ class CommandProcessingTrackerTest {
     movementCommands = createMovementCommandList(
         List.of(
             new Route.Step(pathAB, pointA, pointB, Vehicle.Orientation.FORWARD, 0, 1),
-            new Route.Step(pathBC, pointB, pointC2, Vehicle.Orientation.FORWARD, 1, 1),
+            new Route.Step(pathBC2, pointB, pointC2, Vehicle.Orientation.FORWARD, 1, 1),
             new Route.Step(pathC2D, pointC2, pointD, Vehicle.Orientation.FORWARD, 2, 1)
         )
     );
     commandProcessingTracker.driveOrderUpdated(movementCommands);
     assertThat(commandProcessingTracker.getClaimedResources()).containsExactly(
-        Set.of(pathBC, pointC2),
+        Set.of(pathBC2, pointC2),
         Set.of(pathC2D, pointD)
     );
     assertThat(commandProcessingTracker.getAllocatedResources()).containsExactly(
@@ -272,8 +273,8 @@ class CommandProcessingTrackerTest {
     assertThat(commandProcessingTracker.getLastCommandExecuted()).contains(movementCommands.get(0));
 
     // Then, the next movement command is processed (the one for the new route)
-    commandProcessingTracker.allocationRequested(Set.of(pathBC, pointC2));
-    commandProcessingTracker.allocationConfirmed(Set.of(pathBC, pointC2));
+    commandProcessingTracker.allocationRequested(Set.of(pathBC2, pointC2));
+    commandProcessingTracker.allocationConfirmed(Set.of(pathBC2, pointC2));
     commandProcessingTracker.commandSent(movementCommands.get(1));
     commandProcessingTracker.commandExecuted(movementCommands.get(1));
     commandProcessingTracker.allocationReleased(Set.of(pathAB));
@@ -282,7 +283,7 @@ class CommandProcessingTrackerTest {
     assertThat(commandProcessingTracker.getClaimedResources())
         .containsExactly(Set.of(pathC2D, pointD));
     assertThat(commandProcessingTracker.getAllocatedResources())
-        .containsExactly(Set.of(pathBC), Set.of(pointC2));
+        .containsExactly(Set.of(pathBC2), Set.of(pointC2));
     assertThat(commandProcessingTracker.getAllocatedResourcesAhead()).isEmpty();
     assertThat(commandProcessingTracker.getLastCommandExecuted()).contains(movementCommands.get(1));
 
@@ -291,7 +292,7 @@ class CommandProcessingTrackerTest {
     commandProcessingTracker.allocationConfirmed(Set.of(pathC2D, pointD));
     commandProcessingTracker.commandSent(movementCommands.get(2));
     commandProcessingTracker.commandExecuted(movementCommands.get(2));
-    commandProcessingTracker.allocationReleased(Set.of(pathBC));
+    commandProcessingTracker.allocationReleased(Set.of(pathBC2));
     commandProcessingTracker.allocationReleased(Set.of(pointC2));
     assertThat(commandProcessingTracker.hasCommandsToBeSent()).isFalse();
     assertThat(commandProcessingTracker.getClaimedResources()).isEmpty();
