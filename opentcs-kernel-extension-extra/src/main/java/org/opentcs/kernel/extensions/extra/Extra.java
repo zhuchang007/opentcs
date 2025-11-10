@@ -49,17 +49,20 @@ public class Extra
   public void initialize() {
     LOG.info("Initializing Extra Kernel Extension");
 
-    initPoint("Vehicle-01", "Point-0002");
-    initPoint("Vehicle-02", "Point-0004");
-    initPoint("Vehicle-03", "Point-0006");
-    initPoint("Vehicle-04", "Point-0010");
+//    initPoint("Vehicle-01", "Point-0002");
+//    initPoint("Vehicle-02", "Point-0004");
+//    initPoint("Vehicle-03", "Point-0006");
+//    initPoint("Vehicle-04", "Point-0010");
+//
+//    //Set<String> locations = objectService.fetch(Location.class).stream().map(Location::getName);
+//
+//    addAnOder("Vehicle-01", "Goods in south 02");
+//    addAnOder("Vehicle-02", "Goods out 02");
+//    addAnOder("Vehicle-03", "Working station 01");
+//    addAnOder("Vehicle-04", "Storage 02");
 
-    //Set<String> locations = objectService.fetch(Location.class).stream().map(Location::getName);
-
-    addAnOder("Vehicle-01", "Goods in south 02");
-    addAnOder("Vehicle-02", "Goods out 02");
-    addAnOder("Vehicle-03", "Working station 01");
-    addAnOder("Vehicle-04", "Storage 02");
+    initPoint("Vehicle-01", "Point-0010");
+    addAnOder("Vehicle-01", "Goods out 01");
 
     dispatcherService.dispatch();
   }

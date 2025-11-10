@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model version="7.0.0" name="Demo-02">
+<model version="7.0.0" name="Demo-01">
     <point name="Point-0001" positionX="31000" positionY="11000" positionZ="0" vehicleOrientationAngle="NaN" type="HALT_POSITION">
         <maxVehicleBoundingBox length="1000" width="1000" height="1000" referenceOffsetX="0" referenceOffsetY="0"/>
         <outgoingPath name="Point-0001 --- Point-0002"/>
@@ -457,7 +457,6 @@
         </pathLayout>
     </path>
     <path name="Point-0013 --- Point-0018" sourcePoint="Point-0013" destinationPoint="Point-0018" length="9381" maxVelocity="1000" maxReverseVelocity="0" locked="false">
-        <property name="tcs:routingCostForwardgroup1" value="10"/>
         <pathLayout connectionType="DIRECT" layerId="0"/>
     </path>
     <path name="Point-0013 --- Point-0057" sourcePoint="Point-0013" destinationPoint="Point-0057" length="11638" maxVelocity="1000" maxReverseVelocity="0" locked="false">
@@ -739,7 +738,6 @@
         <boundingBox length="1000" width="1000" height="1000" referenceOffsetX="0" referenceOffsetY="0"/>
         <property name="loopback:loadOperation" value="Load cargo"/>
         <property name="loopback:unloadOperation" value="Unload cargo"/>
-        <property name="tcs:routingGroup" value="group1"/>
         <vehicleLayout color="#FF0000"/>
     </vehicle>
     <vehicle name="Vehicle-02" energyLevelCritical="30" energyLevelGood="90" energyLevelFullyRecharged="95" energyLevelSufficientlyRecharged="45" maxVelocity="1000" maxReverseVelocity="1000" envelopeKey="envelope-a">
@@ -884,5 +882,5 @@
         <layer id="0" ordinal="0" visible="true" name="Default layer" groupId="0"/>
         <layerGroup id="0" name="Default layer group" visible="true"/>
     </visualLayout>
-    <property name="tcs:modelFileLastModified" value="2025-11-10T04:58:48Z"/>
+    <property name="tcs:modelFileLastModified" value="2025-08-05T09:22:30Z"/>
 </model>
