@@ -6,14 +6,18 @@ import jakarta.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import org.opentcs.access.to.order.DestinationCreationTO;
+import org.opentcs.access.to.order.OrderSequenceCreationTO;
 import org.opentcs.access.to.order.TransportOrderCreationTO;
 import org.opentcs.components.kernel.KernelExtension;
 import org.opentcs.components.kernel.services.DispatcherService;
+import org.opentcs.components.kernel.services.PlantModelService;
 import org.opentcs.components.kernel.services.TCSObjectService;
 import org.opentcs.components.kernel.services.TransportOrderService;
 import org.opentcs.components.kernel.services.VehicleService;
 import org.opentcs.data.ObjectUnknownException;
+import org.opentcs.data.model.Path;
 import org.opentcs.data.model.Vehicle;
+import org.opentcs.data.order.OrderSequence;
 import org.opentcs.drivers.vehicle.VehicleCommAdapterMessage;
 import org.opentcs.virtualvehicle.LoopbackCommAdapterMessages;
 import org.opentcs.virtualvehicle.LoopbackCommunicationAdapterDescription;
@@ -31,18 +35,21 @@ public class Extra
   private final TCSObjectService objectService;
   private final TransportOrderService orderService;
   private final DispatcherService dispatcherService;
+  private final PlantModelService plantModelService;
 
   @Inject
   public Extra(
       VehicleService vehicleService,
       TCSObjectService objectService,
       TransportOrderService orderService,
-      DispatcherService dispatcherService
+      DispatcherService dispatcherService,
+      PlantModelService plantModelService
   ) {
     this.vehicleService = vehicleService;
     this.objectService = objectService;
     this.orderService = orderService;
     this.dispatcherService = dispatcherService;
+    this.plantModelService = plantModelService;
   }
 
   @Override
@@ -62,7 +69,11 @@ public class Extra
 //    addAnOder("Vehicle-04", "Storage 02");
 
     initPoint("Vehicle-01", "Point-0010");
-    addAnOder("Vehicle-01", "Goods out 01");
+    initPoint("Vehicle-02", "Point-0011");
+   // addAnOder("Vehicle-01", "Goods out 01");
+    addAnOderSequence();
+    Path path = objectService.fetch(Path.class, "Point-0013 --- Point-0015").orElseThrow();
+    plantModelService.updatePathLock(path.getReference(), true);
 
     dispatcherService.dispatch();
   }
@@ -78,7 +89,7 @@ public class Extra
   }
 
   private void initPoint(String vehicleName, String initPointName) {
-    Vehicle vehicle = objectService.fetch(Vehicle.class, vehicleName).get();
+    Vehicle vehicle = objectService.fetch(Vehicle.class, vehicleName).orElseThrow();
 
     vehicleService.updateVehicleIntegrationLevel(
         vehicle.getReference(),
@@ -114,5 +125,46 @@ public class Extra
             "order-" + vehicleName, List.of(new DestinationCreationTO(locationName, "NOP"))
         )
     );
+  }
+
+  private void addAnOderSequence() {
+    OrderSequenceCreationTO sequenceTO = new OrderSequenceCreationTO("MyOrderSequence");
+    sequenceTO = sequenceTO.withIncompleteName(true).withFailureFatal(true).withIntendedVehicleName(
+        "Vehicle-02"
+    );
+
+    OrderSequence orderSequence = orderService.createOrderSequence(sequenceTO);
+    TransportOrderCreationTO orderTO1
+        = new TransportOrderCreationTO(
+            "MyOrder1",
+            List.of(
+                new DestinationCreationTO("Goods in south 01", "NOP")
+            )
+        )
+            .withIncompleteName(true)
+            .withWrappingSequence(orderSequence.getName())
+            .withIntendedVehicleName("Vehicle-02");
+
+    TransportOrderCreationTO orderTO2
+        = new TransportOrderCreationTO(
+            "MyOrder2",
+            List.of(
+                new DestinationCreationTO("Goods out 02", "NOP")
+            )
+        )
+            .withIncompleteName(true)
+            .withWrappingSequence(orderSequence.getName())
+            .withIntendedVehicleName("Vehicle-02");
+
+    orderService.createTransportOrder(orderTO1);
+    orderService.createTransportOrder(orderTO2);
+    orderService.createTransportOrder(orderTO1);
+    orderService.createTransportOrder(orderTO2);
+
+
+    orderService.markOrderSequenceComplete(
+        orderSequence.getReference()
+    );
+
   }
 }
